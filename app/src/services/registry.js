@@ -71,6 +71,16 @@ export async function register({ name, owner, transactionId }) {
   return { ok: true, ant, message: `Successfully registred ${name}.arweave.net` }
 }
 
+export async function getBalance(owner) {
+  const registry = warp.pst(REGISTRY)
+  const { result } = await registry.viewState({
+    function: 'balance',
+    target: owner
+  })
+  console.log(result)
+  return result
+}
+
 export async function listANTs(owner) {
   const registry = warp.pst(REGISTRY)
   const regState = await registry.currentState()

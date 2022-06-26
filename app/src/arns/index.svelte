@@ -12,6 +12,7 @@
     listANTs,
     register,
     updateSubDomain,
+    getBalance,
   } from "../services/registry.js";
   import { pages } from "../app.js";
   import { gql } from "../services/arweave.js";
@@ -112,6 +113,11 @@
             <div class="flex-1 flex items-center space-x-8">
               <h2 class="text-2xl mb-2">ArNS Registry Portal</h2>
               <a class="link" href="https://ar.io/arns">More Information</a>
+              {#if $address}
+                {#await getBalance($address) then result}
+                  <div>ArNS Balance: {result.balance}</div>
+                {/await}
+              {/if}
             </div>
             <div class="flex-none6">
               <button on:click={registerDomain} class="btn btn-secondary"
@@ -131,7 +137,9 @@
               >
             </div>
             {#if $address}
-              {#await listANTs($address) then records}
+              {#await listANTs($address)}
+                <div class="alert alert-info">Loading sub-domains</div>
+              {:then records}
                 <SubdomainTable
                   title="My Records"
                   {records}
@@ -140,6 +148,10 @@
                   on:remove={() => (removeDialog = true)}
                 />
               {/await}
+            {:else}
+              <div class="alert alert-info">
+                Connect to permapages to see or purchase subdomains.
+              </div>
             {/if}
           </div>
         </div>

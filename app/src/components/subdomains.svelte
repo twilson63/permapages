@@ -31,7 +31,10 @@
             <th>{record.subdomain}</th>
             <td>{record.records["@"]}</td>
             <td
-              ><a class="link" href="https://{record.subdomain}.arweave.dev"
+              ><a
+                target="_blank"
+                class="link"
+                href="https://{record.subdomain}.arweave.dev"
                 >https://{record.subdomain}.arweave.dev</a
               >
             </td>
