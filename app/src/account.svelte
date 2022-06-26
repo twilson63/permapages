@@ -3,6 +3,7 @@
   import { address, account } from "./store.js";
   import { profiles } from "./app.js";
   import { Jumper } from "svelte-loading-spinners";
+  import ProfileView from "./components/profile.svelte";
 
   import {
     gql,
@@ -66,16 +67,7 @@
           <h1 class="text-6xl">Create a PermaProfile</h1>
           <ProfileForm profile={p} on:create={handleCreate} />
         {:else if !editMode && p}
-          <!-- show new profile widget -->
-          <img
-            class="mask mask-squircle"
-            src={p.avatar}
-            alt={p.name}
-            width="94"
-            height="94"
-          />
-          <h1 class="text-6xl">{p.name}</h1>
-          <p>{p.bio ? p.bio : ""}</p>
+          <ProfileView profile={p} />
           <div class="flex space-x-8">
             <a href="/pages" class="btn btn-primary">Pages</a>
             <button
