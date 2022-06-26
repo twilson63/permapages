@@ -15,6 +15,7 @@
   import Modal from "./components/modal.svelte";
 
   let submitDialog = false;
+  let editMode = false;
 
   const profileMgr = profiles({
     gql,
@@ -31,16 +32,17 @@
 
   async function handleCreate({ detail: { profile, avatar, background } }) {
     submitDialog = true;
-    profile.avatar = avatar ? await upload(avatar, $address) : profile.avatar;
-    /*
+
+    profile.avatar = avatar ? await upload(avatar) : profile.avatar;
     profile.background = background
-      ? await upload(background, $address)
+      ? await upload(background)
       : profile.background;
+    profile.owner = $address;
     const result = await profileMgr.create(profile);
-    */
+    //console.log(result);
     submitDialog = false;
-    // handle result
-    return result;
+    editMode = false;
+    profileObject = await getPageProfile($address);
   }
 
   function disconnect() {
@@ -49,15 +51,18 @@
     router.goto("/connect");
   }
 
-  let profile = getPageProfile($address);
+  let profileObject = getPageProfile($address);
 </script>
 
 <Navbar />
 <main>
   <section class="hero min-h-screen bg-base-200">
     <div class="hero-content flex-col">
-      {#await profile then p}
-        {#if p}
+      {#await profileObject then p}
+        {#if editMode && p}
+          <h1 class="text-6xl">Create a PermaProfile</h1>
+          <ProfileForm profile={p} on:create={handleCreate} />
+        {:else if !editMode && p}
           <!-- show new profile widget -->
           <img
             class="mask mask-squircle"
@@ -70,13 +75,17 @@
           <p>{p.bio ? p.bio : ""}</p>
           <div class="flex space-x-8">
             <a href="/pages" class="btn btn-primary">Pages</a>
+            <button
+              class="btn"
+              on:click|preventDefault={() => (editMode = true)}>Edit</button
+            >
             <button class="btn" on:click|preventDefault={disconnect}
               >Disconnect</button
             >
           </div>
         {:else}
           <h1 class="text-6xl">Create a PermaProfile</h1>
-          <ProfileForm {profile} on:create={handleCreate} />
+          <ProfileForm profile={{ links: {} }} on:create={handleCreate} />
         {/if}
       {/await}
     </div>

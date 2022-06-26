@@ -24,7 +24,8 @@ export function profiles({ gql, post, load }) {
       .chain(nodes => isEmpty(nodes) ? Async.Rejected(null) : Async.Resolved(nodes))
       .map(formatProfiles)
       .map(head)
-      .chain(({ id }) => Async.fromPromise(load))
+      .map(x => (console.log(x), x))
+      .chain(({ id }) => Async.fromPromise(load)(id))
       .toPromise().catch(identity)
 
   }
@@ -32,6 +33,7 @@ export function profiles({ gql, post, load }) {
   async function create(profile) {
     return Async.of(profile)
       .chain(profileModel.validate)
+      // confirm user owns this profile name
       .map(profile => ({ profile, tags: profileModel.createTags(profile) }))
       .chain(({ profile, tags }) => deployProfile(profile, tags).map(({ id }) => ({ ...profile, id })))
       .toPromise()

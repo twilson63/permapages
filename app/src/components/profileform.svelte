@@ -3,7 +3,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let profile = {
+  export let profile = {
     links: {},
   };
   let avatarOption = "upload";
@@ -170,7 +170,7 @@
       id="twitter"
       name="twitter"
       class="input input-bordered"
-      bind:value={profile.twitter}
+      bind:value={profile.links.twitter}
     />
   </div>
   <div class="form-control">
@@ -179,7 +179,7 @@
       id="instagram"
       name="instagram"
       class="input input-bordered"
-      bind:value={profile.instagram}
+      bind:value={profile.links.instagram}
     />
   </div>
   <div class="form-control">
@@ -188,7 +188,7 @@
       id="linkedin"
       name="linkedin"
       class="input input-bordered"
-      bind:value={profile.linkedin}
+      bind:value={profile.links.linkedin}
     />
   </div>
   <div class="form-control">
@@ -197,7 +197,43 @@
       id="discord"
       name="discord"
       class="input input-bordered"
-      bind:value={profile.linkedin}
+      bind:value={profile.links.discord}
+    />
+  </div>
+  <div class="form-control">
+    <label for="facebook" class="label">Facebook</label>
+    <input
+      id="facebook"
+      name="facebook"
+      class="input input-bordered"
+      bind:value={profile.links.facebook}
+    />
+  </div>
+  <div class="form-control">
+    <label for="youtube" class="label">Youtube</label>
+    <input
+      id="youtube"
+      name="youtube"
+      class="input input-bordered"
+      bind:value={profile.links.youtube}
+    />
+  </div>
+  <div class="form-control">
+    <label for="twitch" class="label">Twitch</label>
+    <input
+      id="twitch"
+      name="twitch"
+      class="input input-bordered"
+      bind:value={profile.links.twitch}
+    />
+  </div>
+  <div class="form-control">
+    <label for="github" class="label">Github</label>
+    <input
+      id="github"
+      name="github"
+      class="input input-bordered"
+      bind:value={profile.links.github}
     />
   </div>
   <div class="mt-8">
