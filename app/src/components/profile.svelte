@@ -4,9 +4,10 @@
   export let icon_repo = "https://social-icons.arweave.dev";
 </script>
 
-<div class="h-[900px]">
+<div class="h-[700px] w-full">
   <div
-    class="bg-[url('{profile.background}')] bg-cover bg-no-repeat w-full h-[660px] mb-[50px]"
+    style="background-image: url({profile.background})"
+    class="bg-cover bg-no-repeat w-full h-[460px] mb-[50px]"
   >
     <div class="w-full h-full flex flex-col justify-between relative">
       <ul class="w-full flex flex-row-reverse p-5">
@@ -139,7 +140,7 @@
           </li>
         {/if}
       </ul>
-      <div class="w-full flex m-5 absolute top-[565px] left-0">
+      <div class="w-full flex m-5 absolute top-[360px] left-0">
         <img
           alt="avatar"
           src={profile.avatar}

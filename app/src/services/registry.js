@@ -72,10 +72,12 @@ export async function register({ name, owner, transactionId }) {
 }
 
 export async function listANTs(owner) {
-  const result = await arweave.api.post('graphql', {
+  const registry = warp.pst(REGISTRY)
+  const regState = await registry.currentState()
+  const query = {
     query: `
 query {
-  transactions(owners: ["${owner}"], tags: {name: "Contract-Src", values: ["${ANT_SOURCE}"]}) {
+  transactions(first: 100, owners: ["${owner}"], tags: {name: "Contract-Src", values: [${regState.approvedANTSourceCodeTxs.map(s => `"${s}"`)}]}) {
     edges {
       node {
         id
@@ -84,7 +86,9 @@ query {
   }
 }
     `
-  })
+  }
+  console.log(query)
+  const result = await arweave.api.post('graphql', query)
 
   const ids = pluck('id', pluck('node', result.data.data.transactions.edges))
   const ants = await Promise.all(

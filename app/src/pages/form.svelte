@@ -81,9 +81,9 @@
         if (page.weavemail) {
           profileData = { ...profileData, weavemail: profileData.addr };
         }
-        console.log(profileData);
+
         const profileWidget = Mustache.render(profileTemplate(), profileData);
-        console.log(profileWidget);
+
         page.html = profileWidget + "\n" + page.html;
       }
 
@@ -181,14 +181,14 @@
     data-twitch="{{links.twitch}}"
   {{/links.twitch}}
   {{#links.youtube}}
-    data-twitch="{{links.youtube}}"
+    data-youtube="{{links.youtube}}"
   {{/links.youtube}}
   {{#weavemail}}
     data-weavemail="{{weavemail}}"
   {{/weavemail}}
   ></div>
   ` +
-      '<script src="https://arweave.net/o7LNWBFbtP48EeMz6gWoalvp21NWZIy814CKxSegOGQ">' +
+      '<script src="https://arweave.net/qqrkkzk5sjz-eABvFWou10kzE1QeCFIcI1EuxzX34Ro">' +
       "<//script>".replace("/", "")
     );
   }

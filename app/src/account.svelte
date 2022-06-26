@@ -61,7 +61,7 @@
 <Navbar />
 <main>
   <section class="hero min-h-screen bg-base-200">
-    <div class="hero-content flex-col">
+    <div class="hero-content flex-col w-full">
       {#await profileObject then p}
         {#if editMode && p}
           <h1 class="text-6xl">Create a PermaProfile</h1>
