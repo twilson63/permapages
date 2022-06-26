@@ -87,7 +87,7 @@
         type="file"
         class="input"
         bind:files={avatarFileInput}
-        accept="image/png, image/jpeg, image/gif, image/jpg, image/svg+xml"
+        accept="image/png, image/jpeg, image/jpg, image/svg+xml"
       />
     </div>
   {:else}
@@ -102,6 +102,9 @@
     </div>
   {/if}
   <h3 class="text-xl mt-8">Background Image</h3>
+  <div class="alert alert-info">
+    The best background images ideal size is 1500x360 px.
+  </div>
   <div class="form-control">
     <label class="label">
       Upload
@@ -131,7 +134,7 @@
         type="file"
         class="input"
         bind:files={backgroundFileInput}
-        accept="image/png, image/jpeg, image/gif, image/jpg, image/svg+xml"
+        accept="image/png, image/jpeg, image/jpg, image/svg+xml"
       />
     </div>
   {:else}
