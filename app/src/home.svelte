@@ -7,21 +7,21 @@
   <div class="hero-content text-center">
     <div class="max-w-md">
       <figure class="flex items-center justify-center">
-        <img class="w-64 rounded-lg" src="permanote.png" alt="logo" />
+        <img class="w-64 rounded-lg" src="permapages_logo.svg" alt="logo" />
       </figure>
 
       <h1 class="mt-8 text-5xl">
-        <span class="uppercase text-primary">PermaNotes</span>
+        <span class="uppercase text-primary">🐘 PermaPages 🐘</span>
       </h1>
       <div class="badge badge-secondary">ALPHA {version}</div>
       <div class="flex mt-8 space-x-2">
-        <h2 class="text-3xl text-secondary">✨ CREATE</h2>
-        <h2 class="text-3xl text-primary">🗄 STORE</h2>
-        <h2 class="text-3xl text-accent">🧠 SHARE</h2>
+        <h2 class="text-3xl text-secondary">✨ BUILD</h2>
+        <h2 class="text-3xl text-primary">🚀 PUBLISH</h2>
+        <h2 class="text-3xl text-accent">⚡️ CONNECT</h2>
       </div>
       <div class="mt-16 space-x-4">
         {#if $address}
-          <a href="/notes" class="btn btn-primary">My Notes</a>
+          <a href="/notes" class="btn btn-primary">Pages</a>
         {:else}
           <a href="/connect" class="btn btn-primary">Connect</a>
         {/if}

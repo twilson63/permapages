@@ -2,24 +2,15 @@
   import { router } from "tinro";
   import { address, account, topics } from "./store.js";
   import Navbar from "./components/navbar.svelte";
-  import { gql } from "./services/arweave.js";
-  import { notes } from "./app.js";
+  import ProfileForm from "./components/profileform.svelte";
 
   const profile = $account.profile;
-
-  async function listWebpages() {
-    const app = notes({ gql });
-    const results = await app.listWebpages($address);
-    return results;
-  }
 
   function disconnect() {
     if (window.arweaveWallet) window.arweaveWallet.disconnect();
     address.set("");
     router.goto("/connect");
   }
-
-  let webpages = [];
 </script>
 
 <Navbar />
@@ -37,31 +28,11 @@
         <h1 class="text-6xl">{profile.name}</h1>
         <p>{profile.bio ? profile.bio : ""}</p>
       {:else}
-        <h1 class="text-6xl">Anonymous</h1>
-        <p>Profile not found!</p>
-        <p>Do you want to create a profile?</p>
-        <p>
-          Create a profile at <a
-            class="underline"
-            target="_blank"
-            href="https://arweave.net/HOHBm7vNOoDds4uah2Du2jr7nsELJx9V0C0h54MYLes"
-            >Arweave Account</a
-          >
-        </p>
-        <p>If not, you can still use PermaNotes...</p>
-      {/if}
-      {#if $topics.length > 0}
-        <div class="flex space-x-4">
-          <label>Topics: </label>
-          {#each $topics as topic}
-            <a class="underline" href="/topics/{topic}">{decodeURI(topic)}</a>
-          {/each}
-        </div>
+        <h1 class="text-6xl">Create a PermaProfile</h1>
+        <ProfileForm />
       {/if}
       <div class="flex space-x-8">
-        <a href="/notes" class="btn btn-primary">My Notes</a>
-        <a href="/pages" class="btn btn-primary">My Pages</a>
-        <a href="/favorites" class="btn btn-primary">Favorites</a>
+        <a href="/pages" class="btn btn-primary">Pages</a>
         <button class="btn" on:click|preventDefault={disconnect}
           >Disconnect</button
         >

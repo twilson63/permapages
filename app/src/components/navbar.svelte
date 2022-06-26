@@ -37,7 +37,6 @@
         <li><a href="/arns">ArNS</a></li>
         <li><a href="/connect">Connect</a></li>
       {:else}
-        <li><a href="/notes">Notes</a></li>
         <li><a href="/pages">Pages</a></li>
         <li><a href="/arns">ArNS</a></li>
         <li><a href="/account">Account</a></li>
@@ -45,7 +44,7 @@
     </ul>
   </div>
   <div class="flex-1">
-    <a href="/" class="btn btn-ghost normal-case text-xl">PERMA NOTES</a>
+    <a href="/" class="btn btn-ghost normal-case text-xl">🐘 PERMAPAGES</a>
     <div class="badge badge-secondary">ALPHA {version}</div>
   </div>
   <div class="flex-none">
@@ -57,7 +56,6 @@
         <li><a href="/arns">ArNS</a></li>
         <li><a href="/connect">Connect</a></li>
       {:else}
-        <li><a href="/notes">Notes</a></li>
         <li><a href="/pages">Pages</a></li>
         <li><a href="/arns">ArNS</a></li>
         <li><a href="/account">Account</a></li>
