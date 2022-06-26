@@ -61,6 +61,15 @@ export const txToProfile = (tx) => {
   return page
 }
 
+export const createTags = ({ protocol, name, bio, avatar }) => {
+  return [
+    { name: 'Protocol', value: protocol },
+    { name: 'Profile-Name', value: name },
+    { name: 'Profile-Bio', value: bio },
+    { name: 'Profile-Avatar', value: avatar }
+  ]
+}
+
 export const validate = (data) => {
   data.timestamp = new Date().toISOString()
   const result = schema.safeParse(data)

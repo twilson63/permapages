@@ -2,14 +2,11 @@
   import { router } from "tinro";
   import { Jumper } from "svelte-loading-spinners";
 
-  import {
-    connectApp,
-    account as getAccount,
-    topics as getTopics,
-  } from "./services/arweave.js";
+  import { connectApp } from "./services/arweave.js";
 
-  import { address, account, topics } from "./store.js";
+  import { address } from "./store.js";
   import Navbar from "./components/navbar.svelte";
+  import Modal from "./components/modal.svelte";
 
   let error = null;
   let connecting = false;
@@ -19,14 +16,7 @@
       connecting = true;
       const tId = setTimeout(() => (connecting = false), 2000);
       const walletAddress = await connectApp().catch((e) => "");
-      topics.set(await getTopics.load(walletAddress));
-      const a = await getAccount(walletAddress);
 
-      if (a) {
-        account.set(a);
-      } else {
-        account.set({});
-      }
       address.set(walletAddress);
       clearTimeout(tId);
       router.goto("/account");
@@ -46,30 +36,17 @@
     try {
       connecting = true;
       await arweaveWallet.connect(
-        [
-          "ACCESS_ADDRESS",
-          "ACCESS_PUBLIC_KEY",
-          "SIGN_TRANSACTION",
-          "DISPATCH",
-          "ENCRYPT",
-          "DECRYPT",
-        ],
+        ["ACCESS_ADDRESS", "SIGN_TRANSACTION", "DISPATCH"],
         {
-          name: "PermaNotes",
-          logo: `${window.location.origin}/permanote.png`,
+          name: "PermaPages",
+          logo: `${window.location.origin}/permapages_logo.svg`,
         }
       );
 
       const addr = await arweaveWallet.getActiveAddress();
-      topics.set(await getTopics.load(addr));
 
-      const a = await getAccount(addr);
       address.set(addr);
-      if (a) {
-        account.set(a);
-      } else {
-        account.set({});
-      }
+
       connecting = false;
       router.goto("/account");
     } catch (e) {
@@ -149,17 +126,9 @@
   </div>
 </div>
 
-<input
-  type="checkbox"
-  id="connecting"
-  bind:checked={connecting}
-  class="modal-toggle"
-/>
-<div class="modal w-100">
-  <div class="modal-box w-full">
-    <h3 class="font-bold md:text-lg mb-8">Connecting to Permanotes!</h3>
-    <div class="flex items-center justify-center">
-      <Jumper size="60" color="rebeccapurple" unit="px" duration="2s" />
-    </div>
+<Modal open={connecting} ok={false}>
+  <h3 class="font-bold md:text-lg mb-8">Connecting to Permapages!</h3>
+  <div class="flex items-center justify-center">
+    <Jumper size="60" color="rebeccapurple" unit="px" duration="2s" />
   </div>
-</div>
+</Modal>

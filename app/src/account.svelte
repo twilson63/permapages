@@ -1,42 +1,90 @@
 <script>
   import { router } from "tinro";
-  import { address, account, topics } from "./store.js";
+  import { address, account } from "./store.js";
+  import { profiles } from "./app.js";
+  import { Jumper } from "svelte-loading-spinners";
+
+  import {
+    gql,
+    postProfileTx,
+    loadProfile,
+    upload,
+  } from "./services/arweave.js";
   import Navbar from "./components/navbar.svelte";
   import ProfileForm from "./components/profileform.svelte";
+  import Modal from "./components/modal.svelte";
 
-  const profile = $account.profile;
+  let submitDialog = false;
+
+  const profileMgr = profiles({
+    gql,
+    post: postProfileTx,
+    load: loadProfile,
+  });
+
+  async function getPageProfile(address) {
+    const result = await profileMgr.get(address);
+    console.log(result);
+    $account = { id: address, profile: result };
+    return result;
+  }
+
+  async function handleCreate({ detail: { profile, avatar, background } }) {
+    submitDialog = true;
+    profile.avatar = avatar ? await upload(avatar, $address) : profile.avatar;
+    /*
+    profile.background = background
+      ? await upload(background, $address)
+      : profile.background;
+    const result = await profileMgr.create(profile);
+    */
+    submitDialog = false;
+    // handle result
+    return result;
+  }
 
   function disconnect() {
     if (window.arweaveWallet) window.arweaveWallet.disconnect();
     address.set("");
     router.goto("/connect");
   }
+
+  let profile = getPageProfile($address);
 </script>
 
 <Navbar />
 <main>
   <section class="hero min-h-screen bg-base-200">
     <div class="hero-content flex-col">
-      {#if profile}
-        <img
-          class="mask mask-squircle"
-          src={`https://arweave.net/${profile.avatar}`}
-          alt={profile.name}
-          width="94"
-          height="94"
-        />
-        <h1 class="text-6xl">{profile.name}</h1>
-        <p>{profile.bio ? profile.bio : ""}</p>
-      {:else}
-        <h1 class="text-6xl">Create a PermaProfile</h1>
-        <ProfileForm />
-      {/if}
-      <div class="flex space-x-8">
-        <a href="/pages" class="btn btn-primary">Pages</a>
-        <button class="btn" on:click|preventDefault={disconnect}
-          >Disconnect</button
-        >
-      </div>
+      {#await profile then p}
+        {#if p}
+          <!-- show new profile widget -->
+          <img
+            class="mask mask-squircle"
+            src={`https://arweave.net/${p.avatar}`}
+            alt={p.name}
+            width="94"
+            height="94"
+          />
+          <h1 class="text-6xl">{p.name}</h1>
+          <p>{p.bio ? p.bio : ""}</p>
+          <div class="flex space-x-8">
+            <a href="/pages" class="btn btn-primary">Pages</a>
+            <button class="btn" on:click|preventDefault={disconnect}
+              >Disconnect</button
+            >
+          </div>
+        {:else}
+          <h1 class="text-6xl">Create a PermaProfile</h1>
+          <ProfileForm {profile} on:create={handleCreate} />
+        {/if}
+      {/await}
     </div>
   </section>
 </main>
+<Modal open={submitDialog}>
+  <h3 class="font-bold md:text-lg mb-8">Submitting Profile</h3>
+  <div class="flex items-center justify-center">
+    <Jumper size="60" color="rebeccapurple" unit="px" duration="2s" />
+  </div>
+</Modal>

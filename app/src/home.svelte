@@ -21,7 +21,7 @@
       </div>
       <div class="mt-16 space-x-4">
         {#if $address}
-          <a href="/notes" class="btn btn-primary">Pages</a>
+          <a href="/pages" class="btn btn-primary">Pages</a>
         {:else}
           <a href="/connect" class="btn btn-primary">Connect</a>
         {/if}

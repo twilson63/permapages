@@ -1,5 +1,5 @@
 import * as pageModel from './models/pages.js'
-
+import * as profileModel from './models/profiles.js'
 import Async from 'crocks/Async/index.js'
 
 import compose from 'ramda/src/compose'
@@ -9,7 +9,40 @@ import sortBy from 'ramda/src/sortBy'
 import prop from 'ramda/src/prop'
 import map from 'ramda/src/map'
 import path from 'ramda/src/path'
+import head from 'ramda/src/head'
+import isEmpty from 'ramda/src/isEmpty'
+import identity from 'ramda/src/identity'
 
+export function profiles({ gql, post, load }) {
+  const deployProfile = post ? Async.fromPromise(post) : () => Async.of(null)
+
+  async function get(addr) {
+    return Async.of(addr)
+      .map(buildProfileQry)
+      .chain(Async.fromPromise(gql))
+      .map(pluckNodes)
+      .chain(nodes => isEmpty(nodes) ? Async.Rejected(null) : Async.Resolved(nodes))
+      .map(formatProfiles)
+      .map(head)
+      .chain(({ id }) => Async.fromPromise(load))
+      .toPromise().catch(identity)
+
+  }
+
+  async function create(profile) {
+    return Async.of(profile)
+      .chain(profileModel.validate)
+      .map(profile => ({ profile, tags: profileModel.createTags(profile) }))
+      .chain(({ profile, tags }) => deployProfile(profile, tags).map(({ id }) => ({ ...profile, id })))
+      .toPromise()
+  }
+
+  return {
+    get,
+    create,
+    load
+  }
+}
 
 export function pages({ register, post, gql, postWebpage, load }) {
   const deployPage = post ? Async.fromPromise(post) : () => Async.of(null)
@@ -80,6 +113,32 @@ export function pages({ register, post, gql, postWebpage, load }) {
   }
 }
 
+function buildProfileQry(addr) {
+  return `
+query {
+  transactions(
+    owners: ["${addr}"],
+    tags: [
+      { name: "Protocol", values: ["PermaProfile-v0.1"]}
+    ]
+  ) {
+    edges {
+      node {
+        id
+        owner {
+          address
+        },
+        tags {
+          name
+          value
+        }
+      }
+    }
+  }
+}  
+  `
+}
+
 function buildDeployHx() {
   return `
 query {
@@ -102,6 +161,14 @@ function formatPages(nodes) {
     reverse,
     sortBy(prop("timestamp")),
     map(pageModel.txToPage)
+  )(nodes)
+}
+
+function formatProfiles(nodes) {
+  return compose(
+    reverse,
+    sortBy(prop("timestamp")),
+    map(profileModel.txToProfile)
   )(nodes)
 }
 

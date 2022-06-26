@@ -1,6 +1,5 @@
 import Arweave from 'arweave'
 import Account from 'arweave-account'
-import Topics from 'arweave-topics'
 
 import path from 'ramda/src/path'
 import pluck from 'ramda/src/pluck'
@@ -22,25 +21,52 @@ export const arweave = Arweave.init({
   protocol: 'https'
 })
 
-export const topics = Topics(arweave)
-
 let wallet = null
 
 export const connectApp = () => {
   wallet = new ArweaveWebWallet({
-    name: 'permanotes',
-    logo: `${window.location.origin}/permanote.png`
+    name: 'permapages',
+    logo: `${window.location.origin}/permapages_logo.svg`
   })
 
   wallet.setUrl('https://arweave.app')
   return wallet.connect()
 }
 
-export const account = async (address) => await arweaveAccount.get(address)
+//export const account = async (address) => await arweaveAccount.get(address)
+export const upload = async (file, addr) => {
+  let result
+  console.log('file', file)
+  console.log('bufferLength', file.buffer.byteLength)
+  //const balance = await arweave.wallets.getBalance(addr)
+  //const price = await arweave.api.get(`price/${file.buffer.length + 10000}`)
+  // check balance
+  // if ((file.buffer.length + 10000 > 100000) && (price > balance)) { return Promise.reject('not enough AR') }
 
+  const tx = await arweave.createTransaction({ data: file.buffer })
+  tx.addTag('Content-Type', file.type)
+  result = tx
+  if (file.buffer.byteLength + 10000 < 100000) {
+    // try bundlr first
+    result = await arweaveWallet.dispatch(tx)
+
+  } else {
+    // then arweave
+    await arweave.transactions.sign(tx)
+    await arweave.transactions.post(tx)
+  }
+  console.log(result)
+  return result
+
+}
 export const handle = async (handle) => await arweaveAccount.get(handle)
 
 export const loadPage = async (id) => {
+  const { data } = await arweave.api.get(id)
+  return data
+}
+
+export const loadProfile = async (id) => {
   const { data } = await arweave.api.get(id)
   return data
 }
@@ -93,6 +119,34 @@ export const postWebpage = async (data) => {
   return result
 }
 
+// make generic way to deploy to arweave....
+export const postProfileTx = async (profile, tags) => {
+  const tx = await arweave.createTransaction({
+    data: JSON.stringify(profile)
+  })
+
+  tx.addTag('Content-Type', 'application/json')
+  tx.addTag('App-Name', 'PermaPages')
+  map(t => tx.addTag(t.name, t.value), tags)
+  tx.addTag('Timestamp', new Date().toISOString())
+
+  let result = tx
+
+  try {
+    // try bundlr first
+    result = await arweaveWallet.dispatch(tx)
+
+    return result
+  } catch (e) {
+    // then arweave
+    await arweave.transactions.sign(tx)
+    await arweave.transactions.post(tx)
+  }
+
+  return result
+
+}
+
 export const postPageTx = async (page) => {
   const tx = await arweave.createTransaction({
     data: JSON.stringify(page),
@@ -102,7 +156,7 @@ export const postPageTx = async (page) => {
   })
 
   tx.addTag('Content-Type', 'application/json')
-  tx.addTag('App-Name', 'PermaNotes')
+  tx.addTag('App-Name', 'PermaPages')
   tx.addTag('Protocol', page.protocol)
   tx.addTag('Page-Title', page.title)
   tx.addTag('Description', page.description)
