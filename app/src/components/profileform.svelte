@@ -48,7 +48,7 @@
       bind:value={profile.name}
     />
   </div>
-  <div class="form-control">
+  <div class="form-control mb-8">
     <label for="bio" class="label">Bio</label>
     <textarea
       id="bio"
@@ -57,6 +57,7 @@
       bind:value={profile.bio}
     />
   </div>
+  <hr />
   <h3 class="text-xl mt-8">Avatar</h3>
   <div class="form-control">
     <label class="label">
@@ -101,9 +102,11 @@
       />
     </div>
   {/if}
+  <hr />
   <h3 class="text-xl mt-8">Background Image</h3>
-  <div class="alert alert-info">
-    The best background images ideal size is 1500x360 px.
+  <div class="alert alert-info my-8">
+    The best background images ideal size is 1500x360 px. Files larger than
+    100kb will cost AR to upload.
   </div>
   <div class="form-control">
     <label class="label">
@@ -127,7 +130,7 @@
       />
     </label>
   </div>
-  {#if avatarOption === "upload"}
+  {#if backgroundOption === "upload"}
     <div class="form-control">
       <label class="label">Upload Background Image</label>
       <input
@@ -148,6 +151,7 @@
       />
     </div>
   {/if}
+  <hr />
   <h3 class="text-xl mt-8">Links</h3>
   <div class="form-control">
     <label for="arweave" class="label">Arweave</label>
@@ -240,6 +244,6 @@
     />
   </div>
   <div class="mt-8">
-    <button class="btn btn-primary">create</button>
+    <button class="btn btn-primary">submit</button>
   </div>
 </form>

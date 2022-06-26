@@ -147,11 +147,8 @@
     return (
       `
 <div id="profile" 
-  {{#links.github}}
-    data-github="{{links.github}}" 
-  {{/links.github}}
   {{#avatar}}
-    data-avatar="https://arweave.net/{{avatar}}" 
+    data-avatar="{{avatar}}" 
   {{/avatar}}
   {{#name}}
     data-name="{{name}}" 
@@ -159,6 +156,12 @@
   {{#bio}}
     data-bio="{{bio}}"
   {{/bio}}
+  {{#background}}
+    data-background="{{background}}" 
+  {{/background}}
+  {{#links.github}}
+    data-github="{{links.github}}" 
+  {{/links.github}}
   {{#links.twitter}}
     data-twitter="{{links.twitter}}"
   {{/links.twitter}}
@@ -183,8 +186,6 @@
   {{#weavemail}}
     data-weavemail="{{weavemail}}"
   {{/weavemail}}
-  
-  data-background="https://lh3.googleusercontent.com/7M_ebzQvBR22BKnV2l7OI3SLfbOtLbvKM0cE2bA_1TEN00klK5lX2jh77wLU_bw06DGb3N48J7Sd_jQKIREgyYh-yJbEHmNU8A0N" 
   ></div>
   ` +
       '<script src="https://arweave.net/o7LNWBFbtP48EeMz6gWoalvp21NWZIy814CKxSegOGQ">' +

@@ -25,24 +25,27 @@
 
   async function getPageProfile(address) {
     const result = await profileMgr.get(address);
-    console.log(result);
     $account = { id: address, profile: result };
     return result;
   }
 
   async function handleCreate({ detail: { profile, avatar, background } }) {
-    submitDialog = true;
+    try {
+      submitDialog = true;
 
-    profile.avatar = avatar ? await upload(avatar) : profile.avatar;
-    profile.background = background
-      ? await upload(background)
-      : profile.background;
-    profile.owner = $address;
-    const result = await profileMgr.create(profile);
-    //console.log(result);
-    submitDialog = false;
-    editMode = false;
-    profileObject = await getPageProfile($address);
+      profile.avatar = avatar ? await upload(avatar, $address) : profile.avatar;
+      profile.background = background
+        ? await upload(background, $address)
+        : profile.background;
+      profile.owner = $address;
+      const result = await profileMgr.create(profile);
+      //console.log(result);
+      submitDialog = false;
+      editMode = false;
+      profileObject = await getPageProfile($address);
+    } catch (e) {
+      alert("ERROR: " + e.message);
+    }
   }
 
   function disconnect() {
@@ -66,7 +69,7 @@
           <!-- show new profile widget -->
           <img
             class="mask mask-squircle"
-            src={`https://arweave.net/${p.avatar}`}
+            src={p.avatar}
             alt={p.name}
             width="94"
             height="94"
@@ -91,7 +94,7 @@
     </div>
   </section>
 </main>
-<Modal open={submitDialog}>
+<Modal open={submitDialog} ok={false}>
   <h3 class="font-bold md:text-lg mb-8">Submitting Profile</h3>
   <div class="flex items-center justify-center">
     <Jumper size="60" color="rebeccapurple" unit="px" duration="2s" />
