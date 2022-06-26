@@ -48,7 +48,7 @@ yarn dev
 ```
 yarn build
 npm i -g arkb
-arkb deploy dist --use-bundler https://node2.bundlr.network --wallet ../mywallet.json --tag-name DEPLOY --tag-value permanotes
+arkb deploy dist --use-bundler https://node2.bundlr.network --wallet ../mywallet.json --tag-name DEPLOY --tag-value permapages
 ```
 
 > NOTE: make sure you have a balance in bundler if not.
@@ -65,8 +65,4 @@ bundlr upload-dir ./dist -c arweave -h https://node2.bundlr.network --index-file
 ```
 
 
-next update deploy
-
-https://dash.deno.com/projects/permanotes
-
-Add the new TxId
+Update ArNS - https://permapages.arweave.dev

@@ -84,7 +84,7 @@ function buildDeployHx() {
   return `
 query {
   transactions(tags: [
-    {name:"DEPLOY", values:["permanotes"]},
+    {name:"DEPLOY", values:["permapages"]},
     {name:"Content-Type", values:["application/x.arweave-manifest+json"]}
   ]) {
     edges {
