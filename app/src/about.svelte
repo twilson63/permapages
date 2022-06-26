@@ -1,6 +1,6 @@
 <script>
   import Navbar from "./components/navbar.svelte";
-  import { notes } from "./app.js";
+  import { pages } from "./app.js";
   import { gql } from "./services/arweave.js";
   import { marked } from "marked";
 

@@ -63,15 +63,39 @@ export function pages({ register, post, gql, postWebpage, load }) {
       .toPromise()
   }
 
+  async function history() {
+    return Async.of()
+      .map(buildDeployHx)
+      .chain(Async.fromPromise(gql))
+      .map(pluckNodes)
+      .toPromise()
+  }
+
   return {
     purchase,
     create,
     list,
-    get
+    get,
+    history
   }
 }
 
-
+function buildDeployHx() {
+  return `
+query {
+  transactions(tags: [
+    {name:"DEPLOY", values:["permanotes"]},
+    {name:"Content-Type", values:["application/x.arweave-manifest+json"]}
+  ]) {
+    edges {
+      node {
+        id
+      }
+    }
+  }
+}
+  `
+}
 
 function formatPages(nodes) {
   return compose(
