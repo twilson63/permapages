@@ -18,7 +18,7 @@ const arweave = Arweave.init({
 })
 
 LoggerFactory.INST.logLevel("error");
-const warp = WarpWebFactory.memCached(arweave)
+const warp = WarpWebFactory.memCachedBased(arweave).useArweaveGateway().build()
 
 const REGISTRY = "bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"
 const ANT_SOURCE = "JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg"

@@ -7,17 +7,17 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Description</th>
+      <th>Last Status</th>
       <th>TransactionId</th>
       <th>Actions</th>
     </tr>
   </thead>
-  {#each records as { id, title, description, webpage }}
+  {#each records as { id, title, status, webpage }}
     <tbody>
       <!-- row 1 -->
       <tr>
         <td>{title}</td>
-        <td>{description}</td>
+        <td>{status.split(0, 50)}...</td>
         <td>{id}</td>
 
         <td>

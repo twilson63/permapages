@@ -95,8 +95,7 @@
         step = m.step;
       });
 
-      page.id = result.id;
-      $pageCache = [page, ...$pageCache];
+      $pageCache = [result, ...$pageCache];
       submitting = false;
 
       if (!result.foundPost) {
