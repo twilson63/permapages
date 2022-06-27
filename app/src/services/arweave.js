@@ -104,7 +104,7 @@ export const postWebpage = async (data) => {
   let result
   const tx = await arweave.createTransaction({ data: data.html })
   tx.addTag('content-type', 'text/html')
-  tx.addTag('App-Name', 'permanotes')
+  tx.addTag('App-Name', 'permapages')
   tx.addTag('Page-Title', data.title)
 
   try {
@@ -161,7 +161,7 @@ export const postPageTx = async (page) => {
   tx.addTag('App-Name', 'PermaPages')
   tx.addTag('Protocol', page.protocol)
   tx.addTag('Page-Title', page.title)
-  tx.addTag('Description', page.description)
+  tx.addTag('Status', page.status)
   tx.addTag('Webpage', page.webpage)
   tx.addTag('Timestamp', new Date().toISOString())
 

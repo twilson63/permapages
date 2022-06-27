@@ -302,11 +302,23 @@
           class="textarea textarea-bordered"
           id="description"
           name="description"
-          maxlength="50"
+          maxlength="150"
           bind:value={page.description}
           placeholder="Enter a description of your page. This will appear in the meta data of your page for social networks and search engines"
         />
-        <small>(max: 50 characters)</small>
+        <small>(max: 150 characters)</small>
+      </div>
+      <div class="form-control">
+        <label for="status" class="label">Status</label>
+        <textarea
+          class="textarea textarea-bordered"
+          id="status"
+          name="status"
+          maxlength="150"
+          bind:value={page.status}
+          placeholder="Enter a status message about this update. ie (First Publish, adding new widget, etc)"
+        />
+        <small>(OPTIONAL, max: 150 characters)</small>
       </div>
       <div class="modal-action">
         <button for="confirm" class="btn">Submit</button>

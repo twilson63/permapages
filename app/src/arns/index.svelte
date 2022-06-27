@@ -167,9 +167,53 @@
 >
   <h3 class="text-3xl">Change Transaction Id</h3>
   <div class="form-control">
-    <label class="label">TransactionId</label>
-    <input class="input input-bordered" bind:value={changeData.transactionId} />
+    <label class="label">Choose reference</label>
+    <label class="label">
+      <input
+        type="radio"
+        name="reference"
+        class="radio radio-primary"
+        value="permapage"
+        bind:group={changeData.type}
+      />
+      Permapage
+    </label>
+    <label class="label">
+      <input
+        type="radio"
+        name="reference"
+        class="radio radio-primary"
+        bind:group={changeData.type}
+        value="arweave"
+      />
+      Arweave Transaction
+    </label>
   </div>
+  {#if changeData.type === "permapage"}
+    <div class="form-control">
+      <label class="label">Select Permapage</label>
+      <select
+        class="select select-bordered"
+        bind:value={changeData.transactionId}
+      >
+        <option class="option" value="">Select Permapage</option>
+        {#await listPermapages() then permapages}
+          {#each permapages as p}
+            <option value={p.webpage}>{p.title}</option>
+          {/each}
+        {/await}
+      </select>
+    </div>
+  {/if}
+  {#if changeData.type === "arweave"}
+    <div class="form-control">
+      <label class="label">Arweave Transaction</label>
+      <input
+        class="input input-bordered"
+        bind:value={changeData.transactionId}
+      />
+    </div>
+  {/if}
 </Modal>
 <Modal open={transferDialog}>
   <h3 class="text-2xl">🛠 Feature coming soon!</h3>

@@ -44,18 +44,23 @@
       id="name"
       name="name"
       required
+      maxlength="20"
+      pattern="[^' ']+"
       class="input input-bordered"
       bind:value={profile.name}
     />
+    <small class="mt-2">(20 characters max, no spaces allowed)</small>
   </div>
   <div class="form-control mb-8">
     <label for="bio" class="label">Bio</label>
     <textarea
       id="bio"
       name="bio"
+      maxlength="150"
       class="textarea textarea-bordered"
       bind:value={profile.bio}
     />
+    <small class="mt-2">(150 characters max)</small>
   </div>
   <hr />
   <h3 class="text-xl mt-8">Avatar</h3>
@@ -158,8 +163,11 @@
     <input
       id="arweave"
       name="arweave"
+      maxlength="100"
+      pattern="[^' ']+"
       class="input input-bordered"
-      bind:value={profile.arweave}
+      placeholder="Arweave Wallet Address"
+      bind:value={profile.links.arweave}
     />
   </div>
   <div class="form-control">
@@ -167,8 +175,11 @@
     <input
       id="etherium"
       name="etherium"
+      maxlength="100"
+      pattern="[^' ']+"
+      placeholder="Etherium Wallet Address"
       class="input input-bordered"
-      bind:value={profile.etherium}
+      bind:value={profile.links.etherium}
     />
   </div>
   <div class="form-control">
@@ -177,6 +188,9 @@
       id="twitter"
       name="twitter"
       class="input input-bordered"
+      maxlength="30"
+      pattern="[^' ']+"
+      placeholder="twitter handle - max 30 characters"
       bind:value={profile.links.twitter}
     />
   </div>
@@ -186,6 +200,9 @@
       id="instagram"
       name="instagram"
       class="input input-bordered"
+      maxlength="30"
+      pattern="[^' ']+"
+      placeholder="instagram handle - max 30 characters"
       bind:value={profile.links.instagram}
     />
   </div>
@@ -196,6 +213,9 @@
       name="linkedin"
       class="input input-bordered"
       bind:value={profile.links.linkedin}
+      maxlength="30"
+      pattern="[^' ']+"
+      placeholder="linkedin handle - max 30 characters"
     />
   </div>
   <div class="form-control">
@@ -205,6 +225,9 @@
       name="discord"
       class="input input-bordered"
       bind:value={profile.links.discord}
+      maxlength="30"
+      pattern="[^' ']+"
+      placeholder="discord handle - max 30 characters"
     />
   </div>
   <div class="form-control">
@@ -214,6 +237,9 @@
       name="facebook"
       class="input input-bordered"
       bind:value={profile.links.facebook}
+      maxlength="30"
+      pattern="[^' ']+"
+      placeholder="facebook handle - max 30 characters"
     />
   </div>
   <div class="form-control">
@@ -222,6 +248,9 @@
       id="youtube"
       name="youtube"
       class="input input-bordered"
+      maxlength="30"
+      pattern="[^' ']+"
+      placeholder="youtube handle - max 30 characters"
       bind:value={profile.links.youtube}
     />
   </div>
@@ -232,6 +261,9 @@
       name="twitch"
       class="input input-bordered"
       bind:value={profile.links.twitch}
+      maxlength="30"
+      pattern="[^' ']+"
+      placeholder="facebook handle - max 30 characters"
     />
   </div>
   <div class="form-control">
@@ -241,6 +273,9 @@
       name="github"
       class="input input-bordered"
       bind:value={profile.links.github}
+      maxlength="30"
+      pattern="[^' ']+"
+      placeholder="github handle - max 30 characters"
     />
   </div>
   <div class="mt-8">

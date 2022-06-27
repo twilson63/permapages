@@ -64,8 +64,21 @@
     <div class="hero-content flex-col w-full">
       {#await profileObject then p}
         {#if editMode && p}
-          <h1 class="text-6xl">Create a PermaProfile</h1>
-          <ProfileForm profile={p} on:create={handleCreate} />
+          <div class="flex">
+            <div class="card shadow-xl w-1/2 flex-1">
+              <div class="card-body">
+                <h1 class="card-title text-6xl">Update Profile</h1>
+                <p class="text-2xl">
+                  Update your web3 profile by adding additional social accounts,
+                  or changing your avatar or background.
+                </p>
+                <img src="/permapages_logo.svg" alt="permapages_logo" />
+              </div>
+            </div>
+            <div class="flex-0">
+              <ProfileForm profile={p} on:create={handleCreate} />
+            </div>
+          </div>
         {:else if !editMode && p}
           <ProfileView profile={p} />
           <div class="flex space-x-8">
@@ -79,8 +92,24 @@
             >
           </div>
         {:else}
-          <h1 class="text-6xl">Create a PermaProfile</h1>
-          <ProfileForm profile={{ links: {} }} on:create={handleCreate} />
+          <div class="flex">
+            <div class="card shadow-xl w-1/2 flex-1">
+              <div class="card-body">
+                <h1 class="card-title text-6xl">New Profile</h1>
+                <p class="text-2xl">
+                  Create your web3 profile by adding a name and social accounts,
+                  or changing your avatar or background.
+                </p>
+                <img src="/permapages_logo.svg" alt="permapages_logo" />
+              </div>
+            </div>
+            <div class="flex-0">
+              <ProfileForm
+                profile={{ links: { arweave: $address } }}
+                on:create={handleCreate}
+              />
+            </div>
+          </div>
         {/if}
       {/await}
     </div>
