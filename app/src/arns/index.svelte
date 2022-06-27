@@ -33,6 +33,8 @@
   let errorDialog = false;
   let errorMessage = "";
 
+  $: balance = 0;
+
   async function doSearch() {
     const result = await search(searchText);
     if (result.ok) {
@@ -101,6 +103,14 @@
       []
     );
   }
+
+  async function doGetBalance() {
+    const result = await getBalance($address);
+    balance = result.balance;
+  }
+  if ($address) {
+    balance = doGetBalance();
+  }
 </script>
 
 <NavBar />
@@ -114,14 +124,18 @@
               <h2 class="text-2xl mb-2">ArNS Registry Portal</h2>
               <a class="link" href="https://ar.io/arns">More Information</a>
               {#if $address}
-                {#await getBalance($address) then result}
-                  <div>ArNS Balance: {result.balance}</div>
+                {#await balance then result}
+                  <div>ArNS Balance: {result}</div>
+                {:catch e}
+                  <div />
                 {/await}
               {/if}
             </div>
             <div class="flex-none6">
-              <button on:click={registerDomain} class="btn btn-secondary"
-                >Register</button
+              <button
+                disabled={balance === 0}
+                on:click={registerDomain}
+                class="btn btn-secondary">Register</button
               >
             </div>
           </div>

@@ -4,7 +4,6 @@
   import { profiles } from "./app.js";
   import { Jumper } from "svelte-loading-spinners";
   import ProfileView from "./components/profile.svelte";
-  import ProfileForm2 from "./components/profile-form/index.svelte";
 
   import {
     gql,
@@ -17,7 +16,7 @@
   import Modal from "./components/modal.svelte";
 
   let submitDialog = false;
-  let editMode = true;
+  let editMode = false;
 
   const profileMgr = profiles({
     gql,
@@ -47,6 +46,8 @@
       editMode = false;
       profileObject = await getPageProfile($address);
     } catch (e) {
+      submitDialog = false;
+      editMode = false;
       alert("ERROR: " + e.message);
     }
   }
@@ -79,7 +80,6 @@
             </div>
             <div class="flex-0">
               <ProfileForm profile={p} on:create={handleCreate} />
-              <!-- <ProfileForm2 /> -->
             </div>
           </div>
         {:else if !editMode && p}
