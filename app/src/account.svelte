@@ -4,6 +4,7 @@
   import { profiles } from "./app.js";
   import { Jumper } from "svelte-loading-spinners";
   import ProfileView from "./components/profile.svelte";
+  import ProfileForm2 from "./components/profile-form/index.svelte";
 
   import {
     gql,
@@ -16,7 +17,7 @@
   import Modal from "./components/modal.svelte";
 
   let submitDialog = false;
-  let editMode = false;
+  let editMode = true;
 
   const profileMgr = profiles({
     gql,
@@ -26,6 +27,7 @@
 
   async function getPageProfile(address) {
     const result = await profileMgr.get(address);
+    console.log(result.avatar);
     $account = { id: address, profile: result };
     return result;
   }
@@ -60,11 +62,11 @@
 
 <Navbar />
 <main>
-  <section class="hero min-h-screen bg-base-200">
+  <section class="hero min-h-screen bg-base-200 items-start">
     <div class="hero-content flex-col w-full">
       {#await profileObject then p}
         {#if editMode && p}
-          <div class="flex">
+          <div class="flex space-x-8">
             <div class="card shadow-xl w-1/2 flex-1">
               <div class="card-body">
                 <h1 class="card-title text-6xl">Update Profile</h1>
@@ -77,6 +79,7 @@
             </div>
             <div class="flex-0">
               <ProfileForm profile={p} on:create={handleCreate} />
+              <!-- <ProfileForm2 /> -->
             </div>
           </div>
         {:else if !editMode && p}

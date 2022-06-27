@@ -40,12 +40,9 @@ export const upload = async (file, addr) => {
     const balance = await arweave.wallets.getBalance(addr)
     const { data } = await arweave.api.get(`price/${file.buffer.byteLength + 10000}`)
     if (data > balance) {
-      console.log(data)
-      console.log(balance)
       return Promise.reject('not enough AR')
     }
   }
-
   const tx = await arweave.createTransaction({ data: file.buffer })
   tx.addTag('Content-Type', file.type)
 
@@ -56,7 +53,7 @@ export const upload = async (file, addr) => {
     await arweave.transactions.sign(tx)
     await arweave.transactions.post(tx)
   }
-  console.log(tx)
+
   return `https://arweave.net/${tx.id}`
 
 }
@@ -69,7 +66,6 @@ export const loadPage = async (id) => {
 
 export const loadProfile = async (id) => {
   const { data } = await arweave.api.get(id)
-  console.log(data)
   return data
 }
 
@@ -140,6 +136,7 @@ export const postProfileTx = async (profile, tags) => {
 
     return result
   } catch (e) {
+
     // then arweave
     await arweave.transactions.sign(tx)
     await arweave.transactions.post(tx)

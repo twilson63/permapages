@@ -24,7 +24,6 @@ export function profiles({ gql, post, load }) {
       .chain(nodes => isEmpty(nodes) ? Async.Rejected(null) : Async.Resolved(nodes))
       .map(formatProfiles)
       .map(head)
-      .map(x => (console.log(x), x))
       .chain(({ id }) => Async.fromPromise(load)(id))
       .toPromise().catch(identity)
 

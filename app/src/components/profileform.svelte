@@ -171,15 +171,15 @@
     />
   </div>
   <div class="form-control">
-    <label for="etherium" class="label">Etherium</label>
+    <label for="ethereum" class="label">Ethereum</label>
     <input
-      id="etherium"
-      name="etherium"
+      id="ethereum"
+      name="ethereum"
       maxlength="100"
       pattern="[^' ']+"
-      placeholder="Etherium Wallet Address"
+      placeholder="ethereum Wallet Address"
       class="input input-bordered"
-      bind:value={profile.links.etherium}
+      bind:value={profile.links.ethereum}
     />
   </div>
   <div class="form-control">

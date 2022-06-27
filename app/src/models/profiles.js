@@ -17,7 +17,7 @@ const schema = z.object({
   protocol: z.string().default('PermaProfile-v0.1'),
   links: z.object({
     arweave: z.string().optional(),
-    etherium: z.string().optional(),
+    ethereum: z.string().optional(),
     solana: z.string().optional(),
     twitter: z.string().optional(),
     linkedin: z.string().optional(),
