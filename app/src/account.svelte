@@ -26,7 +26,6 @@
 
   async function getPageProfile(address) {
     const result = await profileMgr.get(address);
-    console.log(result.avatar);
     $account = { id: address, profile: result };
     return result;
   }
