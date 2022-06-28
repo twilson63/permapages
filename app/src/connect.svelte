@@ -54,7 +54,7 @@
       address.set(addr);
 
       connecting = false;
-      console.log(path);
+
       if (path !== "/connect") {
         router.goto(path);
       } else {

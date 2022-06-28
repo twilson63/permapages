@@ -124,6 +124,16 @@
             </div>
           </div>
         {/if}
+      {:catch err}
+        <img
+          src="/permapages_logo.svg"
+          alt="app logo"
+          class="h-[300px] w-[300px]"
+        />
+        <div class="alert alert-error m-32 flex-col">
+          <h1 class="text-6xl">Something went wrong!</h1>
+          <p>{err.message}</p>
+        </div>
       {/await}
     </div>
   </section>

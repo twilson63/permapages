@@ -11,7 +11,7 @@
     <label tabindex="0" class="btn mask mask-circle">
       {#if $account && $account.profile}
         <img
-          src={`https://arweave.net/${$account.profile.avatar}`}
+          src={$account.profile.avatar}
           alt="avatar"
           width="48"
           heigth="48"
