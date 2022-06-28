@@ -18,7 +18,6 @@ function template() {
         <figure><img class="h-[300px] w-[300px]" src={{image_url}} alt={{name}} /></figure>
         <div class="card-body">
           <h2 class="card-title">{{name}}</h2>
-          <p>{{name}}</p>
           <div class="card-actions justify-end">
             <a
               href={{permalink}}
