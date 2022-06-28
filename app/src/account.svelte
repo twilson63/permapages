@@ -68,10 +68,10 @@
       {#await profileObject then p}
         {#if p}
           <ProfileView profile={p} />
-          <div class="flex space-x-8">
-            <a href="/pages" class="btn btn-primary">Pages</a>
-            <a class="btn" href="/account/edit">Edit</a>
-            <button class="btn" on:click|preventDefault={disconnect}
+          <div class="flex space-x-2">
+            <a href="/pages" class="btn btn-secondary">Pages</a>
+            <a class="btn btn-primary" href="/account/edit">Edit Profile</a>
+            <button class="btn btn-outline" on:click|preventDefault={disconnect}
               >Disconnect</button
             >
           </div>

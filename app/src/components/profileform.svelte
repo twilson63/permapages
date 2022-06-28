@@ -359,7 +359,7 @@
         />
       </div>
     {/if}
-    <div class="absolute bottom-4 mt-16 space-x-4">
+    <div class="absolute bottom-4 mt-16 space-x-2">
       <button
         on:click={prev}
         type="button"
@@ -372,9 +372,10 @@
         class="btn btn-primary"
         disabled={tabs.indexOf(currentTab) === 5}>Next</button
       >
-      <button class="btn btn" class:btn-outline={tabs.indexOf(currentTab) < 5}
+      <button class="btn" class:btn-outline={tabs.indexOf(currentTab) < 5}
         >Finish</button
       >
+      <a class="btn btn-outline" href="/account">Cancel</a>
     </div>
   </div>
 </form>

@@ -9,15 +9,16 @@ export default {
 
 function template() {
   return `
+<div class="mx-16">
 <h2 class="text-3xl my-8">My NFTs</h2>
 <div class="carousel rounded-box w-full">
   {{#assets}}
     <div class="carosel-item">
       <div class="card w-96 h-full">
-        <figure><img src={{image_url}} alt={{name}} /></figure>
+        <figure><img class="h-[300px] w-[300px]" src={{image_url}} alt={{name}} /></figure>
         <div class="card-body">
           <h2 class="card-title">{{name}}</h2>
-          <p>{{description}}</p>
+          <p>{{name}}</p>
           <div class="card-actions justify-end">
             <a
               href={{permalink}}
@@ -29,6 +30,7 @@ function template() {
       </div>
     </div>
   {{/assets}}
+</div>
 </div>
   `
 }

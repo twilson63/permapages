@@ -15,6 +15,8 @@
   import { router } from "tinro";
 
   let submitDialog = false;
+  let errorDialog = false;
+  let errorMessage = "";
 
   async function getPageProfile(address) {
     const result = await profileMgr.get(address);
@@ -30,18 +32,24 @@
   async function handleCreate({ detail: { profile, avatar, background } }) {
     try {
       submitDialog = true;
+      // upload avatar
       profile.avatar = avatar ? await upload(avatar, $address) : profile.avatar;
+
+      // upload background
       profile.background = background
         ? await upload(background, $address)
         : profile.background;
+
       profile.owner = $address;
-      const result = await profileMgr.create(profile);
-      //console.log(result);
+      // save profile
+      await profileMgr.create(profile);
+
       submitDialog = false;
       router.goto("/account");
     } catch (e) {
       submitDialog = false;
-      alert("ERROR: " + e.message);
+      errorMessage = e.message;
+      errorDialog = true;
     }
   }
 
@@ -77,4 +85,11 @@
   <div class="flex items-center justify-center">
     <Jumper size="60" color="rebeccapurple" unit="px" duration="2s" />
   </div>
+</Modal>
+
+<Modal open={errorDialog}>
+  <h3 class="text-3xl text-error">Error!</h3>
+  <p class="my-8">
+    {errorMessage}
+  </p>
 </Modal>

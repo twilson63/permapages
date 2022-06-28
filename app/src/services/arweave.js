@@ -37,10 +37,14 @@ export const connectApp = () => {
 export const upload = async (file, addr) => {
   // check balance
   if ((file.buffer.byteLength + 10000 > 100000)) {
-    const balance = await arweave.wallets.getBalance(addr)
-    const { data } = await arweave.api.get(`price/${file.buffer.byteLength + 10000}`)
-    if (data > balance) {
-      return Promise.reject('not enough AR')
+    try {
+      const balance = await arweave.wallets.getBalance(addr)
+      const { data } = await arweave.api.get(`price/${file.buffer.byteLength + 10000}`)
+      if (data > balance) {
+        return Promise.reject({ message: 'not enough $AR to upload' })
+      }
+    } catch (e) {
+      return Promise.reject({ message: 'not enough $AR to upload' })
     }
   }
   const tx = await arweave.createTransaction({ data: file.buffer })

@@ -146,7 +146,7 @@
         <img
           alt="avatar"
           src={profile.avatar || "/avatar.svg"}
-          class="ml-5 mr-5 shadow-xl rounded-full border-4 max-w-[265px] bg-base-300"
+          class="ml-5 mr-5 shadow-xl rounded-full border-4 h-[250px] w-[250px] bg-base-300"
         />
         <div class="flex flex-col justify-center">
           <p class="m-1 text-3xl tracking-tight text-base-600">
