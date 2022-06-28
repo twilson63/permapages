@@ -191,7 +191,7 @@
   {{/owner}}
   ></div>
   ` +
-      '<script src="https://arweave.net/qqrkkzk5sjz-eABvFWou10kzE1QeCFIcI1EuxzX34Ro">' +
+      '<script src="https://arweave.net/yLXMCMLh7Rd9o22UmQvHYua9WY2Hl3n9ENoi5cJ5IBA">' +
       "<//script>".replace("/", "")
     );
   }

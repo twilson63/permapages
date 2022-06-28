@@ -206,6 +206,19 @@ function htmlTemplate(title, description, body) {
     <main class="bg-base-100">
     ${body}
     </main>
+    <footer class="footer relative bg-black flex justify-end">
+      <div class="hidden md:block absolute bottom-8 left-8">
+        <a href="https://permapages.app/#/about">
+          <img
+            src="https://permapages.app/ar-dark.png"}
+            alt="permanent"
+          />
+        </a>
+      </div>
+      <div class="flex m-16">
+        <p>🐘 This page was created with <a href="https://permapages.app">Permapages</a>. You should try to create your profile page in permapages, it's easy and only takes a few minutes. 🚀</p>
+      </div>
+    </footer>
   </body>
 </html>  
 `
