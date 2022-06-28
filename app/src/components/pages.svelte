@@ -17,7 +17,7 @@
       <!-- row 1 -->
       <tr>
         <td>{title}</td>
-        <td>{status.split(0, 50)}...</td>
+        <td>{status ? status.split(0, 50) : "no status"}...</td>
         <td>{id}</td>
 
         <td>
