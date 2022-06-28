@@ -288,15 +288,6 @@ arweave-multihost@^0.1.0:
     arweave "^1.10.15"
     axios "^0.21.1"
 
-arweave-topics@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/arweave-topics/-/arweave-topics-0.0.2.tgz#71d9fcd7811bdc6daf0a11f312279a03db15f062"
-  integrity sha512-+zuqXx3nYQN/piquC57ZrVKaOFndMREmlQyInLzKkOBY8xwj/AplqCgvQX1bCSQEx2+qOwt8uZPEymjyUg9XcA==
-  dependencies:
-    arweave "^1.10.23"
-    crocks "^0.12.4"
-    ramda "^0.28.0"
-
 arweave-wallet-connector@^0.0.26:
   version "0.0.26"
   resolved "https://registry.yarnpkg.com/arweave-wallet-connector/-/arweave-wallet-connector-0.0.26.tgz#ff4788be00c8f0b069314242511258e86236aa4b"

@@ -11,6 +11,8 @@
   let error = null;
   let connecting = false;
 
+  const [_, path] = location.href.split("#");
+
   async function appConnect() {
     try {
       connecting = true;
@@ -19,8 +21,12 @@
 
       address.set(walletAddress);
       clearTimeout(tId);
-      router.goto("/account");
       connecting = false;
+      if (path !== "/connect") {
+        router.goto(path);
+      } else {
+        router.goto("/account");
+      }
     } catch (e) {
       connecting = false;
       error = e.message;
@@ -48,7 +54,12 @@
       address.set(addr);
 
       connecting = false;
-      router.goto("/account");
+      console.log(path);
+      if (path !== "/connect") {
+        router.goto(path);
+      } else {
+        router.goto("/account");
+      }
     } catch (e) {
       connecting = false;
       error = e.message;

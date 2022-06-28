@@ -1,7 +1,7 @@
 {
   "name": "permapages",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.1a",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -30,7 +30,6 @@
     "arweave": "^1.10.23",
     "arweave-account": "^1.2.5",
     "arweave-bundles": "^1.0.3",
-    "arweave-topics": "^0.0.2",
     "arweave-wallet-connector": "^0.0.26",
     "crocks": "^0.12.4",
     "date-fns": "^2.28.0",

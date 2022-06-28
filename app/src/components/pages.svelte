@@ -30,5 +30,10 @@
         </td>
       </tr>
     </tbody>
+  {:else}
+    <div class="h-full text-center">
+      <div class="text-[60px]">🐘</div>
+      <h1 class="text-6xl">Create your first Permapage!</h1>
+    </div>
   {/each}
 </table>

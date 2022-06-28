@@ -44,7 +44,8 @@
       };
       const result = await profileMgr.create(profile);
       submitDialog = false;
-      profileObject = await getPageProfile($address);
+      //profileObject = await getPageProfile($address);
+      router.goto("/pages");
     } catch (e) {
       submitDialog = false;
       alert("ERROR: " + e.message);

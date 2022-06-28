@@ -57,7 +57,11 @@
     {/if}
   </Route>
   <Route path="/account/edit">
-    <AccountForm />
+    {#if not(isEmpty($address))}
+      <AccountForm />
+    {:else}
+      <Connect />
+    {/if}
   </Route>
   <Route path="/account">
     {#if not(isEmpty($address))}

@@ -256,8 +256,10 @@
         <p class="mt-4 alert alert-info">
           When you create a page, it will be posted on the permaweb, and can
           never be removed, once published you register a subdomain on ArNS
-          https://[subdomain].arweave.net. <a href="https://ar.io/arns"
-            >Learn more about ArNS</a
+          https://[subdomain].arweave.net. <a
+            target="_blank"
+            class="btn btn-ghost"
+            href="https://ar.io/arns">Learn more about ArNS</a
           >
         </p>
         <div class="mt-8">

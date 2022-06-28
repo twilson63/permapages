@@ -93,6 +93,8 @@
       errorMessage = result.message;
       errorDialog = true;
     }
+    changeData = {};
+    changeDialog = false;
   }
 
   async function listPermapages() {
