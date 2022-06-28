@@ -31,7 +31,11 @@
       class="dropdown-content menu p-2 shadow bg-base-100 rounded-box md:w-52"
     >
       <li>
-        <a href="/notes/La7xUTN13SFI58-tVKSFQznRzHKY3QfVblYhV-6J-2A">Learn</a>
+        <a
+          target="_blank"
+          href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE"
+          >Learn</a
+        >
       </li>
       {#if R.isEmpty($address)}
         <li><a href="/arns">ArNS</a></li>
@@ -45,12 +49,16 @@
   </div>
   <div class="flex-1">
     <a href="/" class="btn btn-ghost normal-case text-xl">🐘 PERMAPAGES</a>
-    <div class="badge badge-secondary">ALPHA {version}</div>
+    <div class="badge badge-secondary">BETA {version}</div>
   </div>
   <div class="flex-none">
     <ul class="hidden md:inline-flex menu menu-horizontal p-0">
       <li>
-        <a href="/notes/Xx8lQw1q9xOUn1mB7CMagKHgv8XUy9NxsrQLtfqZItY">Learn</a>
+        <a
+          target="_blank"
+          href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE"
+          >Learn</a
+        >
       </li>
       {#if R.isEmpty($address)}
         <li><a href="/arns">ArNS</a></li>

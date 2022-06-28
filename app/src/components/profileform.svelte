@@ -59,23 +59,35 @@
 <form class="w-full h-full" on:submit|preventDefault={handleSubmit}>
   <div class="relative h-full">
     <div class="tabs">
-      <a class="tab tab-bordered" class:tab-active={currentTab === "tab1"}
-        >Profile</a
+      <a
+        class="tab tab-bordered"
+        class:tab-active={currentTab === "tab1"}
+        on:click={() => (currentTab = "tab1")}>Profile</a
       >
-      <a class="tab tab-bordered" class:tab-active={currentTab === "tab2"}
-        >Avatar</a
+      <a
+        class="tab tab-bordered"
+        class:tab-active={currentTab === "tab2"}
+        on:click={() => (currentTab = "tab2")}>Avatar</a
       >
-      <a class="tab tab-bordered" class:tab-active={currentTab === "tab3"}
-        >Background Banner</a
+      <a
+        class="tab tab-bordered"
+        class:tab-active={currentTab === "tab3"}
+        on:click={() => (currentTab = "tab3")}>Background Banner</a
       >
-      <a class="tab tab-bordered" class:tab-active={currentTab === "tab4"}
-        >Web3 Addresses</a
+      <a
+        class="tab tab-bordered"
+        class:tab-active={currentTab === "tab4"}
+        on:click={() => (currentTab = "tab4")}>Web3 Addresses</a
       >
-      <a class="tab tab-bordered" class:tab-active={currentTab === "tab5"}
-        >Social Networks</a
+      <a
+        class="tab tab-bordered"
+        class:tab-active={currentTab === "tab5"}
+        on:click={() => (currentTab = "tab5")}>Social Networks</a
       >
-      <a class="tab tab-bordered" class:tab-active={currentTab === "tab6"}
-        >Finish</a
+      <a
+        class="tab tab-bordered"
+        class:tab-active={currentTab === "tab6"}
+        on:click={() => (currentTab = "tab6")}>Platforms</a
       >
     </div>
     {#if currentTab === "tab1"}
@@ -112,10 +124,16 @@
     {:else if currentTab === "tab2"}
       <h3 class="text-xl mt-8">Avatar</h3>
       <p class="my-4">Upload your avatar or add an URL link</p>
-      <div class="my-16 form-control">
+
+      <div class="bg-info text-black rounded px-4 py-4 my-8 w-full">
+        You can either upload an image from your device or paste an `image_url`
+        from your<br /> NFT gallery. Use the radio buttons to choose from upload
+        file from your device to<br /> paste a link from an image in your gallery.
+      </div>
+      <div class="my-8 form-control">
         <small>Choose between 'Upload' or 'Link'</small>
         <label class="label">
-          Upload
+          Upload image from device
           <input
             type="radio"
             name="avatarOption"
@@ -125,7 +143,7 @@
           />
         </label>
         <label class="label">
-          Link
+          Link to an image
           <input
             type="radio"
             name="avatarOption"
@@ -137,7 +155,7 @@
       </div>
       {#if avatarOption === "upload"}
         <div class="form-control">
-          <label class="label">Upload Avatar</label>
+          <label class="label">Upload from device Avatar</label>
           <input
             type="file"
             class="input"
@@ -147,7 +165,7 @@
         </div>
       {:else}
         <div class="form-control">
-          <label for="avatar" class="label">Link (URL) for Avatar</label>
+          <label for="avatar" class="label">Link from web</label>
           <input
             id="avatar"
             name="avatar"
@@ -168,11 +186,11 @@
       </div>
 
       <p class="my-4">Upload your background or add an URL link</p>
-      <div class="my-16 form-control">
+      <div class="my-8 form-control">
         <small>Choose between 'Upload' or 'Link'</small>
         <div class="form-control">
           <label class="label">
-            Upload
+            Upload image from device
             <input
               type="radio"
               name="backgroundOption"
@@ -182,7 +200,7 @@
             />
           </label>
           <label class="label">
-            URL
+            Link to an image from web
             <input
               type="radio"
               name="backgroundOption"
@@ -193,8 +211,8 @@
           </label>
         </div>
         {#if backgroundOption === "upload"}
-          <div class="form-control">
-            <label class="label">Upload Background Image</label>
+          <div class="form-control mt-4">
+            <label class="label">Upload from device</label>
             <input
               type="file"
               class="input"
@@ -203,10 +221,8 @@
             />
           </div>
         {:else}
-          <div class="form-control">
-            <label for="background" class="label"
-              >URL for Background Image</label
-            >
+          <div class="form-control mt-4">
+            <label for="background" class="label">Link from web</label>
             <input
               id="background"
               name="background"

@@ -12,11 +12,10 @@
     upload,
   } from "./services/arweave.js";
   import Navbar from "./components/navbar.svelte";
-  import ProfileForm from "./components/profileform.svelte";
   import Modal from "./components/modal.svelte";
 
   let submitDialog = false;
-  let editMode = false;
+  let name = "";
 
   const profileMgr = profiles({
     gql,
@@ -30,23 +29,24 @@
     return result;
   }
 
-  async function handleCreate({ detail: { profile, avatar, background } }) {
+  async function handleCreate() {
     try {
       submitDialog = true;
 
-      profile.avatar = avatar ? await upload(avatar, $address) : profile.avatar;
-      profile.background = background
-        ? await upload(background, $address)
-        : profile.background;
-      profile.owner = $address;
+      // profile.avatar = avatar ? await upload(avatar, $address) : profile.avatar;
+      // profile.background = background
+      //   ? await upload(background, $address)
+      //   : profile.background;
+      let profile = {
+        name,
+        owner: $address,
+        links: {},
+      };
       const result = await profileMgr.create(profile);
-      //console.log(result);
       submitDialog = false;
-      editMode = false;
       profileObject = await getPageProfile($address);
     } catch (e) {
       submitDialog = false;
-      editMode = false;
       alert("ERROR: " + e.message);
     }
   }
@@ -65,51 +65,61 @@
   <section class="hero min-h-screen bg-base-200 items-start">
     <div class="hero-content flex-col w-full">
       {#await profileObject then p}
-        {#if editMode && p}
-          <div class="flex space-x-8">
-            <div class="card shadow-xl w-1/2 flex-1">
-              <div class="card-body">
-                <h1 class="card-title text-6xl">Update Profile</h1>
-                <p class="text-2xl">
-                  Update your web3 profile by adding additional social accounts,
-                  or changing your avatar or background.
-                </p>
-                <img src="/permapages_logo.svg" alt="permapages_logo" />
-              </div>
-            </div>
-            <div class="flex-0">
-              <ProfileForm profile={p} on:create={handleCreate} />
-            </div>
-          </div>
-        {:else if !editMode && p}
+        {#if p}
           <ProfileView profile={p} />
           <div class="flex space-x-8">
             <a href="/pages" class="btn btn-primary">Pages</a>
-            <button
-              class="btn"
-              on:click|preventDefault={() => (editMode = true)}>Edit</button
-            >
+            <a class="btn" href="/account/edit">Edit</a>
             <button class="btn" on:click|preventDefault={disconnect}
               >Disconnect</button
             >
           </div>
         {:else}
-          <div class="flex">
+          <div class="flex space-x-8">
             <div class="card shadow-xl w-1/2 flex-1">
               <div class="card-body">
                 <h1 class="card-title text-6xl">New Profile</h1>
                 <p class="text-2xl">
-                  Create your web3 profile by adding a name and social accounts,
-                  or changing your avatar or background.
+                  Get started by adding your username, you can enhance your full
+                  web3 profile later.
                 </p>
                 <img src="/permapages_logo.svg" alt="permapages_logo" />
               </div>
             </div>
-            <div class="flex-0">
-              <ProfileForm
-                profile={{ links: { arweave: $address } }}
-                on:create={handleCreate}
-              />
+            <div class="flex-0 mt-8">
+              <form
+                class="w-full h-full"
+                on:submit|preventDefault={handleCreate}
+              >
+                <div class="relative h-full">
+                  <h4 class="mt-4 text-2xl">Account Information</h4>
+                  <p class="text-sm">
+                    Add your username, with no spaces, it should be less than 20
+                    characters.
+                  </p>
+                  <div class="form-control mt-8">
+                    <label for="name" class="label"
+                      >Name <span class="text-secondary">* required</span
+                      ></label
+                    >
+                    <input
+                      id="name"
+                      name="name"
+                      required
+                      maxlength="20"
+                      pattern="[^' ']+"
+                      class="input input-bordered input-secondary"
+                      bind:value={name}
+                    />
+                    <small class="mt-2"
+                      >(20 characters max, no spaces allowed)</small
+                    >
+                  </div>
+                  <div class="mt-8">
+                    <button class="w-full btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         {/if}

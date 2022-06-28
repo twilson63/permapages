@@ -13,7 +13,7 @@
       <h1 class="mt-8 text-5xl">
         <span class="uppercase text-primary">🐘 PermaPages 🐘</span>
       </h1>
-      <div class="badge badge-secondary">ALPHA {version}</div>
+      <div class="badge badge-secondary">BETA {version}</div>
       <div class="flex mt-8 space-x-2">
         <h2 class="text-3xl text-secondary">✨ BUILD</h2>
         <h2 class="text-3xl text-primary">🚀 PUBLISH</h2>
@@ -26,7 +26,8 @@
           <a href="/connect" class="btn btn-primary">Connect</a>
         {/if}
         <a
-          href="/notes/La7xUTN13SFI58-tVKSFQznRzHKY3QfVblYhV-6J-2A"
+          target="_blank"
+          href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE"
           class="btn btn-outline btn-secondary">Learn More</a
         >
       </div>

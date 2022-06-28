@@ -68,7 +68,9 @@
 
       page.content = easymde.value();
       page.owner = $address;
-      page.html = `<div class="prose-lg">${marked.parse(page.content)}</div>`;
+      page.html = `<div class="prose-lg m-16">${marked.parse(
+        page.content
+      )}</div>`;
 
       if (page.ethwallet) {
         const data = await opensea.code.preRender({ address: page.ethwallet });

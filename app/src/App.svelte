@@ -6,6 +6,7 @@
   import Home from "./home.svelte";
   import Connect from "./connect.svelte";
   import Account from "./account.svelte";
+  import AccountForm from "./accounts/form.svelte";
   import Notfound from "./404.svelte";
   import About from "./about.svelte";
   import Pages from "./pages/index.svelte";
@@ -54,6 +55,9 @@
     {:else}
       <Connect />
     {/if}
+  </Route>
+  <Route path="/account/edit">
+    <AccountForm />
   </Route>
   <Route path="/account">
     {#if not(isEmpty($address))}
