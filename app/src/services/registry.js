@@ -73,11 +73,12 @@ export async function register({ name, owner, transactionId }) {
 
 export async function getBalance(owner) {
   const registry = warp.pst(REGISTRY)
+
   const { result } = await registry.viewState({
     function: 'balance',
     target: owner
   })
-  console.log(result)
+
   return result
 }
 
@@ -97,7 +98,7 @@ query {
 }
     `
   }
-  console.log(query)
+
   const result = await arweave.api.post('graphql', query)
 
   const ids = pluck('id', pluck('node', result.data.data.transactions.edges))

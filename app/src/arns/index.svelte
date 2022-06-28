@@ -107,9 +107,23 @@
   }
 
   async function doGetBalance() {
-    const result = await getBalance($address);
-    balance = result.balance;
+    try {
+      const result = await getBalance($address);
+      balance = result.balance;
+    } catch (e) {
+      if (
+        ![
+          "result is null",
+          "Cannot read properties of null (reading 'balance')",
+        ].includes(e.message)
+      ) {
+        errorMessage =
+          "An error occurred trying to check you ArNS Test token balance.";
+        errorDialog = true;
+      }
+    }
   }
+
   if ($address) {
     balance = doGetBalance();
   }
