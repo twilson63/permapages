@@ -54,6 +54,7 @@
         page.content = p.content;
         page.profile = p.profile;
         page.weavemail = p.weavemail;
+        page.ethwallet = p.ethwallet;
       });
   } else {
   }
@@ -68,6 +69,7 @@
 
       page.content = easymde.value();
       page.owner = $address;
+
       page.html = `<div class="prose-lg m-16">${marked.parse(
         page.content
       )}</div>`;
@@ -184,9 +186,9 @@
   {{#links.youtube}}
     data-youtube="{{links.youtube}}"
   {{/links.youtube}}
-  {{#weavemail}}
-    data-weavemail="{{weavemail}}"
-  {{/weavemail}}
+  {{#owner}}
+    data-weavemail="{{owner}}"
+  {{/owner}}
   ></div>
   ` +
       '<script src="https://arweave.net/qqrkkzk5sjz-eABvFWou10kzE1QeCFIcI1EuxzX34Ro">' +
