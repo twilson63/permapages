@@ -4,6 +4,11 @@
 </script>
 
 <div class="hero min-h-screen bg-base-200 items-start">
+  <div class="w-full">
+    <div class="badge badge-secondary ml-16 mt-4 float-left">
+      BETA {version}
+    </div>
+  </div>
   <div class="hero-content text-center">
     <div class="w-full">
       <figure class="flex items-center justify-center">
