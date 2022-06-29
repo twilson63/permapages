@@ -4,10 +4,10 @@
   export let icon_repo = "https://social-icons.arweave.dev";
 </script>
 
-<div class="h-[700px] w-full">
+<div class="h-[400px] w-full">
   <div
     style="background-image: url({profile.background || '/background.svg'})"
-    class="bg-cover bg-no-repeat w-full h-[460px] mb-[50px]"
+    class="bg-cover bg-no-repeat w-full h-[300px] mb-[50px]"
   >
     <div class="w-full h-full flex flex-col justify-between relative">
       <ul class="w-full flex flex-row-reverse p-5">
@@ -142,7 +142,7 @@
           {/if}
         {/if}
       </ul>
-      <div class="w-full flex m-5 absolute top-[360px] left-0">
+      <div class="w-full flex m-5 absolute top-[200px] left-0">
         <img
           alt="avatar"
           src={profile.avatar || "/avatar.svg"}

@@ -117,6 +117,7 @@
           "Cannot read properties of null (reading 'balance')",
         ].includes(e.message)
       ) {
+        console.log(e);
         errorMessage =
           "An error occurred trying to check you ArNS Test token balance.";
         errorDialog = true;
