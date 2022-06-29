@@ -4,7 +4,7 @@
   export let icon_repo = "https://social-icons.arweave.dev";
 </script>
 
-<div class="h-[450px] w-full">
+<div class="h-[475px] w-full">
   <div
     style="background-image: url({profile.background || '/background.svg'})"
     class="bg-cover bg-no-repeat w-full h-[300px] mb-[50px]"
