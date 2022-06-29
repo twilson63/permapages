@@ -15,6 +15,7 @@ window.addEventListener("arweaveWalletLoaded", async () => {
         );
 
         address.set(await arweaveWallet.getActiveAddress());
+
       } catch (e) {
         console.log(e)
       }

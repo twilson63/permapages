@@ -2,9 +2,15 @@
   import { router, meta } from "tinro";
   import Navbar from "../components/navbar.svelte";
   import Modal from "../components/modal.svelte";
-  import { postPageTx, postWebpage, loadPage } from "../services/arweave.js";
+  import {
+    postPageTx,
+    postWebpage,
+    loadPage,
+    loadProfile,
+    gql,
+  } from "../services/arweave.js";
   import { register } from "../services/registry.js";
-  import { pages } from "../app.js";
+  import { pages, profiles } from "../app.js";
   import { address, account, pageCache } from "../store.js";
   import { marked } from "marked";
   import weavemail from "../widgets/weavemail.js";
@@ -81,7 +87,9 @@
       }
 
       if (page.profile) {
-        let profileData = $account.profile;
+        let profileData = await profiles({ gql, load: loadProfile }).get(
+          $address
+        );
         if (page.weavemail) {
           profileData = { ...profileData, weavemail: profileData.addr };
         }
@@ -111,6 +119,7 @@
       }
     } catch (e) {
       submitting = false;
+      console.log(e);
       errorMessage = e.message;
       errorDialog = true;
       window.scrollTo(0, 0);

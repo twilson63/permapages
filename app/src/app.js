@@ -206,19 +206,31 @@ function htmlTemplate(title, description, body) {
     <main class="bg-base-100">
     ${body}
     </main>
-    <footer class="footer relative bg-black flex justify-end">
-      <div class="hidden md:block absolute bottom-8 left-8">
-        <a href="https://permapages.app/#/about">
-          <img
-            src="https://permapages.app/ar-dark.png"}
-            alt="permanent"
-          />
-        </a>
+    <footer class="footer p-10 bg-base-300 text-base-content">
+      <div>
+        <span class="footer-title">About</span> 
+        <p>Built using <a href="https://permapages.app" target="_blank">Permapages</p>
+        <a class="link link-hover" href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE">Documentation</a>
+      </div> 
+      <div>
+        <span class="footer-title">Connect</span> 
+        <a target="_blank" href="https://twitter.com/permapages" class="link link-hover">Twitter</a> 
+        <a target="_blank" href="https://github.com/twilson63/permapages"class="link link-hover">Github</a> 
+      </div> 
+      <div>
+        <span class="footer-title text-2xl">🚀</span> 
+        <div class="flex flex-col">
+          <a href="https://permapages.app" class="font-bold text-accent">Create your own Permapage here</a>
+          <br />
+          <p class="text-accent">Lets get started!</p>
+        </div>
       </div>
-      <div class="flex m-16">
-        <p>🐘 This page was created with <a href="https://permapages.app">Permapages</a>. You should try to create your profile page in permapages, it's easy and only takes a few minutes. 🚀</p>
+      <div class="flex items-center space-x-4">
+        <img class="h-[128px] w-[128px]" src="https://permapages.app/permapages_logo.svg" alt="logo" />
+        <img class="" src="https://permapages.app/ar-dark.png" alt="logo" />
       </div>
     </footer>
+    
   </body>
 </html>  
 `
