@@ -76,7 +76,7 @@
       page.content = easymde.value();
       page.owner = $address;
 
-      page.html = `<div class="prose-lg m-16">${marked.parse(
+      page.html = `<div class="prose-lg m-8 md:m-16">${marked.parse(
         page.content
       )}</div>`;
 
@@ -200,7 +200,7 @@
   {{/owner}}
   ></div>
   ` +
-      '<script src="https://arweave.net/yLXMCMLh7Rd9o22UmQvHYua9WY2Hl3n9ENoi5cJ5IBA">' +
+      '<script src="https://arweave.net/6tCVFIcyO1ZG14y7xBbncv0G-ixnhggZgwiEMQhWl10">' +
       "<//script>".replace("/", "")
     );
   }
