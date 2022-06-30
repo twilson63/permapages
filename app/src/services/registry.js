@@ -76,10 +76,8 @@ export async function register({ name, owner, transactionId }) {
 }
 
 export async function getARBalance(owner) {
-  //await arweave.wallets.getLastTransactionID(owner)
-  //const tx = await arweave.createTransaction({ data: 'test' })
-  //return await arweave.wallets.getBalance(owner) //.then(x => arweave.ar.winstonToAr(x))
-  return 0
+  return await arweave.wallets.getBalance(owner).then(x => arweave.ar.winstonToAr(x)).catch(e => 'N/A')
+
 }
 
 export async function getBalance(owner) {
@@ -99,7 +97,7 @@ export async function getFees(subdomain = '') {
   const registryState = hydrate(await registry.currentState())
   const fee = (await arweave.api.get(`price/${subdomain.length}`)).data
   const price = registryState.fees[subdomain.length]
-  return [price, fee]
+  return [price, arweave.ar.winstonToAr(fee)]
 }
 
 export async function listANTs(owner) {

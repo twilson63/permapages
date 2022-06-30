@@ -302,12 +302,15 @@
   <form on:submit|preventDefault={submitRegistration}>
     <div class="form-control">
       <label class="label">Subdomain</label>
-      <input
-        class="input input-bordered"
-        bind:value={registerData.subdomain}
-        maxlength="20"
-        pattern="[a-zA-Z0-9_]*$"
-      />
+      <label class="input-group w-full">
+        <input
+          class="input input-bordered w-full"
+          bind:value={registerData.subdomain}
+          maxlength="20"
+          pattern="[a-zA-Z0-9_]*$"
+        />
+        <span>.arweave.dev</span>
+      </label>
       <small class="mt-2 text-secondary"
         >Only Letters and Numbers and _ maybe used to create subdomain</small
       >
