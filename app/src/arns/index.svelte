@@ -13,6 +13,8 @@
     register,
     updateSubDomain,
     getBalance,
+    getARBalance,
+    getFees,
   } from "../services/registry.js";
   import { pages } from "../app.js";
   import { gql } from "../services/arweave.js";
@@ -27,13 +29,18 @@
   let searchText = "";
   let connectDialog = false;
   let registerDialog = false;
-  let registerData = {};
+  let registerData = { subdomain: "" };
   let successDialog = false;
   let successData = {};
   let errorDialog = false;
   let errorMessage = "";
 
   $: balance = 0;
+  let ar = 0;
+  let fees = [0, 0];
+  $: {
+    getFees(registerData.subdomain).then((x) => (fees = x));
+  }
 
   async function doSearch() {
     const result = await search(searchText);
@@ -108,9 +115,14 @@
 
   async function doGetBalance() {
     try {
-      const result = await getBalance($address);
-      balance = result.balance;
+      const [arns, _ar] = await Promise.all([
+        getBalance($address),
+        getARBalance($address),
+      ]);
+      balance = arns.balance;
+      ar = _ar;
     } catch (e) {
+      console.log(e);
       if (
         ![
           "result is null",
@@ -125,7 +137,7 @@
   }
 
   if ($address) {
-    balance = doGetBalance();
+    setTimeout(doGetBalance, 500);
   }
 </script>
 
@@ -140,13 +152,8 @@
               <h2 class="text-2xl mb-2">ArNS Registry Portal</h2>
               <a class="link" href="https://ar.io/arns">More Information</a>
               {#if $address}
-                {#await balance}
-                  Fetching balance...
-                {:then result}
-                  <div>ArNS Balance: {result}</div>
-                {:catch e}
-                  <div />
-                {/await}
+                <div>ArNS Balance: {balance}</div>
+                <div>$AR Balance: {ar}</div>
               {/if}
               <blockquote class="text-sm">
                 In order to register a subdomain, you need a small amount of $AR
@@ -275,10 +282,23 @@
 </Modal>
 <Modal open={registerDialog} ok={false}>
   <h3 class="text-2xl">Register subdomain</h3>
-  <p class="my-4">
-    To register a subdomain, you need a name and arweave transaction to
-    reference. You may choose a permapage or arweave transaction.
-  </p>
+  <table class="table">
+    <tr>
+      <th />
+      <th>$ARNS Test</th>
+      <th>$AR</th>
+    </tr>
+    <tr>
+      <th>Balance</th>
+      <td>{balance}</td>
+      <td>{ar}</td>
+    </tr>
+    <tr>
+      <th>Fee</th>
+      <td>{fees ? fees[0] : "unknown"}</td>
+      <td>{fees ? fees[1] : "unknown"}</td>
+    </tr>
+  </table>
   <form on:submit|preventDefault={submitRegistration}>
     <div class="form-control">
       <label class="label">Subdomain</label>
@@ -337,13 +357,16 @@
         <input
           class="input input-bordered"
           bind:value={registerData.transactionId}
+          placeholder="Arweave Transaction Id"
         />
       </div>
     {/if}
     <div class="mt-16 flex space-x-2 justify-end">
       <button class="btn btn-primary">Register</button>
-      <button class="btn" on:click={() => (registerDialog = false)}
-        >Cancel</button
+      <button
+        type="button"
+        class="btn"
+        on:click={() => (registerDialog = false)}>Cancel</button
       >
     </div>
   </form>
