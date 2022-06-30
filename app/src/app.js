@@ -220,7 +220,7 @@ function htmlTemplate(title, description, body) {
       <div>
         <span class="footer-title text-2xl">🚀</span> 
         <div class="flex flex-col">
-          <a href="https://permapages.app" class="font-bold text-accent">Create your own Permapage here</a>
+          <a href="https://permapages.app" class="btn rounded-2xl font-bold bg-black text-white">👉 Create your own Permapage here 🚀</a>
           <br />
           <p class="text-accent">Lets get started!</p>
         </div>

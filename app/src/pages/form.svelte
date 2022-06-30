@@ -28,6 +28,9 @@
   let errorDialog = false;
   let errorMessage = "";
 
+  let profileWidgetUrl =
+    "https://arweave.net/CC1lCQQpy2D939SskzkUJ9t5QMJPoAIb0xtEGxwl2rc";
+
   onMount(() => {
     easymde = new window.EasyMDE({
       autosave: {
@@ -200,7 +203,7 @@
   {{/owner}}
   ></div>
   ` +
-      '<script src="https://arweave.net/v1IJeOCCLnCchLHE0MzO8HgdRZXtaZf7Tk8FMjyBdGM">' +
+      `<script src="${profileWidgetUrl}">` +
       "<//script>".replace("/", "")
     );
   }

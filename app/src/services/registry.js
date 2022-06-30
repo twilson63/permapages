@@ -40,6 +40,10 @@ export async function register({ name, owner, transactionId }) {
     return { ok: false, message: `This name ${name} is already taken and is not available for purchase` }
   }
 
+  if (registryState.balances[owner] > registryState.fees[name.length]) {
+    return { ok: false, message: `Not enough ArNS Test Token to purchase this subdomain.` }
+  }
+
   // create ANT contract
   const ant = await warp.createContract.deployFromSourceTx({
     wallet: 'use_wallet',
