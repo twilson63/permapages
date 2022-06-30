@@ -18,7 +18,7 @@
       <tr>
         <td>{title}</td>
         <td>{status ? status.split(0, 50) : "no status"}...</td>
-        <td>{id}</td>
+        <td>{webpage}</td>
 
         <td>
           <a
