@@ -276,9 +276,17 @@
   <form on:submit|preventDefault={submitRegistration}>
     <div class="form-control">
       <label class="label">Subdomain</label>
-      <input class="input input-bordered" bind:value={registerData.subdomain} />
+      <input
+        class="input input-bordered"
+        bind:value={registerData.subdomain}
+        maxlength="20"
+        pattern="[a-zA-Z0-9_]*$"
+      />
+      <small class="mt-2 text-secondary"
+        >Only Letters and Numbers and _ maybe used to create subdomain</small
+      >
     </div>
-    <div class="form-control">
+    <div class="mt-8 form-control">
       <label class="label">Choose reference</label>
       <label class="label">
         <input
