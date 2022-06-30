@@ -140,12 +140,18 @@
               <h2 class="text-2xl mb-2">ArNS Registry Portal</h2>
               <a class="link" href="https://ar.io/arns">More Information</a>
               {#if $address}
-                {#await balance then result}
+                {#await balance}
+                  Fetching balance...
+                {:then result}
                   <div>ArNS Balance: {result}</div>
                 {:catch e}
                   <div />
                 {/await}
               {/if}
+              <blockquote class="text-sm">
+                In order to register a subdomain, you need a small amount of $AR
+                in your wallet and enough $ARNS TEST Tokens
+              </blockquote>
             </div>
             <div class="flex-none6">
               <button
@@ -334,7 +340,7 @@
         />
       </div>
     {/if}
-    <div class="mt-8 flex space-x-8 justify-right">
+    <div class="mt-16 flex space-x-2 justify-end">
       <button class="btn btn-primary">Register</button>
       <button class="btn" on:click={() => (registerDialog = false)}
         >Cancel</button

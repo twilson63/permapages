@@ -17,6 +17,7 @@
   let submitDialog = false;
   let errorDialog = false;
   let errorMessage = "";
+  let successDialog = false;
 
   async function getPageProfile(address) {
     const result = await profileMgr.get(address);
@@ -46,6 +47,7 @@
 
       submitDialog = false;
       router.goto("/account");
+      successDialog = true;
     } catch (e) {
       submitDialog = false;
       errorMessage = e.message;
@@ -92,4 +94,9 @@
   <p class="my-8">
     {errorMessage}
   </p>
+</Modal>
+
+<Modal open={successDialog}>
+  <h3 class="text-3xl text-error">Success!</h3>
+  <p class="my-8">Profile has been updated!</p>
 </Modal>
