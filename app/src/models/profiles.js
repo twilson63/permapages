@@ -55,7 +55,7 @@ export const txToProfile = (tx) => {
     type: getTag('Type')(tx.tags) || 'profile',
     name: getTag('Profile-Name')(tx.tags),
     bio: getTag('Profile-Bio')(tx.tags),
-    webpage: getTag('Profile-Avatar')(tx.tags),
+    avatar: getTag('Profile-Avatar')(tx.tags),
 
     timestamp
   }

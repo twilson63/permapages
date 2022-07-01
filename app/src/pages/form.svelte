@@ -28,8 +28,7 @@
   let errorDialog = false;
   let errorMessage = "";
 
-  let profileWidgetUrl =
-    "https://arweave.net/EXooqhNBK_egSez1THRnrIm0-6J6JRZaKMaKgpCngdQ";
+  let profileWidgetUrl = "https://profile-widget.arweave.dev";
 
   onMount(() => {
     easymde = new window.EasyMDE({
