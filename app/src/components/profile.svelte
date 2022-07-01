@@ -1,7 +1,9 @@
 <script>
   import isEmpty from "ramda/src/isEmpty";
   export let profile;
-  export let icon_repo = "https://social-icons.arweave.dev";
+  //export let icon_repo = "https://social-icons.arweave.dev";
+  export let icon_repo =
+    "https://arweave.net/T2Kh2uOv3myw8L6BPE6kySs2QXjh8R3B1KolcW_MFQA";
 </script>
 
 <div class="h-[475px] w-full">

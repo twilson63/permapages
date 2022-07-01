@@ -13,7 +13,7 @@ const schema = z.object({
   avatar: z.string().optional(),
   background: z.string().optional(),
   name: z.string().max(20),
-  bio: z.string().max(100).optional(),
+  bio: z.string().max(150).optional(),
   protocol: z.string().default('PermaProfile-v0.1'),
   links: z.object({
     arweave: z.string().optional(),

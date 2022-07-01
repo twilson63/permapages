@@ -49,6 +49,7 @@
       router.goto("/account");
       successDialog = true;
     } catch (e) {
+      console.log(e);
       submitDialog = false;
       errorMessage = e.message;
       errorDialog = true;

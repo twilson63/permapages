@@ -29,7 +29,7 @@
   let errorMessage = "";
 
   let profileWidgetUrl =
-    "https://arweave.net/CC1lCQQpy2D939SskzkUJ9t5QMJPoAIb0xtEGxwl2rc";
+    "https://arweave.net/EXooqhNBK_egSez1THRnrIm0-6J6JRZaKMaKgpCngdQ";
 
   onMount(() => {
     easymde = new window.EasyMDE({
@@ -160,49 +160,7 @@
 
   function profileTemplate() {
     return (
-      `
-<div id="profile" 
-  {{#avatar}}
-    data-avatar="{{avatar}}" 
-  {{/avatar}}
-  {{#name}}
-    data-name="{{name}}" 
-  {{/name}}
-  {{#bio}}
-    data-bio="{{bio}}"
-  {{/bio}}
-  {{#background}}
-    data-background="{{background}}" 
-  {{/background}}
-  {{#links.github}}
-    data-github="{{links.github}}" 
-  {{/links.github}}
-  {{#links.twitter}}
-    data-twitter="{{links.twitter}}"
-  {{/links.twitter}}
-  {{#links.discord}}
-    data-discord="{{links.discord}}"
-  {{/links.discord}}
-  {{#links.instagram}}
-    data-instagram="{{links.instagram}}"
-  {{/links.instagram}}
-  {{#links.facebook}}
-    data-facebook="{{links.facebook}}"
-  {{/links.facebook}}
-  {{#links.linkedin}}
-    data-linkedin="{{links.linkedin}}"
-  {{/links.linkedin}}
-  {{#links.twitch}}
-    data-twitch="{{links.twitch}}"
-  {{/links.twitch}}
-  {{#links.youtube}}
-    data-youtube="{{links.youtube}}"
-  {{/links.youtube}}
-  {{#owner}}
-    data-weavemail="{{owner}}"
-  {{/owner}}
-  ></div>
-  ` +
+      `<div id="profile" data-addr="{{owner}}"></div>` +
       `<script src="${profileWidgetUrl}">` +
       "<//script>".replace("/", "")
     );
