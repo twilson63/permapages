@@ -1,5 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import { Jumper } from "svelte-loading-spinners";
+
   const dispatch = createEventDispatcher();
 
   export let title;
@@ -10,6 +12,15 @@
       dispatch(type, { id });
     };
   }
+
+  async function checkSubdomain(subdomain) {
+    const result = await fetch(`https://${subdomain}.arweave.dev`);
+    if (result.status === 200) {
+      return true;
+    }
+
+    return false;
+  }
 </script>
 
 <div>
@@ -19,6 +30,7 @@
       <!-- head -->
       <thead>
         <tr>
+          <th />
           <th>Subdomain</th>
           <th>TransactionId</th>
           <th>Link</th>
@@ -28,6 +40,17 @@
       <tbody>
         {#each records as record}
           <tr>
+            <td>
+              {#await checkSubdomain(record.subdomain) then active}
+                {#if active}
+                  <div class="bg-success text-success rounded-2xl w-[24px]">
+                    U
+                  </div>
+                {:else}
+                  <Jumper size="32" color="pink" />
+                {/if}
+              {/await}
+            </td>
             <th>{record.subdomain}</th>
             <td>{record.records["@"]}</td>
             <td

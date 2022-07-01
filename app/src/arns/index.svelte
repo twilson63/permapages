@@ -2,10 +2,11 @@
   import { router } from "tinro";
   import NavBar from "../components/navbar.svelte";
   import Modal from "../components/modal.svelte";
-  import { address } from "../store.js";
+  import { address, arnsCache } from "../store.js";
   import SubdomainTable from "../components/subdomains.svelte";
   import find from "ramda/src/find";
   import propEq from "ramda/src/propEq";
+  import { Jumper } from "svelte-loading-spinners";
 
   import {
     search,
@@ -34,6 +35,7 @@
   let successData = {};
   let errorDialog = false;
   let errorMessage = "";
+  let registering = false;
 
   $: balance = 0;
   let ar = 0;
@@ -66,12 +68,23 @@
   }
   async function submitRegistration() {
     registerDialog = false;
+    registering = true;
     const result = await pages({ register }).purchase({
       name: registerData.subdomain,
       owner: $address,
       transactionId: registerData.transactionId,
     });
+    registering = false;
     if (result.ok) {
+      $arnsCache = [
+        {
+          id: result.id,
+          subdomain: registerData.subdomain,
+          records: { "@": registerData.transactionId },
+        },
+        ...$arnsCache,
+      ];
+      list = doListANTS($address);
       successData.message = `You have successfully registered your subdomain ${registerData.subdomain}`;
       successDialog = true;
     } else {
@@ -139,6 +152,25 @@
   if ($address) {
     setTimeout(doGetBalance, 100);
   }
+
+  async function doListANTS($address) {
+    const results = await listANTs($address);
+    const pending = ($arnsCache || []).filter((n) =>
+      find(propEq("id", n.id), results) ? false : true
+    );
+
+    return [...pending, ...results].reduce(
+      (acc, v) => (find(propEq("id", v.id), acc) ? acc : [...acc, v]),
+      []
+    );
+  }
+
+  setInterval(() => {
+    console.log("checking subdomains");
+    list = doListANTS($address);
+  }, 1000 * 60 * 4);
+
+  let list = doListANTS($address);
 </script>
 
 <NavBar />
@@ -180,7 +212,7 @@
               >
             </div>
             {#if $address}
-              {#await listANTs($address)}
+              {#await list}
                 <div class="alert alert-info">Loading sub-domains</div>
               {:then records}
                 <SubdomainTable
@@ -390,4 +422,11 @@
   <p class="my-8">
     {errorMessage}
   </p>
+</Modal>
+
+<Modal open={registering} ok={false}>
+  <h3 class="text-3xl text-secondary">Registering Domain</h3>
+  <div class="my-8 flex items-center justify-center">
+    <Jumper size="60" color="rebeccapurple" />
+  </div>
 </Modal>
