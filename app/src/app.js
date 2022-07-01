@@ -267,7 +267,7 @@ query {
 function buildPermaPageQuery(owner) {
   return `
   query {
-    transactions(owners: ["${owner}"], 
+    transactions(first: 100, owners: ["${owner}"], 
       tags:{name:"Protocol", values:["PermaPages-v0.3"]}) {
       edges {
         node {

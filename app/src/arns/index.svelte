@@ -137,7 +137,7 @@
   }
 
   if ($address) {
-    setTimeout(doGetBalance, 500);
+    setTimeout(doGetBalance, 100);
   }
 </script>
 
@@ -162,7 +162,7 @@
             </div>
             <div class="flex-none6">
               <button
-                disabled={balance === 0}
+                disabled={balance === 0 || ar === 0}
                 on:click={registerDomain}
                 class="btn btn-secondary">Register</button
               >

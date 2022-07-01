@@ -9,14 +9,15 @@
     loadProfile,
     gql,
   } from "../services/arweave.js";
-  import { register } from "../services/registry.js";
+  import { register, listANTs, updateSubDomain } from "../services/registry.js";
   import { pages, profiles } from "../app.js";
-  import { address, account, pageCache } from "../store.js";
+  import { address, pageCache } from "../store.js";
   import { marked } from "marked";
-  import weavemail from "../widgets/weavemail.js";
   import opensea from "../widgets/opensea.js";
   import Mustache from "mustache";
   import { onMount } from "svelte";
+  import compose from "ramda/src/compose";
+  import pluck from "ramda/src/pluck";
 
   var easymde = null;
   let error = null;
@@ -27,10 +28,14 @@
   let frameDialog = false;
   let errorDialog = false;
   let errorMessage = "";
+  let updateSubdomain = false;
 
   let profileWidgetUrl = "https://profile-widget.arweave.dev";
 
-  onMount(() => {
+  let ant = null;
+  let lastTx = meta().query.fork;
+
+  onMount(async () => {
     easymde = new window.EasyMDE({
       autosave: {
         enabled: true,
@@ -46,6 +51,9 @@
     //   easymde.value = "";
     //   page.content = "";
     // }
+    const ants = await listANTs($address);
+    const txs = compose(pluck("@"), pluck("records"))(ants);
+    ant = ants[txs.indexOf(page.webpage)];
   });
 
   let page = { public: true };
@@ -61,8 +69,8 @@
         easymde.value(p.content);
         page.content = p.content;
         page.profile = p.profile;
-        page.weavemail = p.weavemail;
         page.ethwallet = p.ethwallet;
+        page.webpage = p.webpage;
       });
   } else {
   }
@@ -92,9 +100,6 @@
         let profileData = await profiles({ gql, load: loadProfile }).get(
           $address
         );
-        if (page.weavemail) {
-          profileData = { ...profileData, weavemail: profileData.addr };
-        }
 
         const profileWidget = Mustache.render(profileTemplate(), profileData);
 
@@ -110,6 +115,12 @@
       });
 
       $pageCache = [result, ...$pageCache];
+
+      if (updateSubdomain) {
+        console.log("ANT", ant.id);
+        console.log("result", result.id);
+        //await updateSubDomain(ant.id, result.id);
+      }
       submitting = false;
 
       if (!result.foundPost) {
@@ -187,18 +198,6 @@
               type="checkbox"
               class="toggle toggle-secondary"
               bind:checked={page.profile}
-            />
-          </label>
-        </div>
-        <div class="mt-4 form-control">
-          <label for="weavemail" class="label cursor-pointer">
-            <span class="label-text"
-              >WeaveMail - Toggle to on, to add Weavemail form</span
-            >
-            <input
-              type="checkbox"
-              class="toggle toggle-secondary"
-              bind:checked={page.weavemail}
             />
           </label>
         </div>
@@ -296,6 +295,18 @@
         />
         <small>(OPTIONAL, max: 150 characters)</small>
       </div>
+      {#if ant}
+        <div class="form-control">
+          <label class="label">
+            <input
+              type="checkbox"
+              class="checkbox"
+              bind:checked={updateSubdomain}
+            />
+            <span>Update Arweave Subdomain</span>
+          </label>
+        </div>
+      {/if}
       <div class="modal-action">
         <button for="confirm" class="btn">Submit</button>
       </div>
