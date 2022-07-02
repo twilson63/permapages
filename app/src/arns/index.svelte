@@ -86,6 +86,7 @@
       $arnsCache = [
         {
           id: result.id,
+          name: registerData.subdomain,
           subdomain: registerData.subdomain,
           records: { "@": registerData.transactionId },
         },
@@ -162,8 +163,9 @@
 
   async function doListANTS($address) {
     const results = await listANTs($address);
+    console.log(results);
     const pending = ($arnsCache || []).filter((n) =>
-      find(propEq("id", n.id), results) ? false : true
+      find(propEq("name", n.name), results) ? false : true
     );
 
     return [...pending, ...results].reduce(

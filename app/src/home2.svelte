@@ -849,7 +849,9 @@
                     <div class="w-layout-grid footer4_link-list">
                       <a href="/about" class="footer4_link">About</a>
                       <a href="/pages" class="footer4_link">Pages</a>
-                      <a href="#" class="footer4_link">Get ArNS Tokens</a>
+                      <a href="https://pilot.ar.io" class="footer4_link"
+                        >Get ArNS Tokens</a
+                      >
                       <a
                         href="https://www.arweave.org/"
                         target="_blank"
