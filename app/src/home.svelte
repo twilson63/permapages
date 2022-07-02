@@ -3,6 +3,17 @@
   let version = __APP_VERSION__.split(".")[2];
 </script>
 
+<svelte:head>
+  <title>PermaPages</title>
+  <meta
+    content="Create your on PermaPage on the Permaweb!"
+    name="description"
+  />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+  <link href="css/components.css" rel="stylesheet" type="text/css" />
+  <link href="css/landing.css" rel="stylesheet" type="text/css" />
+</svelte:head>
 <div class="hero min-h-screen bg-base-200 items-start">
   <div class="w-full">
     <div class="badge badge-secondary ml-16 mt-4 float-left">

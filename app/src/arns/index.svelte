@@ -1,4 +1,5 @@
 <script>
+  import { onDestroy } from "svelte";
   import { router } from "tinro";
   import NavBar from "../components/navbar.svelte";
   import Modal from "../components/modal.svelte";
@@ -36,14 +37,19 @@
   let errorDialog = false;
   let errorMessage = "";
   let registering = false;
-  let claimingTokens = 0;
+  let claimingTokens = Number(localStorage.getItem("claim")) || 0;
+  let timeout = null;
 
-  $: balance = 0;
-  let ar = 0;
+  $: balance = "Checking...";
+  let ar = "Checking...";
   let fees = [0, 0];
   $: {
     getFees(registerData.subdomain).then((x) => (fees = x));
   }
+
+  onDestroy(() => {
+    clearTimeout(timeout);
+  });
 
   async function doSearch() {
     const result = await search(searchText);
@@ -166,34 +172,40 @@
     );
   }
 
-  function watchClaim() {
-    setTimeout(
-      () =>
-        fetch(`https://pilot.ar.io/api/enquiry?address=${$address}`)
-          .then((res) => res.json())
-          .then((doc) => {
-            if (doc.processed && doc.approved) {
-              claimingTokens = 2;
-              return;
-            }
-            if (doc.alreadyClaimed) {
-              claimingTokens = 2;
-              return;
-            }
-            watchClaim();
-          }),
-      60000
-    );
+  // function watchClaim() {
+  //   function doFetch() {
+  //     fetch(`https://pilot.ar.io/api/enquiry?address=${$address}`, {
+  //       mode: "no-cors",
+  //     })
+  //       .then((res) => res.json())
+  //       .then((doc) => {
+  //         console.log(doc);
+  //         if (doc.processed && doc.approved) {
+  //           claimingTokens = 2;
+  //           return;
+  //         }
+  //         if (doc.alreadyClaimed) {
+  //           claimingTokens = 2;
+  //           return;
+  //         }
+  //         doFetch();
+  //       });
+  //   }
+  //   setTimeout(doFetch, 60000);
+  //   doFetch();
+  // }
+  function checkDomains() {
+    timeout = setTimeout(() => {
+      console.log("checking domains");
+      list = doListANTS($address);
+      checkDomains();
+    }, 1000 * 60 * 4);
   }
-
-  setInterval(() => {
-    console.log("checking subdomains");
-    list = doListANTS($address);
-  }, 1000 * 60 * 4);
+  checkDomains();
 
   let list = doListANTS($address);
 
-  watchClaim();
+  //watchClaim();
 </script>
 
 <NavBar />
@@ -202,7 +214,7 @@
     <div class="hero-content flex-col lg:flex-row-reverse w-full">
       <div class="flex flex-col space-y-16 w-full">
         <div>
-          <div class="flex">
+          <div class="flex items-center">
             <div class="flex-1 flex items-center space-x-8">
               <h2 class="text-2xl mb-2">ArNS Registry Portal</h2>
               <a class="link" href="https://ar.io/arns">More Information</a>
@@ -210,12 +222,12 @@
                 <div>ArNS Balance: {balance}</div>
                 <div>$AR Balance: {ar}</div>
               {/if}
-              <blockquote class="text-sm">
+              <blockquote class="text-sm p-4">
                 In order to register a subdomain, you need a small amount of $AR
                 in your wallet and enough $ARNS TEST Tokens
               </blockquote>
             </div>
-            <div class="flex-none6">
+            <div class="flex-none">
               <button
                 disabled={balance === 0 || ar === 0}
                 on:click={registerDomain}
@@ -227,16 +239,17 @@
                   target="_blank"
                   href="https://twitter.com/intent/tweet?text={encodeURI(
                     'I am requesting Arweave Name System tokens to register my permaweb domain! My address is ' +
-                      $address
+                      $address +
+                      '🐘'
                   )}"
                   on:click={() => {
+                    localStorage.setItem("claim", "1");
                     claimingTokens = 1;
-                    watchClaim();
                   }}>Claim Tokens</a
                 >
               {:else if claimingTokens === 1}
-                <button class="btn btn-primary" disabled={true}
-                  >Claiming....</button
+                <button class="btn btn-primary" on:click={() => doGetBalance()}
+                  >Refresh Balance</button
                 >
               {:else}
                 <button class="btn btn-success" disabled={true}

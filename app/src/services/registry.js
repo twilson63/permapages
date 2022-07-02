@@ -76,7 +76,9 @@ export async function register({ name, owner, transactionId }) {
 }
 
 export async function getARBalance(owner) {
-  return await arweave.wallets.getBalance(owner).then(x => arweave.ar.winstonToAr(x)).catch(e => 'N/A')
+  const { data } = await arweave.api.get(`wallet/${owner}/balance`)
+  return arweave.ar.winstonToAr(data)
+  //return await arweave.wallets.getBalance(owner).then(x => arweave.ar.winstonToAr(x)).catch(e => 'N/A')
 
 }
 

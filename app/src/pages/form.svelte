@@ -81,6 +81,7 @@
 
   async function doConfirm() {
     try {
+      confirm = false;
       submitting = true;
 
       page.content = easymde.value();
