@@ -36,6 +36,7 @@
   let errorDialog = false;
   let errorMessage = "";
   let registering = false;
+  let claimingTokens = 0;
 
   $: balance = 0;
   let ar = 0;
@@ -165,12 +166,34 @@
     );
   }
 
+  function watchClaim() {
+    setTimeout(
+      () =>
+        fetch(`https://pilot.ar.io/api/enquiry?address=${$address}`)
+          .then((res) => res.json())
+          .then((doc) => {
+            if (doc.processed && doc.approved) {
+              claimingTokens = 2;
+              return;
+            }
+            if (doc.alreadyClaimed) {
+              claimingTokens = 2;
+              return;
+            }
+            watchClaim();
+          }),
+      60000
+    );
+  }
+
   setInterval(() => {
     console.log("checking subdomains");
     list = doListANTS($address);
   }, 1000 * 60 * 4);
 
   let list = doListANTS($address);
+
+  watchClaim();
 </script>
 
 <NavBar />
@@ -198,6 +221,28 @@
                 on:click={registerDomain}
                 class="btn btn-secondary">Register</button
               >
+              {#if claimingTokens === 0}
+                <a
+                  class="btn btn-primary"
+                  target="_blank"
+                  href="https://twitter.com/intent/tweet?text={encodeURI(
+                    'I am requesting Arweave Name System tokens to register my permaweb domain! My address is ' +
+                      $address
+                  )}"
+                  on:click={() => {
+                    claimingTokens = 1;
+                    watchClaim();
+                  }}>Claim Tokens</a
+                >
+              {:else if claimingTokens === 1}
+                <button class="btn btn-primary" disabled={true}
+                  >Claiming....</button
+                >
+              {:else}
+                <button class="btn btn-success" disabled={true}
+                  >Claimed Token</button
+                >
+              {/if}
             </div>
           </div>
           <div class="overflow-x-auto">
