@@ -37,8 +37,9 @@
   let errorDialog = false;
   let errorMessage = "";
   let registering = false;
-  let claimingTokens = Number(localStorage.getItem("claim")) || 0;
+  let claimingTokens = localStorage.getItem($address + "-claim") || "Available";
   let timeout = null;
+  let timeout2 = null;
 
   $: balance = "Checking...";
   let ar = "Checking...";
@@ -49,6 +50,7 @@
 
   onDestroy(() => {
     clearTimeout(timeout);
+    clearTimeout(timeout2);
   });
 
   async function doSearch() {
@@ -153,6 +155,9 @@
         errorMessage =
           "An error occurred trying to check you ArNS Test token balance.";
         errorDialog = true;
+      } else {
+        balance = "Not Found";
+        ar = "Not Found";
       }
     }
   }
@@ -163,7 +168,6 @@
 
   async function doListANTS($address) {
     const results = await listANTs($address);
-    console.log(results);
     const pending = ($arnsCache || []).filter((n) =>
       find(propEq("name", n.name), results) ? false : true
     );
@@ -174,28 +178,46 @@
     );
   }
 
-  // function watchClaim() {
-  //   function doFetch() {
-  //     fetch(`https://pilot.ar.io/api/enquiry?address=${$address}`, {
-  //       mode: "no-cors",
-  //     })
-  //       .then((res) => res.json())
-  //       .then((doc) => {
-  //         console.log(doc);
-  //         if (doc.processed && doc.approved) {
-  //           claimingTokens = 2;
-  //           return;
-  //         }
-  //         if (doc.alreadyClaimed) {
-  //           claimingTokens = 2;
-  //           return;
-  //         }
-  //         doFetch();
-  //       });
-  //   }
-  //   setTimeout(doFetch, 60000);
-  //   doFetch();
-  // }
+  function watchClaim() {
+    function doFetch() {
+      return fetch(`https://arns-faucet.deno.dev?address=${$address}`)
+        .then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            return { processed: false, alreadyClaimed: false, approved: false };
+          }
+        })
+        .then((doc) => {
+          console.log(doc);
+          if (doc.alreadyClaimed) {
+            claimingTokens = "Already Claimed";
+            localStorage.setItem($address + "-claim", claimingTokens);
+            return;
+          }
+
+          if (!doc.processed) {
+            claimingTokens = "Processing";
+            localStorage.setItem($address + "-claim", claimingTokens);
+            return;
+          }
+          if (!doc.approved) {
+            claimingTokens = "Not Approved";
+            localStorage.setItem($address + "-claim", claimingTokens);
+            return;
+          }
+          if (doc.processed && doc.approved) {
+            claimingTokens = "Claimed";
+            localStorage.setItem($address + "-claim", claimingTokens);
+            return;
+          }
+        });
+    }
+    timeout2 = setTimeout(watchClaim, 2 * 60 * 1000);
+    doFetch();
+    console.log("checking status " + new Date().toISOString());
+  }
+
   function checkDomains() {
     timeout = setTimeout(() => {
       console.log("checking domains");
@@ -203,11 +225,13 @@
       checkDomains();
     }, 1000 * 60 * 4);
   }
+
   checkDomains();
 
   let list = doListANTS($address);
-
-  //watchClaim();
+  if (claimingTokens !== "Available") {
+    watchClaim();
+  }
 </script>
 
 <NavBar />
@@ -235,7 +259,7 @@
                 on:click={registerDomain}
                 class="btn btn-secondary">Register</button
               >
-              {#if claimingTokens === 0}
+              {#if claimingTokens === "Available"}
                 <a
                   class="btn btn-primary"
                   target="_blank"
@@ -245,17 +269,16 @@
                       '🐘'
                   )}"
                   on:click={() => {
-                    localStorage.setItem("claim", "1");
-                    claimingTokens = 1;
+                    localStorage.setItem($address + "-claim", "Processing");
+                    claimingTokens = "Processing";
+                    watchClaim();
                   }}>Claim Tokens</a
                 >
-              {:else if claimingTokens === 1}
-                <button class="btn btn-primary" on:click={() => doGetBalance()}
-                  >Refresh Balance</button
-                >
               {:else}
-                <button class="btn btn-success" disabled={true}
-                  >Claimed Token</button
+                <button
+                  class="btn btn-primary"
+                  disabled={true}
+                  on:click={watchClaim}>{claimingTokens}</button
                 >
               {/if}
             </div>
