@@ -442,9 +442,8 @@
               </p>
               <div class="margin-top margin-medium">
                 <div class="button-row">
-                  <a
-                    href="https://permapages.app/#/pages"
-                    class="button-secondary-3 w-button">Create in style</a
+                  <a href="/pages" class="button-secondary-3 w-button"
+                    >Create in style</a
                   >
                   <a
                     href="https://blockstacker.arweave.dev/"
@@ -502,9 +501,8 @@
               </p>
               <div class="margin-top margin-medium">
                 <div class="button-row">
-                  <a
-                    href="https://permapages.app/#/pages"
-                    class="button-secondary-3 w-button">Make a media page</a
+                  <a href="/pages" class="button-secondary-3 w-button"
+                    >Make a media page</a
                   >
                   <a
                     href="https://genesis.arweave.dev/"
@@ -561,9 +559,8 @@
               </p>
               <div class="margin-top margin-medium">
                 <div class="button-row">
-                  <a
-                    href="https://permapages.app/#/pages"
-                    class="button-secondary-3 w-button">Get a subdomain</a
+                  <a href="/pages" class="button-secondary-3 w-button"
+                    >Get a subdomain</a
                   >
                   <a
                     href="https://hotdog.arweave.dev/"
@@ -860,9 +857,8 @@
             </p>
             <div class="margin-top margin-medium">
               <div class="button-row-2 is-button-row-center">
-                <a
-                  href="https://permapages.app/#/pages"
-                  class="button-3 w-button"><strong>Create a page!</strong></a
+                <a href="/pages" class="button-3 w-button"
+                  ><strong>Create a page!</strong></a
                 >
                 <a
                   href="https://pilot.ar.io/"
@@ -1032,7 +1028,7 @@
                         <a href="https://www.youtube.com/watch?v=f-nq1KA0aqE"
                           ><strong>Follow this tutorial</strong></a
                         >, create a personal page and Test ArNS subdomain using
-                        <a href="https://permapages.app/">PermaPages.</a>
+                        <a href="https://pages.arweave.dev">PermaPages.</a>
                       </p>
                     </div>
                   </div>
@@ -1192,7 +1188,7 @@
                       >
                       <a
                         id="w-node-c61ef7b6-bed1-dc7d-9e80-cafecb572567-e167b7f5"
-                        href="https://permapages.app/#/pages"
+                        href="/pages"
                         class="button-small-footer w-button">Create a page</a
                       >
                     </div>
@@ -1202,7 +1198,7 @@
                     >
                       <a
                         id="w-node-c51544a8-bb6f-3a9b-86bd-91fe22218c1e-e167b7f5"
-                        href="https://twitter/com/permapages"
+                        href="https://twitter.com/permapages"
                         target="_blank"
                         class="w-inline-block"
                         ><img
