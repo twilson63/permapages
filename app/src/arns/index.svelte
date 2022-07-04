@@ -134,8 +134,7 @@
       errorDialog = true;
       return;
     }
-    console.log(changeData);
-    return;
+
     const result = await updateSubDomain(
       changeData.ANT,
       changeData.transactionId
