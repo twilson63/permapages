@@ -31,7 +31,7 @@
   let searchText = "";
   let connectDialog = false;
   let registerDialog = false;
-  let registerData = { subdomain: "" };
+  let registerData = { subdomain: "", type: "permapage" };
   let successDialog = false;
   let successData = {};
   let errorDialog = false;
@@ -77,6 +77,20 @@
   }
   async function submitRegistration() {
     registerDialog = false;
+    if (registerData.subdomain === "") {
+      errorMessage = `ERROR: subdomain must include characters!`;
+      errorDialog = true;
+      return;
+    }
+    if (registerData.transactionId === "") {
+      errorMessage = `ERROR: ${
+        registerData.type === "arweave"
+          ? "TransactionId is not set!"
+          : "Permapage is not selected!"
+      } `;
+      errorDialog = true;
+      return;
+    }
     registering = true;
     const result = await pages({ register }).purchase({
       name: registerData.subdomain,
@@ -110,6 +124,18 @@
   }
 
   async function handleChange(e) {
+    changeDialog = false;
+    if (!changeData.transactionId || changeData.transactionId === "") {
+      errorMessage = `ERROR: ${
+        changeData.type === "arweave"
+          ? "TransactionId is not set!"
+          : "Permapage is not selected!"
+      } `;
+      errorDialog = true;
+      return;
+    }
+    console.log(changeData);
+    return;
     const result = await updateSubDomain(
       changeData.ANT,
       changeData.transactionId
@@ -124,7 +150,6 @@
       errorDialog = true;
     }
     changeData = {};
-    changeDialog = false;
   }
 
   async function listPermapages() {
@@ -215,7 +240,7 @@
     }
     timeout2 = setTimeout(watchClaim, 2 * 60 * 1000);
     doFetch();
-    console.log("checking status " + new Date().toISOString());
+    //console.log("checking status " + new Date().toISOString());
   }
 
   function checkDomains() {
@@ -229,9 +254,11 @@
   checkDomains();
 
   let list = doListANTS($address);
+  /*
   if (claimingTokens !== "Available") {
     watchClaim();
   }
+  */
 </script>
 
 <NavBar />
@@ -259,6 +286,7 @@
                 on:click={registerDomain}
                 class="btn btn-secondary">Register</button
               >
+              <!--
               {#if claimingTokens === "Available"}
                 <a
                   class="btn btn-primary"
@@ -281,6 +309,7 @@
                   on:click={watchClaim}>{claimingTokens}</button
                 >
               {/if}
+              -->
             </div>
           </div>
           <div class="overflow-x-auto">
@@ -421,13 +450,15 @@
         <input
           class="input input-bordered w-full"
           bind:value={registerData.subdomain}
+          minlength="1"
           maxlength="20"
-          pattern="[a-zA-Z0-9_]*$"
+          pattern="[a-zA-Z0-9_-]*(?:[a-zA-Z0-9])$"
         />
         <span>.arweave.dev</span>
       </label>
       <small class="mt-2 text-secondary"
-        >Only Letters and Numbers and _ maybe used to create subdomain</small
+        >Only Letters and Numbers and '_,-' maybe used to create subdomain - no
+        '_,-' allowed as last character.</small
       >
     </div>
     <div class="mt-8 form-control">
@@ -489,7 +520,7 @@
     </div>
   </form>
 </Modal>
-<Modal open={successDialog}>
+<Modal open={successDialog} on:click={() => (successDialog = false)}>
   <h3 class="text-3xl text-success">Success!</h3>
   <p class="my-8">
     Congrats! {successData.message}!
@@ -500,7 +531,7 @@
   </p>
 </Modal>
 
-<Modal open={errorDialog}>
+<Modal open={errorDialog} on:click={() => (errorDialog = false)}>
   <h3 class="text-3xl text-error">Error!</h3>
   <p class="my-8">
     {errorMessage}

@@ -54,6 +54,7 @@
 
   function disconnect() {
     if (window.arweaveWallet) window.arweaveWallet.disconnect();
+    localStorage.setItem("arweave-app", "");
     address.set("");
     router.goto("/connect");
   }

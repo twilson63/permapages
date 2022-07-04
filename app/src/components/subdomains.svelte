@@ -62,14 +62,17 @@
               >
             </td>
             <td>
-              <button on:click={handle("change", record.id)} class="link"
-                >Change</button
+              <button
+                on:click={handle("change", record.id)}
+                class="link uppercase">Change</button
               >
-              <button on:click={handle("transfer", record.id)} class="link"
-                >Transfer</button
+              <button
+                on:click={handle("transfer", record.id)}
+                class="link uppercase">Transfer</button
               >
-              <button on:click={handle("remove", record.id)} class="link"
-                >Remove</button
+              <button
+                on:click={handle("remove", record.id)}
+                class="link uppercase">Remove</button
               >
             </td>
           </tr>

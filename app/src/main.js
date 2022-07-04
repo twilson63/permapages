@@ -1,6 +1,7 @@
 import './tailwind.css'
 import App from './App.svelte'
 import { address } from './store.js'
+import { connectApp } from "./services/arweave.js";
 
 window.addEventListener("arweaveWalletLoaded", async () => {
   if (localStorage.getItem("address") !== "") {
@@ -20,11 +21,16 @@ window.addEventListener("arweaveWalletLoaded", async () => {
         console.log(e)
       }
     } else {
-      address.set("");
+      address.set("")
     }
   }
 });
 
+if (localStorage.getItem('arweave-app') === 'true') {
+  console.log('TODO: connect to arweave.app')
+  //const walletAddress = await connectApp().catch((e) => "");
+  //address.set(walletAddress);
+}
 
 const app = new App({
   target: document.getElementById('app')

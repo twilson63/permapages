@@ -18,7 +18,7 @@
       connecting = true;
       const tId = setTimeout(() => (connecting = false), 2000);
       const walletAddress = await connectApp().catch((e) => "");
-
+      localStorage.setItem("arweave-app", "true");
       address.set(walletAddress);
       clearTimeout(tId);
       connecting = false;

@@ -126,6 +126,7 @@ function buildProfileQry(addr) {
   return `
 query {
   transactions(
+    first : 100,
     owners: ["${addr}"],
     tags: [
       { name: "Protocol", values: ["PermaProfile-v0.1"]}
