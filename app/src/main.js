@@ -26,12 +26,6 @@ window.addEventListener("arweaveWalletLoaded", async () => {
   }
 });
 
-if (localStorage.getItem('arweave-app') === 'true') {
-  console.log('TODO: connect to arweave.app')
-  //const walletAddress = await connectApp().catch((e) => "");
-  //address.set(walletAddress);
-}
-
 const app = new App({
   target: document.getElementById('app')
 })

@@ -28,6 +28,7 @@ export const connectApp = () => {
     name: 'permapages',
     logo: `${window.location.origin}/permapages_logo.svg`
   })
+  console.log('wallet', wallet)
 
   wallet.setUrl('https://arweave.app')
   return wallet.connect()

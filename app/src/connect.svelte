@@ -18,6 +18,7 @@
       connecting = true;
       const tId = setTimeout(() => (connecting = false), 2000);
       const walletAddress = await connectApp().catch((e) => "");
+      console.log("connected - " + walletAddress);
       localStorage.setItem("arweave-app", "true");
       address.set(walletAddress);
       clearTimeout(tId);
@@ -65,6 +66,11 @@
       error = e.message;
     }
   }
+
+  // if (localStorage.getItem("arweave-app") === "true") {
+  //   console.log("connecting to arweave.app");
+  //   appConnect();
+  // }
 </script>
 
 <Navbar />
