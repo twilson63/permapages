@@ -1,7 +1,10 @@
 <script>
   import { address } from "./store.js";
   let version = __APP_VERSION__.split(".")[2];
+  let scrollY;
 </script>
+
+<svelte:window bind:scrollY />
 
 <svelte:head>
   <title>PermaPages</title>
@@ -10,9 +13,61 @@
     name="description"
   />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <link href="css/normalize.css" rel="stylesheet" type="text/css" />
-  <link href="css/components.css" rel="stylesheet" type="text/css" />
-  <link href="css/landing.css" rel="stylesheet" type="text/css" />
+  <link href="css/home.css" rel="stylesheet" type="text/css" />
+  <style>
+    @media (min-width: 992px) {
+      html.w-mod-js:not(.w-mod-ix)
+        [data-w-id="8e0031be-6d28-482d-5992-47d9f0105010"] {
+        opacity: 0;
+      }
+      html.w-mod-js:not(.w-mod-ix)
+        [data-w-id="8e0031be-6d28-482d-5992-47d9f010500e"] {
+        opacity: 0;
+      }
+      html.w-mod-js:not(.w-mod-ix)
+        [data-w-id="8e0031be-6d28-482d-5992-47d9f010500f"] {
+        opacity: 0;
+      }
+      html.w-mod-js:not(.w-mod-ix)
+        [data-w-id="8e0031be-6d28-482d-5992-47d9f0105011"] {
+        opacity: 0;
+      }
+    }
+    @media (max-width: 991px) and (min-width: 768px) {
+      html.w-mod-js:not(.w-mod-ix)
+        [data-w-id="8e0031be-6d28-482d-5992-47d9f0105010"] {
+        opacity: 0;
+      }
+      html.w-mod-js:not(.w-mod-ix)
+        [data-w-id="8e0031be-6d28-482d-5992-47d9f010500e"] {
+        opacity: 0;
+      }
+      html.w-mod-js:not(.w-mod-ix)
+        [data-w-id="8e0031be-6d28-482d-5992-47d9f010500f"] {
+        opacity: 0;
+      }
+      html.w-mod-js:not(.w-mod-ix)
+        [data-w-id="8e0031be-6d28-482d-5992-47d9f0105011"] {
+        opacity: 0;
+      }
+    }
+  </style>
+  <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
+  <script type="text/javascript">
+    !(function (o, c) {
+      var n = c.documentElement,
+        t = " w-mod-";
+      (n.className += t + "js"),
+        ("ontouchstart" in o ||
+          (o.DocumentTouch && c instanceof DocumentTouch)) &&
+          (n.className += t + "touch");
+    })(window, document);
+  </script>
+  <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon" />
+  <link
+    href="images/webclip.png"
+    rel="apple-touch-icon"
+  /><!--  Please keep this css code to improve the font quality -->
 </svelte:head>
 <div class="page-wrapper">
   <div class="global-styles w-embed">
@@ -21,12 +76,14 @@
       .w-richtext > :first-child {
         margin-top: 0;
       }
+
       /* Snippet gets rid of bottom margin on last element in any rich text*/
       .w-richtext > :last-child,
       .w-richtext ol li:last-child,
       .w-richtext ul li:last-child {
         margin-bottom: 0;
       }
+
       /* Snippet makes all link elements listed below to inherit color from their parent */
       a,
       .w-tab-link,
@@ -36,24 +93,29 @@
       .w-dropdown-link {
         color: inherit;
       }
+
       /* Snippet prevents all click and hover interaction with an element */
       .clickable-off {
         pointer-events: none;
       }
+
       /* Snippet enables all click and hover interaction with an element */
       .clickable-on {
         pointer-events: auto;
       }
+
       /* Snippet enables you to add class of div-square which creates and maintains a 1:1 dimension of a div.*/
       .div-square::after {
         content: "";
         display: block;
         padding-bottom: 100%;
       }
+
       /*Hide focus outline for main content element*/
       main:focus-visible {
         outline: -webkit-focus-ring-color auto 0px;
       }
+
       /* Make sure containers never lose their center alignment*/
       .container-medium,
       .container-small,
@@ -61,6 +123,7 @@
         margin-right: auto !important;
         margin-left: auto !important;
       }
+
       /*Reset selects, buttons, and links styles*/
       .w-input,
       .w-select,
@@ -69,6 +132,7 @@
         text-decoration: inherit;
         font-size: inherit;
       }
+
       /*Apply "..." after 3 lines of text */
       .text-style-3lines {
         display: -webkit-box;
@@ -76,6 +140,7 @@
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
       }
+
       /* Apply "..." after 2 lines of text */
       .text-style-2lines {
         display: -webkit-box;
@@ -83,6 +148,7 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
       }
+
       /* Apply "..." at 100% width */
       .truncate-width {
         width: 100%;
@@ -90,11 +156,13 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
+
       /* Removes native scrollbar */
       .no-scrollbar {
         -ms-overflow-style: none; // IE 10+
         overflow: -moz-scrollbars-none; // Firefox
       }
+
       .no-scrollbar::-webkit-scrollbar {
         display: none; // Safari and Chrome
       }
@@ -117,7 +185,7 @@
             </div>
             <p class="text-size-medium">
               Create and manage your own permanent web3 profile and permaweb
-              pages built on Arweave <span class="text-span">ⓐ</span>.
+              pages built on Arweave.
             </p>
             <div class="margin-top margin-medium">
               <div class="button-row">
@@ -208,7 +276,7 @@
                   Go to the <a
                     href="https://pilot.ar.io/"
                     target="_blank"
-                    class="link-3">faucet</a
+                    class="link-3">pilot.ar.io</a
                   >
                   (required to get your own custom subdomain).
                 </p>
@@ -248,7 +316,7 @@
     </div>
   </div>
 </div>
-<div class="wf-section">
+<div class="section-4 wf-section">
   <section class="section-layout348">
     <div class="page-padding-2">
       <div class="container-large-2">
@@ -263,6 +331,7 @@
               srcset="images/permaprofilesss-p-500.png 500w, images/permaprofilesss-p-800.png 800w, images/permaprofilesss-p-1080.png 1080w, images/permaprofilesss.png 1400w"
               alt=""
               class="layout348_image is-image1"
+              style="opacity: {scrollY > 1200 && scrollY < 2000 ? '1' : '0'}"
             /><img
               src="images/blockstackersss.png"
               loading="lazy"
@@ -272,6 +341,7 @@
               srcset="images/blockstackersss-p-500.png 500w, images/blockstackersss-p-800.png 800w, images/blockstackersss-p-1080.png 1080w, images/blockstackersss.png 1400w"
               alt=""
               class="layout348_image is-image2"
+              style="opacity: {scrollY > 2000 && scrollY < 2800 ? '1' : '0'}"
             /><img
               src="images/Media-NFTsss.png"
               loading="lazy"
@@ -281,6 +351,7 @@
               srcset="images/Media-NFTsss-p-500.png 500w, images/Media-NFTsss-p-800.png 800w, images/Media-NFTsss-p-1080.png 1080w, images/Media-NFTsss.png 1400w"
               alt=""
               class="layout348_image is-image3"
+              style="opacity: {scrollY > 2800 && scrollY < 3600 ? '1' : '0'}"
             /><img
               src="images/beatmakersss.png"
               loading="lazy"
@@ -290,6 +361,7 @@
               srcset="images/beatmakersss-p-500.png 500w, images/beatmakersss-p-800.png 800w, images/beatmakersss-p-1080.png 1080w, images/beatmakersss.png 1400w"
               alt=""
               class="layout348_image is-image4"
+              style="opacity: {scrollY > 3600 && scrollY < 4200 ? '1' : '0'}"
             />
           </div>
           <div
@@ -342,8 +414,10 @@
               </div>
               <div class="layout348_mobile-image-wrapper">
                 <img
-                  src="https://uploads-ssl.webflow.com/624380709031623bfe4aee60/626c881e91068544651ccbd0_Placeholder%20Image-1.svg"
+                  src="images/permaprofilesss.png"
                   loading="lazy"
+                  sizes="(max-width: 479px) 94vw, (max-width: 767px) 90vw, 100vw"
+                  srcset="images/permaprofilesss-p-500.png 500w, images/permaprofilesss-p-800.png 800w, images/permaprofilesss-p-1080.png 1080w, images/permaprofilesss.png 1400w"
                   alt=""
                   class="layout348_mobile-image"
                 />
@@ -368,8 +442,9 @@
               </p>
               <div class="margin-top margin-medium">
                 <div class="button-row">
-                  <a href="/pages" class="button-secondary-3 w-button"
-                    >Create in style</a
+                  <a
+                    href="https://permapages.app/#/pages"
+                    class="button-secondary-3 w-button">Create in style</a
                   >
                   <a
                     href="https://blockstacker.arweave.dev/"
@@ -396,8 +471,10 @@
               </div>
               <div class="layout348_mobile-image-wrapper">
                 <img
-                  src="https://uploads-ssl.webflow.com/624380709031623bfe4aee60/626c881e9106853aea1ccbcf_Placeholder%20Image-2.svg"
+                  src="images/blockstackersss.png"
                   loading="lazy"
+                  sizes="(max-width: 479px) 94vw, (max-width: 767px) 90vw, 100vw"
+                  srcset="images/blockstackersss-p-500.png 500w, images/blockstackersss-p-800.png 800w, images/blockstackersss-p-1080.png 1080w, images/blockstackersss.png 1400w"
                   alt=""
                   class="layout348_mobile-image"
                 />
@@ -425,8 +502,9 @@
               </p>
               <div class="margin-top margin-medium">
                 <div class="button-row">
-                  <a href="/pages" class="button-secondary-3 w-button"
-                    >Make a media page</a
+                  <a
+                    href="https://permapages.app/#/pages"
+                    class="button-secondary-3 w-button">Make a media page</a
                   >
                   <a
                     href="https://genesis.arweave.dev/"
@@ -453,8 +531,10 @@
               </div>
               <div class="layout348_mobile-image-wrapper">
                 <img
-                  src="https://uploads-ssl.webflow.com/624380709031623bfe4aee60/626c881e910685d5d81ccbcd_Placeholder%20Image-3.svg"
+                  src="images/Media-NFTsss.png"
                   loading="lazy"
+                  sizes="(max-width: 479px) 94vw, (max-width: 767px) 90vw, 100vw"
+                  srcset="images/Media-NFTsss-p-500.png 500w, images/Media-NFTsss-p-800.png 800w, images/Media-NFTsss-p-1080.png 1080w, images/Media-NFTsss.png 1400w"
                   alt=""
                   class="layout348_mobile-image"
                 />
@@ -481,8 +561,9 @@
               </p>
               <div class="margin-top margin-medium">
                 <div class="button-row">
-                  <a href="/pages" class="button-secondary-3 w-button"
-                    >Get a subdomain</a
+                  <a
+                    href="https://permapages.app/#/pages"
+                    class="button-secondary-3 w-button">Get a subdomain</a
                   >
                   <a
                     href="https://hotdog.arweave.dev/"
@@ -509,8 +590,10 @@
               </div>
               <div class="layout348_mobile-image-wrapper">
                 <img
-                  src="https://uploads-ssl.webflow.com/624380709031623bfe4aee60/626c881e91068527b81ccbce_Placeholder%20Image-4.svg"
+                  src="images/beatmakersss.png"
                   loading="lazy"
+                  sizes="(max-width: 479px) 94vw, (max-width: 767px) 90vw, 100vw"
+                  srcset="images/beatmakersss-p-500.png 500w, images/beatmakersss-p-800.png 800w, images/beatmakersss-p-1080.png 1080w, images/beatmakersss.png 1400w"
                   alt=""
                   class="layout348_mobile-image"
                 />
@@ -525,55 +608,285 @@
     </div>
   </section>
 </div>
+<div class="section-5 wf-section">
+  <section class="section-layout348">
+    <div class="page-padding-2">
+      <div class="container-large-2">
+        <section class="section-layout193">
+          <div class="cta">
+            <div class="container-large-2">
+              <div class="padding-vertical">
+                <section class="section-layout192">
+                  <div class="cta">
+                    <div class="container-large-2">
+                      <div class="padding-vertical">
+                        <div class="w-layout-grid layout192_component">
+                          <div class="testimonial13_client-image-wrapper">
+                            <img
+                              src="images/permaprofilesss.png"
+                              loading="lazy"
+                              srcset="images/permaprofilesss-p-500.png 500w, images/permaprofilesss-p-800.png 800w, images/permaprofilesss-p-1080.png 1080w, images/permaprofilesss.png 1400w"
+                              sizes="100vw"
+                              alt=""
+                              class="image-8"
+                            />
+                          </div>
+                          <div
+                            id="w-node-_2aad985b-1e16-9b17-22f3-624a459f40fb-e167b7f5"
+                            class="layout192_content"
+                          >
+                            <div class="margin-bottom margin-xsmall">
+                              <div class="text-weight-semibold-2">
+                                <strong>Your profile on the permaweb</strong>
+                              </div>
+                            </div>
+                            <div class="margin-bottom margin-small">
+                              <h2 class="tablet-title">Create a profile</h2>
+                            </div>
+                            <p class="text-size-medium-2">
+                              Use a template provided and make it your own.
+                              Plus, add links to your socials, websites, etc.
+                            </p>
+                            <div class="margin-top margin-medium">
+                              <div class="button-row">
+                                <a href="#" class="button-secondary-4 w-button"
+                                  >Get your PermaPage</a
+                                >
+                                <a
+                                  href="#"
+                                  class="button-link with-icon w-inline-block"
+                                >
+                                  <div>Visit this page</div>
+                                  <div class="icon-embed-xxsmall w-embed">
+                                    <svg
+                                      width="16"
+                                      height="16"
+                                      viewbox="0 0 16 16"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M6 3L11 8L6 13"
+                                        stroke="CurrentColor"
+                                        stroke-width="1.5"
+                                      />
+                                    </svg>
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="w-layout-grid layout1_component">
+                          <div class="layout1_content">
+                            <div class="margin-bottom margin-xsmall">
+                              <div class="text-weight-semibold-3">
+                                <strong>That future retro vibe!</strong>
+                              </div>
+                            </div>
+                            <div class="margin-bottom margin-small">
+                              <h2 class="tablet-title">Keep it classic</h2>
+                            </div>
+                            <p class="text-size-medium-2">
+                              Add some gifs and get that 90&#x27;s vibe back in
+                              action via your own custom markdown text and more.
+                            </p>
+                            <div class="margin-top margin-medium">
+                              <div class="button-row">
+                                <a href="#" class="button-secondary-4 w-button"
+                                  >Create in style</a
+                                >
+                                <a
+                                  href="#"
+                                  class="button-link with-icon w-inline-block"
+                                >
+                                  <div>Visit this page</div>
+                                  <div class="icon-embed-xxsmall w-embed">
+                                    <svg
+                                      width="16"
+                                      height="16"
+                                      viewbox="0 0 16 16"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M6 3L11 8L6 13"
+                                        stroke="CurrentColor"
+                                        stroke-width="1.5"
+                                      />
+                                    </svg>
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="layout1_image-wrapper">
+                            <img
+                              src="images/blockstackersss.png"
+                              loading="lazy"
+                              srcset="images/blockstackersss-p-500.png 500w, images/blockstackersss-p-800.png 800w, images/blockstackersss-p-1080.png 1080w, images/blockstackersss.png 1400w"
+                              sizes="100vw"
+                              alt=""
+                              class="image-7"
+                            />
+                          </div>
+                        </div>
+                        <div class="w-layout-grid layout192_component-new">
+                          <div class="testimonial13_client-image-wrapper">
+                            <img
+                              src="images/Media-NFTsss.png"
+                              loading="lazy"
+                              srcset="images/Media-NFTsss-p-500.png 500w, images/Media-NFTsss-p-800.png 800w, images/Media-NFTsss-p-1080.png 1080w, images/Media-NFTsss.png 1400w"
+                              sizes="100vw"
+                              alt=""
+                              class="image-9"
+                            />
+                          </div>
+                          <div
+                            id="w-node-_894421c9-a8cc-f446-fc93-858f0d09d545-e167b7f5"
+                            class="layout192_content"
+                          >
+                            <div class="margin-bottom margin-xsmall">
+                              <div class="text-weight-semibold-2">
+                                <strong
+                                  >Taking media to a whole new level</strong
+                                >
+                              </div>
+                            </div>
+                            <div class="margin-bottom margin-small">
+                              <h2 class="tablet-title">Multimedia ready</h2>
+                            </div>
+                            <p class="text-size-medium-2">
+                              If you&#x27;ve uploaded films, animated art, or an
+                              ever-changing media NFT on Arweave like this piece
+                              here, you can easily make it your own page.
+                            </p>
+                            <div class="margin-top margin-medium">
+                              <div class="button-row">
+                                <a href="#" class="button-secondary-4 w-button"
+                                  >Make a media page</a
+                                >
+                                <a
+                                  href="#"
+                                  class="button-link with-icon w-inline-block"
+                                >
+                                  <div>Visit this media NFT</div>
+                                  <div class="icon-embed-xxsmall w-embed">
+                                    <svg
+                                      width="16"
+                                      height="16"
+                                      viewbox="0 0 16 16"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M6 3L11 8L6 13"
+                                        stroke="CurrentColor"
+                                        stroke-width="1.5"
+                                      />
+                                    </svg>
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <section class="section-layout1">
+                <div class="cta">
+                  <div class="container-large-2" />
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</div>
 <div class="section-2 wf-section">
   <div class="quote-section">
     <div class="container-large">
       <div class="padding-vertical padding-new">
-        <div class="max-width-large align-center">
-          <div class="home1-testimonial_component">
-            <div class="margin-vertical margin-medium">
-              <div class="quote-text">
-                &quot;It really is a lot of fun to create pages directly from
-                Arweave transactions. NFTs, full websites, you name it. Bringing
-                back it to the 90&#x27;s internet, just with a massive
-                difference... decentralized Permanence!&quot;
-              </div>
-            </div>
-            <div class="home1-testimonial_client-image-wrapper">
-              <img
-                src="images/onlyarweave.png"
-                loading="lazy"
-                srcset="images/onlyarweave-p-500.png 500w, images/onlyarweave-p-800.png 800w, images/onlyarweave.png 869w"
-                sizes="64px"
-                alt=""
-                class="home1-testimonial_client-image"
-              />
-            </div>
-            <p class="name-quote-text">
-              <a href="https://only.arweave.dev" target="_blank"
-                >only.arweave.dev</a
-              >
-            </p>
-            <p class="paragraph">Community member and PermaPages publisher</p>
+        <div class="max-width-large align-center" />
+      </div>
+      <div class="home1-testimonial_component">
+        <div class="margin-vertical margin-medium">
+          <div class="quote-text">
+            &quot;It really is a lot of fun to create pages directly from
+            Arweave transactions. NFTs, full websites, you name it. Bringing
+            back it to the 90&#x27;s internet, just with a massive difference...
+            decentralized Permanence!&quot;
           </div>
         </div>
+        <div class="home1-testimonial_client-image-wrapper">
+          <img
+            src="images/onlyarweave.png"
+            loading="lazy"
+            srcset="images/onlyarweave-p-500.png 500w, images/onlyarweave-p-800.png 800w, images/onlyarweave.png 869w"
+            sizes="64px"
+            alt=""
+            class="home1-testimonial_client-image"
+          />
+        </div>
+        <p class="name-quote-text">
+          <a href="https://only.arweave.dev" target="_blank">only.arweave.dev</a
+          >
+        </p>
+        <p class="paragraph">PermaPages publisher</p>
       </div>
     </div>
   </div>
 </div>
-<a href="http://arweave.org" target="_blank" class="seal-desktop w-inline-block"
-  ><img src="images/light.svg" loading="lazy" alt="" class="image-2" /></a
->
-<a href="http://arweave.org" target="_blank" class="seal-mobile w-inline-block"
-  ><img
-    src="images/light_1.svg"
-    loading="lazy"
-    width="150"
-    height="75"
-    alt=""
-    class="image-2"
-  /></a
->
+<div class="cta-make-page wf-section">
+  <div class="cta">
+    <div class="container-large-2" />
+  </div>
+  <section class="section-cta27">
+    <div class="cta-make-page">
+      <div class="container-small">
+        <div class="padding-vertical padding-xhuge">
+          <div class="text-align-center">
+            <div class="margin-bottom margin-small">
+              <h2 class="text-color-white">👀 Make your own PermaPage</h2>
+            </div>
+            <p class="text-size-medium-2 text-color-white">
+              The next 500 people to sign up will receive an atomic NFT for
+              helping test ArNS.
+            </p>
+            <div class="margin-top margin-medium">
+              <div class="button-row-2 is-button-row-center">
+                <a
+                  href="https://permapages.app/#/pages"
+                  class="button-3 w-button"><strong>Create a page!</strong></a
+                >
+                <a
+                  href="https://pilot.ar.io/"
+                  target="_blank"
+                  class="button-secondary-4 is-alternate w-button"
+                  >Get the details</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cta27_background-image-wrapper">
+      <div class="image-overlay-layer" />
+      <img
+        src="images/placeholder-image.svg"
+        loading="lazy"
+        alt=""
+        class="cta27_background-image"
+      />
+    </div>
+  </section>
+</div>
 <section class="section-layout87">
   <div class="layout87_background-video-wrapper" />
 </section>
@@ -585,12 +898,14 @@
         .w-richtext > :first-child {
           margin-top: 0;
         }
+
         /* Snippet gets rid of bottom margin on last element in any rich text*/
         .w-richtext > :last-child,
         .w-richtext ol li:last-child,
         .w-richtext ul li:last-child {
           margin-bottom: 0;
         }
+
         /* Snippet makes all link elements listed below to inherit color from their parent */
         a,
         .w-tab-link,
@@ -600,24 +915,29 @@
         .w-dropdown-link {
           color: inherit;
         }
+
         /* Snippet prevents all click and hover interaction with an element */
         .clickable-off {
           pointer-events: none;
         }
+
         /* Snippet enables all click and hover interaction with an element */
         .clickable-on {
           pointer-events: auto;
         }
+
         /* Snippet enables you to add class of div-square which creates and maintains a 1:1 dimension of a div.*/
         .div-square::after {
           content: "";
           display: block;
           padding-bottom: 100%;
         }
+
         /*Hide focus outline for main content element*/
         main:focus-visible {
           outline: -webkit-focus-ring-color auto 0px;
         }
+
         /* Make sure containers never lose their center alignment*/
         .container-medium,
         .container-small,
@@ -625,6 +945,7 @@
           margin-right: auto !important;
           margin-left: auto !important;
         }
+
         /*Reset selects, buttons, and links styles*/
         .w-input,
         .w-select,
@@ -633,6 +954,7 @@
           text-decoration: inherit;
           font-size: inherit;
         }
+
         /*Apply "..." after 3 lines of text */
         .text-style-3lines {
           display: -webkit-box;
@@ -640,6 +962,7 @@
           -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
         }
+
         /* Apply "..." after 2 lines of text */
         .text-style-2lines {
           display: -webkit-box;
@@ -647,6 +970,7 @@
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
         }
+
         /* Apply "..." at 100% width */
         .truncate-width {
           width: 100%;
@@ -654,11 +978,13 @@
           overflow: hidden;
           text-overflow: ellipsis;
         }
+
         /* Removes native scrollbar */
         .no-scrollbar {
           -ms-overflow-style: none; // IE 10+
           overflow: -moz-scrollbars-none; // Firefox
         }
+
         .no-scrollbar::-webkit-scrollbar {
           display: none; // Safari and Chrome
         }
@@ -846,16 +1172,28 @@
                         class="image-3"
                       /></a
                     >
-                    <div class="w-layout-grid footer4_link-list">
-                      <a href="/about" class="footer4_link">About</a>
+                    <div
+                      id="w-node-_93816162-f910-eb78-0fa4-406d754f988c-e167b7f5"
+                      class="w-layout-grid footer4_link-list"
+                    >
+                      <a href="/about" target="_blank" class="footer4_link"
+                        >About</a
+                      >
                       <a href="/pages" class="footer4_link">Pages</a>
-                      <a href="https://pilot.ar.io" class="footer4_link"
-                        >Get ArNS Tokens</a
+                      <a
+                        href="https://pilot.ar.io/"
+                        target="_blank"
+                        class="footer4_link">Get ArNS Tokens</a
                       >
                       <a
                         href="https://www.arweave.org/"
                         target="_blank"
                         class="footer4_link">Arweave</a
+                      >
+                      <a
+                        id="w-node-c61ef7b6-bed1-dc7d-9e80-cafecb572567-e167b7f5"
+                        href="https://permapages.app/#/pages"
+                        class="button-small-footer w-button">Create a page</a
                       >
                     </div>
                     <div
@@ -864,15 +1202,15 @@
                     >
                       <a
                         id="w-node-c51544a8-bb6f-3a9b-86bd-91fe22218c1e-e167b7f5"
-                        href="https://twitter.com/permapages"
+                        href="https://twitter/com/permapages"
                         target="_blank"
                         class="w-inline-block"
                         ><img
                           src="images/2021-Twitter-logo---white.png"
                           loading="lazy"
                           width="22"
+                          srcset="images/2021-Twitter-logo---white-p-500.png 500w, images/2021-Twitter-logo---white-p-800.png 800w, images/2021-Twitter-logo---white.png 1034w"
                           sizes="22px"
-                          srcset="images/2021-Twitter-logo---white.png 500w, images/2021-Twitter-logo---white.png 800w, images/2021-Twitter-logo---white.png 1034w"
                           alt=""
                           class="image-5"
                         /></a
@@ -893,7 +1231,6 @@
                     </div>
                   </div>
                 </div>
-                <div class="line-divider-2" />
                 <div class="padding-top padding-medium">
                   <div class="w-layout-grid footer4_bottom-wrapper">
                     <div
@@ -903,9 +1240,9 @@
                       © 2022 PermaPages. All right reserved.
                     </div>
                     <!--
-                    <a href="#" class="footer4_legal-link">Privacy Policy</a>
-                    <a href="#" class="footer4_legal-link">Terms of Service</a>
-                    -->
+                      <a href="#" class="footer4_legal-link">Privacy Policy</a>
+                      <a href="#" class="footer4_legal-link">Terms of Service</a>
+                      -->
                   </div>
                 </div>
               </div>
@@ -916,4 +1253,19 @@
     </footer>
   </div>
 </div>
+
+<a href="http://arweave.org" target="_blank" class="seal-desktop w-inline-block"
+  ><img src="images/light.svg" loading="lazy" alt="" class="image-2" /></a
+>
+<a href="http://arweave.org" target="_blank" class="seal-mobile w-inline-block"
+  ><img
+    src="images/light_1.svg"
+    loading="lazy"
+    width="150"
+    height="75"
+    alt=""
+    class="image-2"
+  /></a
+>
+
 <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
