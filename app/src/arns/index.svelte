@@ -14,6 +14,7 @@
     listANTs,
     register,
     updateSubDomain,
+    removeSubDomain,
     getBalance,
     getARBalance,
     getFees,
@@ -24,8 +25,12 @@
   let changeDialog = false;
   let changeData = {};
 
-  let transferDialog = false;
   let removeDialog = false;
+  let removeData = {};
+  
+  let transferDialog = false;
+  let transferData = {};
+
   let searchDialog = false;
   let searchMessage = "";
   let searchText = "";
@@ -118,7 +123,6 @@
   }
 
   function showChangeDialog(e) {
-    console.log(e.detail.id);
     changeData = { ANT: e.detail.id };
     changeDialog = true;
   }
@@ -149,6 +153,31 @@
       errorDialog = true;
     }
     changeData = {};
+  }
+
+  function showRemoveDialog(e) {
+    console.log('remove data', e.detail)
+    removeData = e.detail;
+    removeDialog = true;
+  }
+
+  async function handleRemove(e) {
+    removeDialog = false;
+    
+    const result = await removeSubDomain(
+      removeData.ANT,
+      removeData.subdomain
+    );
+    if (result.ok) {
+      successData = {
+        message: "Successfully removed transaction id",
+      };
+      successDialog = true;
+    } else {
+      errorMessage = result.message;
+      errorDialog = true;
+    }
+    removeData = {};
   }
 
   async function listPermapages() {
@@ -331,7 +360,7 @@
                   {records}
                   on:change={showChangeDialog}
                   on:transfer={() => (transferDialog = true)}
-                  on:remove={() => (removeDialog = true)}
+                  on:remove={showRemoveDialog}
                 />
               {/await}
             {:else}
@@ -404,8 +433,9 @@
 <Modal open={transferDialog}>
   <h3 class="text-2xl">🛠 Feature coming soon!</h3>
 </Modal>
-<Modal open={removeDialog}>
-  <h3 class="text-2xl">🛠 Feature coming soon!</h3>
+<Modal open={removeDialog} on:click={handleRemove} cancel={true} on:cancel={() => removeDialog = false }>
+  <h3 class="text-2xl">Remove Transaction</h3>
+  <p>By dropping the transaction from the subdomain, the subdomain will still remain under your control, the subdomain will no longer point to any arweave transaction.</p>
 </Modal>
 <Modal open={searchDialog} on:click={() => (searchDialog = false)}>
   <h3 class="text-2xl">Search Result</h3>

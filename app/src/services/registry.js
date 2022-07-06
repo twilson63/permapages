@@ -164,6 +164,7 @@ export async function updateSubDomain(ANT, transactionId) {
 }
 
 export async function removeSubDomain(ANT, subDomain) {
+  
   const ant = warp.pst(ANT).connect('use_wallet')
   await ant.writeInteraction({
     function: 'removeRecord',

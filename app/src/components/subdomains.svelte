@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { Jumper } from "svelte-loading-spinners";
+import { record } from "zod";
 
   const dispatch = createEventDispatcher();
 
@@ -11,6 +12,12 @@
     return () => {
       dispatch(type, { id });
     };
+  }
+  
+  function handleRemove(data) {
+    return () => {
+      dispatch('remove', data)
+    }
   }
 
   async function checkSubdomain(subdomain) {
@@ -71,7 +78,7 @@
                 class="link uppercase">Transfer</button
               >
               <button
-                on:click={handle("remove", record.id)}
+                on:click={handleRemove({ ANT: record.id, subdomain: record.subdomain})}
                 class="link uppercase">Remove</button
               >
             </td>

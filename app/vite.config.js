@@ -31,7 +31,7 @@ export default defineConfig({
   },
   server: {
     hmr: {
-      clientPort: host ? 443 : 24678,
+      clientPort: host ? 443 : 3000,
       host: host
         ? publicUrl
         : "localhost",
