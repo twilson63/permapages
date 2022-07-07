@@ -42,7 +42,6 @@
   let errorDialog = false;
   let errorMessage = "";
   let registering = false;
-  let claimingTokens = localStorage.getItem($address + "-claim") || "Available";
   let timeout = null;
   let timeout2 = null;
 
@@ -155,13 +154,36 @@
     changeData = {};
   }
 
+  function showTransferDialog(e) {
+    transferData.ANT = e.id;
+    transferDialog = true;
+  }
+
+  async function handleTransfer() {
+    transferDialog = false;
+    const result = await transferSubdomain(
+      transferData.ANT,
+      transferData.target
+    )
+    if (result.ok) {
+      successData = {
+        message: "Successfully removed transferred subdomain",
+      };
+      successDialog = true;
+    } else {
+      errorMessage = result.message;
+      errorDialog = true;
+    }
+    transferData = {};
+  }
+
   function showRemoveDialog(e) {
-    console.log('remove data', e.detail)
+    
     removeData = e.detail;
     removeDialog = true;
   }
 
-  async function handleRemove(e) {
+  async function handleRemove() {
     removeDialog = false;
     
     const result = await removeSubDomain(
@@ -231,46 +253,6 @@
     );
   }
 
-  function watchClaim() {
-    function doFetch() {
-      return fetch(`https://arns-faucet.deno.dev?address=${$address}`)
-        .then((res) => {
-          if (res.status === 200) {
-            return res.json();
-          } else {
-            return { processed: false, alreadyClaimed: false, approved: false };
-          }
-        })
-        .then((doc) => {
-          console.log(doc);
-          if (doc.alreadyClaimed) {
-            claimingTokens = "Already Claimed";
-            localStorage.setItem($address + "-claim", claimingTokens);
-            return;
-          }
-
-          if (!doc.processed) {
-            claimingTokens = "Processing";
-            localStorage.setItem($address + "-claim", claimingTokens);
-            return;
-          }
-          if (!doc.approved) {
-            claimingTokens = "Not Approved";
-            localStorage.setItem($address + "-claim", claimingTokens);
-            return;
-          }
-          if (doc.processed && doc.approved) {
-            claimingTokens = "Claimed";
-            localStorage.setItem($address + "-claim", claimingTokens);
-            return;
-          }
-        });
-    }
-    timeout2 = setTimeout(watchClaim, 2 * 60 * 1000);
-    doFetch();
-    //console.log("checking status " + new Date().toISOString());
-  }
-
   function checkDomains() {
     timeout = setTimeout(() => {
       console.log("checking domains");
@@ -282,11 +264,7 @@
   checkDomains();
 
   let list = doListANTS($address);
-  /*
-  if (claimingTokens !== "Available") {
-    watchClaim();
-  }
-  */
+
 </script>
 
 <NavBar />
@@ -310,34 +288,15 @@
             </div>
             <div class="flex-none">
               <button
-                disabled={balance === 0 || ar === 0}
+                disabled={balance === 'Not Found' || ar === 'Not Found'}
                 on:click={registerDomain}
                 class="btn btn-secondary">Register</button
               >
-              <!--
-              {#if claimingTokens === "Available"}
-                <a
-                  class="btn btn-primary"
-                  target="_blank"
-                  href="https://twitter.com/intent/tweet?text={encodeURI(
-                    'I am requesting Arweave Name System tokens to register my permaweb domain! My address is ' +
-                      $address +
-                      '🐘'
-                  )}"
-                  on:click={() => {
-                    localStorage.setItem($address + "-claim", "Processing");
-                    claimingTokens = "Processing";
-                    watchClaim();
-                  }}>Claim Tokens</a
-                >
-              {:else}
-                <button
-                  class="btn btn-primary"
-                  disabled={true}
-                  on:click={watchClaim}>{claimingTokens}</button
-                >
+              {#if balance === 'Not Found'}
+              <a class="btn" href="/arns/claim">
+                Claim Tokens
+              </a>
               {/if}
-              -->
             </div>
           </div>
           <div class="overflow-x-auto">
@@ -359,7 +318,7 @@
                   title="My Records"
                   {records}
                   on:change={showChangeDialog}
-                  on:transfer={() => (transferDialog = true)}
+                  on:transfer={showTransferDialog}
                   on:remove={showRemoveDialog}
                 />
               {/await}
@@ -430,8 +389,12 @@
     </div>
   {/if}
 </Modal>
-<Modal open={transferDialog}>
-  <h3 class="text-2xl">🛠 Feature coming soon!</h3>
+<Modal open={transferDialog} cancel={true} on:click={handleTransfer} on:cancel={() => transferDialog = false}>
+  <h3 class="text-2xl"></h3>
+  <div class="form-control">
+    <label class="label">Target Wallet Address</label>
+    <input type="text" class="input input-bordered" bind:value={transferData.target} />
+  </div>
 </Modal>
 <Modal open={removeDialog} on:click={handleRemove} cancel={true} on:cancel={() => removeDialog = false }>
   <h3 class="text-2xl">Remove Transaction</h3>

@@ -13,6 +13,7 @@
   import PageLink from "./pages/link.svelte";
   import PageForm from "./pages/form.svelte";
   import Arns from "./arns/index.svelte";
+  import Claim from './arns/claim.svelte';
   import Preview from "./pages/show.svelte";
 
   import not from "ramda/src/not";
@@ -38,9 +39,17 @@
       <Connect />
     {/if}
   </Route>
+  <Route path="/arns/claim">
+    {#if not(isEmpty($address))}
+      <Claim />
+    {:else}
+      <Connect />
+    {/if}
+  </Route>
   <Route path="/arns">
     <Arns />
   </Route>
+
   <Route path="/pages/*">
     {#if not(isEmpty($address))}
       <Route path="/link">

@@ -39,8 +39,8 @@ import { record } from "zod";
         <tr>
           <th />
           <th>Subdomain</th>
-          <th>TransactionId</th>
-          <th>Link</th>
+          <th class="hidden md:table-cell">TransactionId</th>
+          <th class="hidden md:table-cell">Link</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -58,9 +58,13 @@ import { record } from "zod";
                 {/if}
               {/await}
             </td>
-            <th>{record.subdomain}</th>
-            <td>{record.records["@"]}</td>
-            <td
+            <th><a
+              target="_blank"
+              class="link"
+              href="https://{record.subdomain}.arweave.dev"
+              >{record.subdomain}</a></th>
+            <td class="hidden md:table-cell">{record.records["@"]}</td>
+            <td class="hidden md:table-cell"
               ><a
                 target="_blank"
                 class="link"
@@ -71,15 +75,17 @@ import { record } from "zod";
             <td>
               <button
                 on:click={handle("change", record.id)}
-                class="link uppercase">Change</button
+                class="link uppercase">CHG</button
               >
+              <!--
               <button
                 on:click={handle("transfer", record.id)}
-                class="link uppercase">Transfer</button
+                class="link uppercase">TSFR</button
               >
+              -->
               <button
                 on:click={handleRemove({ ANT: record.id, subdomain: record.subdomain})}
-                class="link uppercase">Remove</button
+                class="link uppercase">RM</button
               >
             </td>
           </tr>
