@@ -242,11 +242,17 @@
   }
 
   async function doListANTS($address) {
+    // load from localstorage
+    $arnsCache = JSON.parse(localStorage.getItem(`arnsCache-${$address}`) || '[]')
+    // load for arweave
     const results = await listANTs($address);
+    // keep only the ones not showing up in arweave gql yet
     const pending = ($arnsCache || []).filter((n) =>
       find(propEq("name", n.name), results) ? false : true
     );
-
+    // update store keeping only the uncached
+    $arnsCache = pending // keep only the ANTS not found
+    // return list
     return [...pending, ...results].reduce(
       (acc, v) => (find(propEq("id", v.id), acc) ? acc : [...acc, v]),
       []
@@ -255,7 +261,7 @@
 
   function checkDomains() {
     timeout = setTimeout(() => {
-      console.log("checking domains");
+      //console.log("checking domains");
       list = doListANTS($address);
       checkDomains();
     }, 1000 * 60 * 4);
