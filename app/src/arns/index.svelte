@@ -58,6 +58,18 @@
   });
 
   async function doSearch() {
+    if (!/^(?:[a-zA-Z0-9])+[a-zA-Z0-9-]*(?:[a-zA-Z0-9])$/.test(searchText)) {
+      searchText = "";
+      searchMessage = "This subdomain is not allowed";
+      searchDialog = true;
+      return
+    }
+    if (searchText === 'www') {
+      searchText = "";
+      searchMessage = "This subdomain is not allowed";
+      searchDialog = true;
+      return
+    }
     const result = await search(searchText);
     if (result.ok) {
       searchMessage = "No registration found. You may register this subdomain";
@@ -311,6 +323,7 @@
               <input
                 class="input input-bordered"
                 placeholder="enter subdomain"
+                pattern="^(?:[a-zA-Z0-9])+[a-zA-Z0-9-]*(?:[a-zA-Z0-9])$"
                 bind:value={searchText}
               />
               <button class="btn btn-outline" on:click={doSearch}>Search</button
@@ -450,7 +463,7 @@
           bind:value={registerData.subdomain}
           minlength="1"
           maxlength="20"
-          pattern="^(?:[a-zA-Z0-9])+[a-zA-Z0-9_-]*(?:[a-zA-Z0-9])$"
+          pattern="^(?:[a-zA-Z0-9])+[a-zA-Z0-9-]*(?:[a-zA-Z0-9])$"
         />
         <span>.arweave.dev</span>
       </label>
