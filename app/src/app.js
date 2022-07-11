@@ -53,12 +53,17 @@ export function pages({ register, post, gql, postWebpage, load }) {
   //const void = () => null
 
   async function create(page, notify) {
+    // 1. generate web page
+    // 2. generate source
+    // 3. generate meta.json
+    // 4. create path.manifest
+    // 5. mint contract
     return Async.of(page)
       .chain(pageModel.validate)
       .chain(page =>
-        Async.of(page).map(({ title, description, html }) => ({
+        Async.of(page).map(({ title, description, html, theme }) => ({
           title,
-          html: htmlTemplate(title, description, html)
+          html: htmlTemplate(title, description, html, theme)
         })).chain(Async.fromPromise(postWebpage))
           .map(({ id }) => ({ ...page, webpage: id }))
       )
@@ -190,9 +195,10 @@ function pluckNodes(results) {
   )(results)
 }
 
-function htmlTemplate(title, description, body) {
+function htmlTemplate(title, description, body, theme="default") {
+
   return `<!doctype html>
-<html>
+<html${theme === 'default' ? '' : ` data-theme="${theme}"`}>
   <head>
     <meta charset="utf-8">
     <title>${title}</title>

@@ -35,6 +35,10 @@
   let ant = null;
   let lastTx = meta().query.fork;
 
+  let themes = [
+    "synthwave", "retro", "cyberpunk", "valentine", "aqua", "night", "coffee"
+  ]
+
   onMount(async () => {
     easymde = new window.EasyMDE({
       autosave: {
@@ -71,6 +75,7 @@
         page.profile = p.profile;
         page.ethwallet = p.ethwallet;
         page.webpage = p.webpage;
+        page.theme = p.theme;
       });
   } else {
   }
@@ -150,7 +155,7 @@
 
   async function preview() {
     let html = marked.parse(easymde.value());
-    html = `<div class="prose-lg m-16">${html}</div>`;
+    html = `<div class="prose-lg m-16" ${page.theme === 'default' ? '' : ` data-theme="${page.theme}"`}>${html}</div>`;
     // if (page.ethwallet) {
     //   const data = await opensea.code.preRender({ address: page.ethwallet });
     //   html = Mustache.render(opensea.template(), data) + "\n" + html;
@@ -213,6 +218,18 @@
               bind:value={page.ethwallet}
             />
           </label>
+        </div>
+        <div class="my-8 form-control">
+          <label class="label">
+            <span class="label-text">Select Theme</span>
+            <select id="theme-select" class="select select-bordered" bind:value={page.theme}>
+              <option value="default">default</option>
+              {#each themes as theme}
+                <option value={theme}>{theme}</option>
+              {/each}
+            </select>
+          </label>
+          <small>Select a fun theme for your page, by default, the `light` theme is chosen unless browser is set to dark mode, then the `dark` theme is chosen.</small>
         </div>
         <div class="form-control">
           <label for="content" class="label">Page Content(markdown)</label>

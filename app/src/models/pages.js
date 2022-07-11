@@ -23,6 +23,7 @@ const schema = z.object({
   ethwallet: z.string().default(''),
   webpage: z.string().optional(),
   timestamp: z.string(),
+  theme: z.string()
 })
 
 const getTag = name => compose(

@@ -12,6 +12,8 @@ import { readContract, selectWeightedPstHolder } from 'smartweave'
 // PST for permanotes
 const PERMANOTE_PST = 'cwElAMnBqu2fp-TUsV9lBIZJi-DRZ5tQJgJqxhFjqNY'
 const CONTRACT_SRC = '0hTokSQ7m3DQujuVisZ-RzcU6hOY3-Uz2ZIh4Aa0nKY'
+const PAGE_SRC = 'OhGbHpgw-GIXhUaDZIzUjVm5rXWtd_2hrABWlB83rb8'
+
 const FEE = '.004'
 const arweaveAccount = new Account()
 
@@ -20,6 +22,11 @@ export const arweave = Arweave.init({
   port: 443,
   protocol: 'https'
 })
+
+// global warp
+const { WarpNodeFactory } = window.warp 
+const warp = WarpNodeFactory.memCached(arweave)
+
 
 let wallet = null
 
@@ -182,6 +189,34 @@ export const postPageTx = async (page) => {
 
   return result
 
+}
+
+/**
+ * TODO: when forking a page we need to carry over the intial state
+ * of the previous page/
+ *  
+ */
+export const deployPageContract = async ({page, source, currentState}) => {
+  // build path manifest data
+  const manifest = {
+    manifest: 'arweave/paths',
+    version: '0.1.0',
+    index: {
+      path: 'index.html'
+    },
+    paths: {
+      'index.html': { id: page },
+      'source.json': { id: source }
+    }
+  }
+  // create initialState
+
+  // create contract
+  const result = await warp.createContract.deployFromSrcTxId({
+    srcTxId: PAGE_SRC,
+    initialState: currentState,
+    data: JSON.stringify(manifest),
+  }, true)
 }
 
 export const postTx = async (note) => {
