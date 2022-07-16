@@ -1,18 +1,31 @@
 import Arweave from 'arweave'
 import Account from 'arweave-account'
 
+import always from 'ramda/src/always'
+import assoc from 'ramda/src/assoc'
 import path from 'ramda/src/path'
 import pluck from 'ramda/src/pluck'
+import prop from 'ramda/src/prop'
 import map from 'ramda/src/map'
 import mergeAll from 'ramda/src/mergeAll'
+import compose from 'ramda/src/compose'
+import join from 'ramda/src/join'
+import split from 'ramda/src/split'
+import toLower from 'ramda/src/toLower'
 
 import { ArweaveWebWallet } from "arweave-wallet-connector";
 import { readContract, selectWeightedPstHolder } from 'smartweave'
+import { Async } from 'crocks'
 
 // PST for permanotes
-const PERMANOTE_PST = 'cwElAMnBqu2fp-TUsV9lBIZJi-DRZ5tQJgJqxhFjqNY'
-const CONTRACT_SRC = '0hTokSQ7m3DQujuVisZ-RzcU6hOY3-Uz2ZIh4Aa0nKY'
-const PAGE_SRC = 'OhGbHpgw-GIXhUaDZIzUjVm5rXWtd_2hrABWlB83rb8'
+//const PERMANOTE_PST = 'cwElAMnBqu2fp-TUsV9lBIZJi-DRZ5tQJgJqxhFjqNY'
+//const CONTRACT_SRC = '0hTokSQ7m3DQujuVisZ-RzcU6hOY3-Uz2ZIh4Aa0nKY'
+//const PAGE_SRC = 'OhGbHpgw-GIXhUaDZIzUjVm5rXWtd_2hrABWlB83rb8'
+const WARP_URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
+const PAGE_SRC = 'kSiq990WBHkz6uYO_1z7jylm3YbRrcpm7UfhYUb8Cg0'
+
+const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] = 
+  ['App-Name', 'App-Version', 'SDK', 'Content-Type', 'Contract-Src', 'Init-State']
 
 const FEE = '.004'
 const arweaveAccount = new Account()
@@ -24,11 +37,31 @@ export const arweave = Arweave.init({
 })
 
 // global warp
-const { WarpNodeFactory } = window.warp 
-const warp = WarpNodeFactory.memCached(arweave)
-
+const { WarpWebFactory } = window.warp 
+const warp = WarpWebFactory.memCached(arweave)
 
 let wallet = null
+
+//--- Helper functions
+const createDataEntry = data => Async.fromPromise(arweave.createTransaction.bind(arweave))({data})
+const addTags = tags => tx => {
+  tags.map(({name, value}) => tx.addTag(name, value))
+  return tx 
+}
+
+const sign = tx => 
+  Async.fromPromise(arweave.transactions.sign.bind(arweave.transactions))(tx).map(always(tx))
+const post = contractTx => Async.fromPromise(fetch)(WARP_URL, {
+  method: 'POST',
+  body: JSON.stringify({contractTx}),
+  headers: {
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
+  }
+}).chain(response => response.ok ? Async.fromPromise(response.json.bind(response))() : Async.Rejected(response))  
+
+//--- end ---
 
 export const connectApp = () => {
   wallet = new ArweaveWebWallet({
@@ -109,24 +142,54 @@ export const load = async (id) => {
 }
 
 export const postWebpage = async (data) => {
-  let result
-  const tx = await arweave.createTransaction({ data: data.html })
-  tx.addTag('content-type', 'text/html')
-  tx.addTag('App-Name', 'permapages')
-  tx.addTag('Page-Title', data.title)
+  const dispatch = Async.fromPromise(window.arweaveWallet.dispatch.bind(window.arweaveWallet))
 
-  try {
-    // try bundlr first
-    result = await arweaveWallet.dispatch(tx)
-
-    return result
-  } catch (e) {
-    // then arweave
-    await arweave.transactions.sign(tx)
-    await arweave.transactions.post(tx)
+  const slugify = compose(
+    toLower,
+    join('-'),
+    split(' ')
+  )
+  // create data-entry
+  const de = {
+    data: data.html,
+    tags: [
+      {name: APP_NAME, value: 'SmartWeaveContract'},
+      {name: APP_VERSION, value: '0.3.0'},
+      {name: SDK, value: 'RedStone'},
+      {name: CONTENT_TYPE, value: 'text/html'},
+      {name: CONTRACT_SRC, value: PAGE_SRC},
+      {name: INIT_STATE, value: JSON.stringify({
+        ticker: 'PAGE-' + slugify(data.title),
+        name: 'Permapage NFT',
+        title: data.title,
+        owner: data.owner,
+        balances: {
+          [data.owner]: 1
+        },
+        locked: false, 
+        views: {},
+        contentType: 'text/html',
+        createdAt: Date.now(),
+        tags: [],
+      })},
+      {name: 'Page-Title', value: data.title},
+      {name: 'Type', value: 'PermaWebPage'}
+    ]
   }
+    
+  // dispatch to bundlr
+  return createDataEntry(de.data).map(addTags(de.tags)).chain(dispatch)
+  // post to Warp 
+    .chain(result => createDataEntry(de.data)
+      .map(addTags(de.tags))
+      .chain(sign)
+      .map(assoc('id', result.id))
+      .chain(post)
+    )
+    .map(prop('contractId'))
+    .toPromise()
 
-  return result
+  
 }
 
 // make generic way to deploy to arweave....
@@ -189,34 +252,6 @@ export const postPageTx = async (page) => {
 
   return result
 
-}
-
-/**
- * TODO: when forking a page we need to carry over the intial state
- * of the previous page/
- *  
- */
-export const deployPageContract = async ({page, source, currentState}) => {
-  // build path manifest data
-  const manifest = {
-    manifest: 'arweave/paths',
-    version: '0.1.0',
-    index: {
-      path: 'index.html'
-    },
-    paths: {
-      'index.html': { id: page },
-      'source.json': { id: source }
-    }
-  }
-  // create initialState
-
-  // create contract
-  const result = await warp.createContract.deployFromSrcTxId({
-    srcTxId: PAGE_SRC,
-    initialState: currentState,
-    data: JSON.stringify(manifest),
-  }, true)
 }
 
 export const postTx = async (note) => {

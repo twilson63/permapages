@@ -65,7 +65,7 @@ export function pages({ register, post, gql, postWebpage, load }) {
           title,
           html: htmlTemplate(title, description, html, theme)
         })).chain(Async.fromPromise(postWebpage))
-          .map(({ id }) => ({ ...page, webpage: id }))
+          .map((id) => ({ ...page, webpage: id }))
       )
       .map(_ => (notify({ step: 1, message: 'generating page' }), _))
       .chain(page => deployPage(page).map(({ id }) => ({ ...page, id })))
