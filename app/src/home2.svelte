@@ -1191,6 +1191,7 @@
                         href="/pages"
                         class="button-small-footer w-button">Create a page</a
                       >
+                      <a href="/widgets" class="footer4_link">Widgets for Developers</a>
                     </div>
                     <div
                       id="w-node-_93816162-f910-eb78-0fa4-406d754f9897-e167b7f5"
@@ -1233,7 +1234,7 @@
                       id="w-node-_93816162-f910-eb78-0fa4-406d754f98a3-e167b7f5"
                       class="footer4_credit-text"
                     >
-                      © 2022 PermaPages. All right reserved.
+                      &copy; 2022 PermaPages. All right reserved.
                     </div>
                     <!--
                       <a href="#" class="footer4_legal-link">Privacy Policy</a>

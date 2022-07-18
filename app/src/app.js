@@ -12,6 +12,19 @@ import path from 'ramda/src/path'
 import head from 'ramda/src/head'
 import isEmpty from 'ramda/src/isEmpty'
 import identity from 'ramda/src/identity'
+import propEq from 'ramda/src/propEq'
+
+export function widgets({gql}) {
+  async function list() {
+    return Async.of(buildWidgetList())
+      .chain(Async.fromPromise(gql))
+      .map(pluckNodes)
+      .map(formatWidgets)
+      .toPromise()
+  }
+
+  return { list }
+}
 
 export function profiles({ gql, post, load }) {
   const deployProfile = post ? Async.fromPromise(post) : () => Async.of(null)
@@ -297,4 +310,45 @@ function buildPermaPageQuery(owner) {
     }
   }
   `
+}
+
+function buildWidgetList() {
+  return `
+query {
+  transactions(first: 100, tags: [
+    { name: "Content-Type", values: ["application/javascript"]},
+    { name: "App-Name", values: ["Permapage-Widget"]},
+    { name: "App-Version", values: ["0.0.1"]}
+  ]) {
+    edges {
+      node {
+        id
+        tags {
+          name 
+          value 
+        }
+      }
+    }
+  }
+}
+  `
+}
+
+function getTag(tags) {
+  return function (name) {
+    return tags.find(propEq('name', name))?.value
+  }
+
+}
+
+function formatWidgets(nodes) {
+  return map(({id, tags}) => ({
+    source: `https://arweave.net/${id}`,
+    elementId: getTag(tags)('Widget-Id'),
+    name: getTag(tags)('Widget-Name'),
+    description: getTag(tags)('Widget-Desc'),
+    version: getTag(tags)('Widget-Version'),
+    docs: getTag(tags)('Widget-Docs')
+  }), nodes) 
+  //.filter(has('elementId'))
 }

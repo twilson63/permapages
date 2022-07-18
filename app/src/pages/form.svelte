@@ -10,7 +10,7 @@
     gql,
   } from "../services/arweave.js";
   import { register, listANTs, updateSubDomain } from "../services/registry.js";
-  import { pages, profiles } from "../app.js";
+  import { pages, profiles, widgets } from "../app.js";
   import { address, pageCache } from "../store.js";
   import { marked } from "marked";
   import opensea from "../widgets/opensea.js";
@@ -18,6 +18,7 @@
   import { onMount } from "svelte";
   import compose from "ramda/src/compose";
   import pluck from "ramda/src/pluck";
+import { append } from "svelte/internal";
 
   var easymde = null;
   let error = null;
@@ -28,6 +29,8 @@
   let frameDialog = false;
   let errorDialog = false;
   let errorMessage = "";
+  let widgetDialog = false;
+
   let updateSubdomain = false;
 
   let profileWidgetUrl = "https://profile-widget.arweave.dev";
@@ -112,6 +115,13 @@
         page.html = profileWidget + "\n" + page.html;
       }
 
+      // handle widgets
+      if (page.widgets) {
+        // build source markup.
+        // build templates
+        // inject widgets in to page.
+      }
+
       const result = await pages({
         register,
         post: postPageTx,
@@ -181,6 +191,14 @@
       "<//script>".replace("/", "")
     );
   }
+
+  function loadWidgets() {
+    return widgets({gql}).list()
+  }
+
+  function addWidget(w) {
+    page.widgets = append(w, page.widgets)
+  }
 </script>
 
 <Navbar />
@@ -196,7 +214,7 @@
       <form class="w-full" on:submit|preventDefault={submit}>
         <div class="mt-4 form-control">
           <label for="profile" class="label cursor-pointer">
-            <span class="label-text"
+            <span class="label-text text-xl"
               >Profile (if marked the page will insert your account as a header
               to the page.)</span
             >
@@ -209,9 +227,10 @@
         </div>
         <div class="mt-4 form-control">
           <label for="gallery" class="label cursor-pointer">
-            <span class="label-text"
-              >NFT Gallery - Enter Ethereum Wallet Address</span
+            <span class="label-text text-xl"
+              >NFT Gallery</span
             >
+            <small class="hidden md:inline-block">Enter Ethereum Wallet Address</small>
             <input
               type="input"
               class="input input-bordered w-1/2"
@@ -221,15 +240,25 @@
         </div>
         <div class="my-8 form-control">
           <label class="label">
-            <span class="label-text">Select Theme</span>
+            <span class="label-text text-xl">Select Theme</span>
+            <small class="hidden md:inline-block">Select a fun theme for your page, by default, the `light` theme is chosen unless browser is set to dark mode, then the `dark` theme is chosen.</small>
             <select id="theme-select" class="select select-bordered" bind:value={page.theme}>
               <option value="default">default</option>
               {#each themes as theme}
                 <option value={theme}>{theme}</option>
               {/each}
             </select>
+            
           </label>
-          <small>Select a fun theme for your page, by default, the `light` theme is chosen unless browser is set to dark mode, then the `dark` theme is chosen.</small>
+          
+        </div>
+        <div class="my-8 form-control">
+          <label class="label">
+            <span class="label-text text-xl">Widgets</span>
+            <small class="hidden md:inline-block">Add widgets to permapages to add interactive functionality to your page.</small>
+            <button type="button" class="btn btn-secondary" on:click={() => widgetDialog = true}>Add Widget</button>
+          </label>
+          
         </div>
         <div class="form-control">
           <label for="content" class="label">Page Content(markdown)</label>
@@ -366,4 +395,28 @@
 <Modal open={errorDialog}>
   <h3 class="text-2xl text-error">Error</h3>
   <p class="my-4">{errorMessage}</p>
+</Modal>
+<Modal open={widgetDialog} on:click={() => widgetDialog = false}>
+  <h3 class="text-2x mb-8">Widgets</h3>
+  <div>
+    {#await loadWidgets()}
+      <div>Loading...</div>
+    {:then widgets}
+      {#each widgets as widget}
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">
+            {widget.name} 
+            <span class="badge badge-primary">{widget.version}</span>
+          </div>
+          <div>{widget.description}</div>
+          <div class="card-actions">
+            <button class="btn btn-sm" on:click={() => addWidget(widget)}>Add Widget</button>
+          </div>
+        </div>
+        
+      </div>
+      {/each}
+    {/await}
+  </div>
 </Modal>

@@ -123,7 +123,7 @@ query {
   const result = await arweave.api.post('graphql', query)
 
   const ids = pluck('id', pluck('node', result.data.data.transactions.edges))
-  console.log(ids)
+  
   const ants = await Promise.all(
     map(getANT, ids)
   )
