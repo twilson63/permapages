@@ -18,7 +18,7 @@
   import { onMount } from "svelte";
   import compose from "ramda/src/compose";
   import pluck from "ramda/src/pluck";
-import { append } from "svelte/internal";
+  import append from "ramda/src/append";
 
   var easymde = null;
   let error = null;
@@ -63,7 +63,7 @@ import { append } from "svelte/internal";
     ant = ants[txs.indexOf(page.webpage)];
   });
 
-  let page = { public: true };
+  let page = { public: true, widgets: [], includeFooter: true };
 
   if (meta().query.fork) {
     // getNote from meta().query.fork
@@ -88,6 +88,7 @@ import { append } from "svelte/internal";
   }
 
   async function doConfirm() {
+    let widgetMarkup = ''
     try {
       confirm = false;
       submitting = true;
@@ -95,9 +96,20 @@ import { append } from "svelte/internal";
       page.content = easymde.value();
       page.owner = $address;
 
-      page.html = `<div class="prose-lg m-8 md:m-24">${marked.parse(
-        page.content
-      )}</div>`;
+      // handle widgets
+      if (page.widgets) {
+        widgetMarkup = page.widgets.reduce((a,w) => a + `<div id="${w.name}"></div>`, '')
+      }
+
+      page.html = `<div class="flex space-x-4">  
+        <div class="prose prose-lg m-8 md:m-24 flex-1">${marked.parse(page.content)}</div>
+        <div class="flex-none">
+          <div class="flex flex-col space-y-8">
+            ${widgetMarkup}
+          </div>
+        </div
+      </div>
+      `;
 
       if (page.ethwallet) {
         const data = await opensea.code.preRender({ address: page.ethwallet });
@@ -113,13 +125,6 @@ import { append } from "svelte/internal";
         const profileWidget = Mustache.render(profileTemplate(), profileData);
 
         page.html = profileWidget + "\n" + page.html;
-      }
-
-      // handle widgets
-      if (page.widgets) {
-        // build source markup.
-        // build templates
-        // inject widgets in to page.
       }
 
       const result = await pages({
@@ -192,13 +197,25 @@ import { append } from "svelte/internal";
     );
   }
 
-  function loadWidgets() {
-    return widgets({gql}).list()
+  async function loadWidgets() {
+    const ws = await widgets({gql}).list()
+    return ws.filter(w => 
+      page.widgets.find(a => a.elementId === w.elementId) ? false : true
+    )
+
   }
 
   function addWidget(w) {
     page.widgets = append(w, page.widgets)
+    availableWidets = loadWidgets()
   }
+
+  function removeWidget(id) {
+    page.widgets = page.widgets.filter(w => w.elementId !== id) 
+    availableWidets = loadWidgets()
+  }
+
+  let availableWidets = loadWidgets()
 </script>
 
 <Navbar />
@@ -260,6 +277,25 @@ import { append } from "svelte/internal";
           </label>
           
         </div>
+        {#if page.widgets.length > 0}
+          <div class="flex space-x-4 mb-8">
+            {#each page.widgets as w}
+            <div class="badge badge-primary" on:click={removeWidget(w.elementId)}>{w.name}</div>
+            {/each}
+          </div>
+        {/if}
+        <div class="mt-4 form-control">
+          <label for="footer" class="label cursor-pointer">
+            <span class="label-text text-xl"
+              >Footer (toggle off to not include footer)</span
+            >
+            <input
+              type="checkbox"
+              class="toggle toggle-secondary"
+              bind:checked={page.includeFooter}
+            />
+          </label>
+        </div>
         <div class="form-control">
           <label for="content" class="label">Page Content(markdown)</label>
           <textarea
@@ -280,9 +316,11 @@ import { append } from "svelte/internal";
           >
         </p>
         <div class="mt-8">
+          <!--
           <button type="button" class="btn btn-secondary" on:click={preview}
             >Preview</button
           >
+          -->
           <button type="submit" class="btn btn-primary">Publish</button>
           <a class="btn" href="/pages">Cancel</a>
         </div>
@@ -399,7 +437,7 @@ import { append } from "svelte/internal";
 <Modal open={widgetDialog} on:click={() => widgetDialog = false}>
   <h3 class="text-2x mb-8">Widgets</h3>
   <div>
-    {#await loadWidgets()}
+    {#await availableWidets}
       <div>Loading...</div>
     {:then widgets}
       {#each widgets as widget}
