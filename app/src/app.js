@@ -75,9 +75,9 @@ export function pages({ register, post, gql, postWebpage, load }) {
       .chain(pageModel.validate)
       .map(x => (console.log(x), x))
       .chain(page =>
-        Async.of(page).map(({ title, owner, description, widgets, html, theme }) => ({
+        Async.of(page).map(({ title, owner, description, widgets, html, theme, includeFooter }) => ({
           title,
-          html: htmlTemplate(title, owner, description, widgets, html, theme)
+          html: htmlTemplate(title, owner, description, widgets, html, theme, includeFooter)
         })).chain(Async.fromPromise(postWebpage))
           .map((id) => ({ ...page, webpage: id }))
       )
@@ -217,9 +217,10 @@ function htmlTemplate(title, owner, description, widgets, body, theme="default",
     ${widgets.reduce((a,w) => a + `<script defer type="module" src="${w.source}"></script>`, '')}
   </head>
   <body>
-    <div id="widget-connector"></div>
-    <script defer type="module" src="https://arweave.net/8qRkUonpQTmAxA6I1fsYg0qKcHOn-ufCI8iWnZrVu4E"></script>
-
+  <!--  
+  <div id="widget-connector"></div>
+  <script defer type="module" src="https://arweave.net/8qRkUonpQTmAxA6I1fsYg0qKcHOn-ufCI8iWnZrVu4E"></script>
+  -->
     <main class="bg-base-100">
       ${body}
     </main>
