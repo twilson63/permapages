@@ -182,7 +182,7 @@ font-size: inherit;
                   </p>
                   <div class="margin-top margin-medium">
                     <div class="button-row-2">
-                      <a href="#" class="button-link with-icon w-inline-block">
+                      <a href="https://notes.arweave.dev/#/notes/CB9wDNrR7pdCB-BTepoYNWRUOT5RlB7KH2PPeOXow24" class="button-link with-icon w-inline-block">
                         <div>Go to the workshop doc</div>
                         <div class="icon-embed-xxsmall w-embed"><svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 3L11 8L6 13" stroke="CurrentColor" stroke-width="1.5"></path>
@@ -204,7 +204,7 @@ font-size: inherit;
                 <p class="text-size-medium-2">Every Permapage, by default, loads the following libraries for programmatic access:<br>‍<br>• TailwindCSS (Atomic CSS using classes) - <a href="https://tailwindcss.com/"><strong>https://tailwindcss.com<br>• </strong></a>DaisyUI (CSS Components built on TailwindCSS) - <a href="https://daisyui.com/"><strong>https://daisyui.com <br>• </strong></a>Arweave SDK (Access to the permaweb) <br>• Arweave JS - <a href="https://github.com/arweaveteam/arweave-js"><strong>https://github.com/arweaveteam/arweave-js<br>• </strong></a>Warp SDK (Arweave Smart Contract Access) - <a href="https://warp.cc/"><strong>https://warp.cc<br><br>‍</strong></a>You may use these libraries as you build your widget, or you can import your own libraries using ESM Modules. <strong><em>NOTE: If you import external libraries, it is important to use permanent links to those libraries<br><br>‍</em></strong>TailwindCSS and DaisyUI are available as HTML class names within your markup, for example, if you wanted to create a <strong>badge</strong> component within your Widget, you would use the following HTML <strong>&lt;div class=&quot;badge badge-primary&quot;&gt;My Badge&lt;/div&gt;<br><br>‍</strong>Arweave is available on the <strong>window</strong> object as <strong>arweave</strong> Warp is available on the <strong>window</strong> object as <strong>warp</strong>Using these libraries you have the power to create rich user experiences with minimal code. <br><br>TailwindCSS and DaisyUI give you a clean presentation framework to manage the look and feel of your widget and Arweave and Warp give you powerful interaction libraries with Arweave Data and Smartweave Contracts.</p>
                 <div class="margin-top margin-medium">
                   <div class="button-row-2">
-                    <a href="#" class="button-link with-icon-green w-inline-block">
+                    <a href="https://notes.arweave.dev/#/notes/CB9wDNrR7pdCB-BTepoYNWRUOT5RlB7KH2PPeOXow24" class="button-link with-icon-green w-inline-block">
                       <div>Start building</div>
                       <div class="icon-embed-xxsmall w-embed"><svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M6 3L11 8L6 13" stroke="CurrentColor" stroke-width="1.5"></path>
