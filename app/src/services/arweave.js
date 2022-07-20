@@ -163,9 +163,7 @@ export const postWebpage = async (data) => {
         name: 'Permapage NFT',
         title: data.title,
         owner: data.owner,
-        balances: {
-          [data.owner]: 1
-        },
+        balances: {},
         locked: false, 
         views: {},
         contentType: 'text/html',

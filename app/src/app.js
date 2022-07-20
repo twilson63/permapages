@@ -217,10 +217,12 @@ function htmlTemplate(title, owner, description, widgets, body, theme="default",
     ${widgets.reduce((a,w) => a + `<script defer type="module" src="${w.source}"></script>`, '')}
   </head>
   <body>
-  <!--  
+  ${widgets.length > 0 ? `
   <div id="widget-connector"></div>
   <script defer type="module" src="https://arweave.net/8qRkUonpQTmAxA6I1fsYg0qKcHOn-ufCI8iWnZrVu4E"></script>
-  -->
+  ` : ''} 
+  
+  
     <main class="bg-base-100">
       ${body}
     </main>

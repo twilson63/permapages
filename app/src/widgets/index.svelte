@@ -322,12 +322,12 @@ font-size: inherit;
                       <div id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dc9-c3a095a8" class="w-layout-grid footer4_link-list">
                         <a href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE" target="_blank" class="footer4_link">Learn More</a>
                         <a href="/pages" class="footer4_link">Pages</a>
-                        <a href="/arns" target="_blank" class="footer4_link">Get ArNS Tokens</a>
+                        <a href="https://pilot.ar.io" target="_blank" class="footer4_link">Get ArNS Tokens</a>
                         <a href="https://www.arweave.org/" target="_blank" class="footer4_link">Arweave</a>
                         <a id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dd2-c3a095a8" href="/pages" class="button-small-footer w-button">Create a page</a>
                       </div>
                       <div id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dd4-c3a095a8" class="w-layout-grid footer4_social-list">
-                        <a id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dd5-c3a095a8" href="https://twitter/com/permapages" target="_blank" class="w-inline-block"><img src="images/2021-Twitter-logo---white.png" loading="lazy" width="22" srcset="images/2021-Twitter-logo---white-p-500.png 500w, images/2021-Twitter-logo---white-p-800.png 800w, images/2021-Twitter-logo---white.png 1034w" sizes="22px" alt="" class="image-5"></a>
+                        <a id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dd5-c3a095a8" href="https://twitter.com/permapages" target="_blank" class="w-inline-block"><img src="images/2021-Twitter-logo---white.png" loading="lazy" width="22" srcset="images/2021-Twitter-logo---white-p-500.png 500w, images/2021-Twitter-logo---white-p-800.png 800w, images/2021-Twitter-logo---white.png 1034w" sizes="22px" alt="" class="image-5"></a>
                         <a id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dd7-c3a095a8" href="https://u4n5oynk2rn5la52rnkhzxibnyavffuf6o6byt325a4mqklh5wdq.arweave.net/pxvXYarUW9WDuotUfN0BbgFSloXzvBxPeug4yCln7Yc/profile/vh-NTHVvlKZqRxc8LyyTNok65yQ55a_PJ1zWLb9G2JI" target="_blank" class="w-inline-block"><img src="images/metaweave_dark-transparent.png" loading="lazy" width="30" alt="" class="image-4"></a>
                       </div>
                     </div>
