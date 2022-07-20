@@ -302,8 +302,8 @@ try {
                     <p class="text-size-medium-3">Get your widget into the wild.</p>
                     <div class="margin-top margin-medium">
                       <div class="button-row-3 is-button-row-center">
-                        <a href="#" class="button-cta w-button">Go to widget workshop docs</a>
-                        <a href="#" class="button-3 w-button">Visit PermaPages</a>
+                        <a href="https://notes.arweave.dev/#/notes/CB9wDNrR7pdCB-BTepoYNWRUOT5RlB7KH2PPeOXow24" class="button-cta w-button">Go to widget workshop docs</a>
+                        <a href="/" class="button-3 w-button">Visit PermaPages</a>
                       </div>
                     </div>
                   </div>
