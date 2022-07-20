@@ -1,3 +1,6 @@
+<script>
+  let watchVideo = false
+</script>
 <svelte:head>
   <title>Permapages Widgets - Build</title>
   <meta
@@ -132,28 +135,19 @@ font-size: inherit;
                     <div class="margin-top margin-medium">
                       <div class="button-row-2 is-button-row-center">
                         <a href="#" class="button w-button">Get started</a>
-                        <a href="#" class="button-2 w-button">Learn more</a>
+                        <a href="/widgets/build" class="button-2 w-button">Learn more</a>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <a href="#" class="home5-header_lightbox w-inline-block w-lightbox"><img src="images/intro-to-widgets.png" loading="lazy" srcset="images/intro-to-widgets.png 500w, images/intro-to-widgets.png 800w, images/intro-to-widgets.png 1080w, images/intro-to-widgets.png 1600w, images/intro-to-widgets.png 1920w" sizes="(max-width: 991px) 90vw, 100vw" alt="" class="home5-header_lightbox-image">
-                <script type="application/json" class="w-json">{
-"items": [
-  {
-    "url": "https://youtube.com/watch?v=hie-VyMtqd4",
-    "originalUrl": "https://youtube.com/watch?v=hie-VyMtqd4",
-    "width": 940,
-    "height": 528,
-    "thumbnailUrl": "https://i.ytimg.com/vi/hie-VyMtqd4/hqdefault.jpg",
-    "html": "<iframe class=\"embedly-embed\" src=\"//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2Fhie-VyMtqd4%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dhie-VyMtqd4&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fhie-VyMtqd4%2Fhqdefault.jpg&key=96f1f04c5f4143bcb0f2e68c87d65feb&type=text%2Fhtml&schema=youtube\" width=\"940\" height=\"528\" scrolling=\"no\" title=\"YouTube embed\" frameborder=\"0\" allow=\"autoplay; fullscreen\" allowfullscreen=\"true\"></iframe>",
-    "type": "video"
-  }
-],
-"group": ""
-}</script>
-              </a>
+              {#if watchVideo}
+              <div class="home5-header_lightbox w-inline-block w-lightbox">
+                <iframe class="embedly-embed" src="//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2Fhie-VyMtqd4%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dhie-VyMtqd4&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2Fhie-VyMtqd4%2Fhqdefault.jpg&key=96f1f04c5f4143bcb0f2e68c87d65feb&type=text%2Fhtml&schema=youtube" width="940" height="528" scrolling="no" title="YouTube embed" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>
+              </div>
+              {:else}
+              <a href="#" on:click|preventDefault={() => watchVideo = true } class="home5-header_lightbox w-inline-block w-lightbox"><img src="images/intro-to-widgets.png" loading="lazy" srcset="images/intro-to-widgets.png 500w, images/intro-to-widgets.png 800w, images/intro-to-widgets.png 1080w, images/intro-to-widgets.png 1600w, images/intro-to-widgets.png 1920w" sizes="(max-width: 991px) 90vw, 100vw" alt="" class="home5-header_lightbox-image" /></a>
+              {/if}
             </div>
           </div>
         </div>
@@ -162,13 +156,10 @@ font-size: inherit;
     <section class="section-home5-features-video">
       <div class="page-padding-3">
         <div class="container-large-2">
-          <div class="padding-vertical padding-xhuge">
+          <div class="padding-xhuge">
             <div class="w-layout-grid home5-features-video_component">
-              <a href="#" class="home5-features-video_lightbox w-inline-block w-lightbox"><img src="images/PoAP-Arweave.png" loading="lazy" srcset="images/PoAP-Arweave-p-500.png 500w, images/PoAP-Arweave-p-800.png 800w, images/PoAP-Arweave.png 1000w" sizes="(max-width: 767px) 90vw, (max-width: 991px) 43vw, 41vw" alt="" class="large-sq-image-home">
-                <script type="application/json" class="w-json">{
-"items": [],
-"group": ""
-}</script>
+              <a href="#" class="home5-features-video_lightbox w-inline-block w-lightbox">
+                <img src="images/PoAP-Arweave.png" loading="lazy" srcset="images/PoAP-Arweave-p-500.png 500w, images/PoAP-Arweave-p-800.png 800w, images/PoAP-Arweave.png 1000w" sizes="(max-width: 767px) 90vw, (max-width: 991px) 43vw, 41vw" alt="" class="large-sq-image-home" />
               </a>
               <div class="home5-features-video_content">
                 <div class="margin-bottom margin-xsmall">
@@ -180,7 +171,7 @@ font-size: inherit;
                 <p class="text-size-medium-2">Builders can leverage widgets to aggregate resources and information that may change over time, converting a static web presence to a dynamic view of information. <br><br>Essentially, you can make any page come alive.</p>
                 <div class="margin-top margin-medium">
                   <div class="button-row-2">
-                    <a href="#" class="button-link with-icon w-inline-block">
+                    <a href="/widgets/build" class="button-link with-icon w-inline-block">
                       <div>Get the details to build</div>
                       <div class="icon-embed-xxsmall w-embed"><svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M6 3L11 8L6 13" stroke="CurrentColor" stroke-width="1.5"></path>
@@ -203,7 +194,7 @@ font-size: inherit;
                 <p class="text-size-medium-2">Arweave is a friendly place for all developers. Even if you have never built on web3 before, you can create a widget with some basic development skills (HTML, Javascript, CSS).</p>
                 <div class="margin-top margin-medium">
                   <div class="button-row-2">
-                    <a href="#" class="button-link with-icon w-inline-block">
+                    <a href="/widgets/build" class="button-link with-icon w-inline-block">
                       <div>Start building</div>
                       <div class="icon-embed-xxsmall w-embed"><svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M6 3L11 8L6 13" stroke="CurrentColor" stroke-width="1.5"></path>
@@ -313,7 +304,7 @@ font-size: inherit;
                     </div>
                   </div>
                   <div class="home5-pricing_divider"></div>
-                  <a href="#" class="button-4 max-width-full w-button">Get started</a>
+                  <a href="/widgets/build" class="button-4 max-width-full w-button">Get started</a>
                 </div>
               </div>
             </div>
@@ -344,8 +335,10 @@ font-size: inherit;
                   <div class="padding-top padding-medium">
                     <div class="w-layout-grid footer4_bottom-wrapper">
                       <div id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7ddb-c3a095a8" class="footer4_credit-text">© 2022 PermaPages. All right reserved.</div>
+                      <!--
                       <a href="#" class="footer4_legal-link">Privacy Policy</a>
                       <a href="#" class="footer4_legal-link">Terms of Service</a>
+                      -->
                     </div>
                   </div>
                 </div>

@@ -2,7 +2,11 @@
   import hljs from "highlight.js";
   import { onMount } from "svelte";
   
+  let watchVideo = false 
+
   onMount(() => hljs.highlightAll())
+
+
 </script>
 <svelte:head>
   <title>Permapages Widgets - Build</title>
@@ -140,22 +144,15 @@ font-size: inherit;
                   </div>
                 </div>
               </div>
-              <a href="#" class="home5-header_lightbox w-inline-block w-lightbox"><img src="images/widget_workshop-1.png" loading="lazy" srcset="images/widget_workshop-1.png 500w, images/widget_workshop-1.png 800w, images/widget_workshop-1.png 1080w, images/widget_workshop-1.png 1600w, images/widget_workshop-1.png 1920w" sizes="(max-width: 991px) 90vw, 100vw" alt="" class="home5-header_lightbox-image">
-                <script type="application/json" class="w-json">{
-"items": [
-  {
-    "url": "https://youtube.com/watch?v=lS-hYDI4AnM",
-    "originalUrl": "https://youtube.com/watch?v=lS-hYDI4AnM",
-    "width": 940,
-    "height": 528,
-    "thumbnailUrl": "https://i.ytimg.com/vi/lS-hYDI4AnM/hqdefault.jpg",
-    "html": "<iframe class=\"embedly-embed\" src=\"//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FlS-hYDI4AnM%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DlS-hYDI4AnM&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FlS-hYDI4AnM%2Fhqdefault.jpg&key=96f1f04c5f4143bcb0f2e68c87d65feb&type=text%2Fhtml&schema=youtube\" width=\"940\" height=\"528\" scrolling=\"no\" title=\"YouTube embed\" frameborder=\"0\" allow=\"autoplay; fullscreen\" allowfullscreen=\"true\"></iframe>",
-    "type": "video"
-  }
-],
-"group": ""
-}</script>
+              {#if watchVideo}
+              <div class="home5-header_lightbox w-inline-block w-lightbox">
+                <iframe class="embedly-embed" src="//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FlS-hYDI4AnM%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DlS-hYDI4AnM&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FlS-hYDI4AnM%2Fhqdefault.jpg&key=8dbccd19d8504533ba8c8c7bf03fedca&type=text%2Fhtml&schema=youtube" width="500" height="281" scrolling="no" title="YouTube embed" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>
+              </div>
+              {:else}
+              <a href="#" on:click|preventDefault={() => watchVideo = true} class="home5-header_lightbox w-inline-block w-lightbox"><img src="images/widget_workshop-1.png" loading="lazy" srcset="images/widget_workshop-1.png 500w, images/widget_workshop-1.png 800w, images/widget_workshop-1.png 1080w, images/widget_workshop-1.png 1600w, images/widget_workshop-1.png 1920w" sizes="(max-width: 991px) 90vw, 100vw" alt="" class="home5-header_lightbox-image" />
+                
               </a>
+              {/if}
             </div>
           </div>
         </div>
@@ -171,11 +168,8 @@ font-size: inherit;
         <div class="container-large-2">
           <div class="padding-vertical">
             <div class="w-layout-grid dev-guy-block">
-              <a href="#" class="home5-features-video_lightbox w-inline-block w-lightbox"><img src="images/code-guy-1.png" loading="lazy" srcset="images/code-guy-1.png 500w, images/code-guy-1.png 1000w" sizes="100vw" alt="" class="large-sq-image-home">
-                <script type="application/json" class="w-json">{
-"items": [],
-"group": ""
-}</script>
+              <a href="#/widgets/build" class="home5-features-video_lightbox w-inline-block w-lightbox">
+                <img src="images/code-guy-1.png" loading="lazy" srcset="images/code-guy-1.png 500w, images/code-guy-1.png 1000w" sizes="100vw" alt="" class="large-sq-image-home" />
               </a>
               <div class="home5-features-video_content">
                 <div class="margin-bottom margin-small">
