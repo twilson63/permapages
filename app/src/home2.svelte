@@ -1186,12 +1186,13 @@
                         target="_blank"
                         class="footer4_link">Arweave</a
                       >
+                      <a href="/widgets" class="footer4_link">Widgets for Developers</a>
                       <a
                         id="w-node-c61ef7b6-bed1-dc7d-9e80-cafecb572567-e167b7f5"
                         href="/pages"
                         class="button-small-footer w-button">Create a page</a
                       >
-                      <a href="/widgets" class="footer4_link">Widgets for Developers</a>
+                     
                     </div>
                     <div
                       id="w-node-_93816162-f910-eb78-0fa4-406d754f9897-e167b7f5"

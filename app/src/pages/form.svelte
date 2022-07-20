@@ -80,7 +80,7 @@
         page.webpage = p.webpage;
         page.theme = p.theme;
         page.widgets = p.widgets;
-        page.includeFooter = p.includeFooter;
+        page.includeFooter = p.includeFooter || true;
       });
   } else {
   }
@@ -271,7 +271,7 @@
           </label>
           
         </div>
-        <!--
+        
         <div class="my-8 form-control">
           <label class="label">
             <span class="label-text text-xl">Widgets</span>
@@ -287,7 +287,7 @@
             {/each}
           </div>
         {/if}
-        -->
+        
         <div class="mt-4 form-control">
           <label for="footer" class="label cursor-pointer">
             <span class="label-text text-xl"

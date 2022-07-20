@@ -16,6 +16,9 @@
   import Claim from './arns/claim.svelte';
   import Preview from "./pages/show.svelte";
   import Widgets from "./widgets.svelte"
+  import WidgetsSupport from './widgets/support.svelte'
+  import WidgetsBuild from './widgets/build.svelte'
+  import WidgetsHome from './widgets/index.svelte'
 
   import not from "ramda/src/not";
   import isEmpty from "ramda/src/isEmpty";
@@ -87,7 +90,13 @@
     <Preview />
   </Route>
   <Route path="/widgets">
-    <Widgets />
+    <WidgetsHome />
+  </Route>
+  <Route path="/widgets/support">
+    <WidgetsSupport />
+  </Route>
+  <Route path="/widgets/build">
+    <WidgetsBuild />
   </Route>
   <Route path="/404">
     <Notfound />
