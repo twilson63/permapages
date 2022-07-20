@@ -146,7 +146,7 @@ font-size: inherit;
               </div>
               {#if watchVideo}
               <div class="home5-header_lightbox w-inline-block w-lightbox">
-                <iframe class="embedly-embed" src="//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FlS-hYDI4AnM%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DlS-hYDI4AnM&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FlS-hYDI4AnM%2Fhqdefault.jpg&key=8dbccd19d8504533ba8c8c7bf03fedca&type=text%2Fhtml&schema=youtube" width="500" height="281" scrolling="no" title="YouTube embed" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>
+                <iframe class="embedly-embed" src="//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FlS-hYDI4AnM%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DlS-hYDI4AnM&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FlS-hYDI4AnM%2Fhqdefault.jpg&key=8dbccd19d8504533ba8c8c7bf03fedca&type=text%2Fhtml&schema=youtube" width="940" height="528" scrolling="no" title="YouTube embed" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>
               </div>
               {:else}
               <a href="#" on:click|preventDefault={() => watchVideo = true} class="home5-header_lightbox w-inline-block w-lightbox"><img src="images/widget_workshop-1.png" loading="lazy" srcset="images/widget_workshop-1.png 500w, images/widget_workshop-1.png 800w, images/widget_workshop-1.png 1080w, images/widget_workshop-1.png 1600w, images/widget_workshop-1.png 1920w" sizes="(max-width: 991px) 90vw, 100vw" alt="" class="home5-header_lightbox-image" />

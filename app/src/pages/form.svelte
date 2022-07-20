@@ -201,7 +201,9 @@
 
   async function loadWidgets() {
     const ws = await widgets({gql}).list()
-    return ws.filter(w => 
+    return ws
+    .filter(w => !['widget-connector','widget-poap'].includes(w.name))
+    .filter(w => 
       page.widgets.find(a => a.elementId === w.elementId) ? false : true
     )
 
