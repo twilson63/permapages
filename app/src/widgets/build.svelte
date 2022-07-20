@@ -168,42 +168,29 @@ font-size: inherit;
         <div class="container-large-2">
           <div class="padding-vertical">
             <div class="w-layout-grid dev-guy-block">
-              <a href="#/widgets/build" class="home5-features-video_lightbox w-inline-block w-lightbox">
-                <img src="images/code-guy-1.png" loading="lazy" srcset="images/code-guy-1.png 500w, images/code-guy-1.png 1000w" sizes="100vw" alt="" class="large-sq-image-home" />
-              </a>
-              <div class="home5-features-video_content">
-                <div class="margin-bottom margin-small">
-                  <h2 class="heading-6">The basics</h2>
-                </div>
-                <p class="text-size-medium-2">A widget is a bundled “ESM” javascript file that is added to the HTML page when Permapages generates the web page with a target “div” element with a unique “id” for rendering.</p>
-                <div class="mockup-code my-4">
-                  <pre class="px-4"><code class="language-html">
-{`<div id=”hello-world”></div>
-<script defer type=”module” src=”https://w-hello.arweave.dev”></script>
-                    `}
-                  </code></pre>
-                </div>
-                <p class="text-size-medium-2">
-                  Source code of https://w-hello.arweave.dev or https://arweave.net/XXXXXXXXXX
-                </p>
-                <div class="mockup-code my-4">
-                  <pre class="px-4"><code class="language-js">
-{`var el = document.getElementById("hello-world")
-el.innerHTML = "<h2 class=”text-primary”>Hello World</h2>"
-                    `}
-                  </code></pre>
-                </div>
-                
-                <div class="margin-top margin-medium">
-                  <div class="button-row-2">
-                    <a href="#" class="button-link with-icon w-inline-block">
-                      <div>Go to the workshop doc</div>
-                      <div class="icon-embed-xxsmall w-embed"><svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M6 3L11 8L6 13" stroke="CurrentColor" stroke-width="1.5"></path>
-                        </svg></div>
-                    </a>
+                <a href="#" class="home5-features-video_lightbox w-inline-block w-lightbox"><img src="images/esm-javascript.png" loading="lazy" srcset="images/esm-javascript-p-500.png 500w, images/esm-javascript-p-800.png 800w, images/esm-javascript.png 1000w" sizes="100vw" alt="" class="large-sq-image-home">
+                  <script type="application/json" class="w-json">{
+  "items": [],
+  "group": ""
+  }</script>
+                </a>
+                <div class="home5-features-video_content">
+                  <div class="margin-bottom margin-small">
+                    <h2 class="heading-6">The basics</h2>
                   </div>
-                </div>
+                  <p class="text-size-medium-2">A widget is a bundled “ESM” javascript file that is added to the HTML page when Permapages generates the web page with a target “div” element with a unique “id” for rendering.<a href="https://arweave.net/XXXXXXXXXX"><strong><br><br></strong>Source code of <strong>https://w-hello.arweave.dev</strong> or <strong>https://arweave.net/XXXXXXXXXX<br><br>‍</strong></a>The widget has the full ability to modify the HTML page using the HTML Document Object Model. <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model"><strong>https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model</strong></a>
+                  </p>
+                  <div class="margin-top margin-medium">
+                    <div class="button-row-2">
+                      <a href="#" class="button-link with-icon w-inline-block">
+                        <div>Go to the workshop doc</div>
+                        <div class="icon-embed-xxsmall w-embed"><svg width="16" height="16" viewbox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 3L11 8L6 13" stroke="CurrentColor" stroke-width="1.5"></path>
+                          </svg></div>
+                      </a>
+                    </div>
+                  </div>
+                
               </div>
             </div>
             <div class="w-layout-grid dev-tools">
@@ -239,10 +226,11 @@ el.innerHTML = "<h2 class=”text-primary”>Hello World</h2>"
               <p>An Arweave Transactions consists of the <strong>data</strong> and <strong>tags</strong>; the data should be the bundled javascript, and the tags will identify your transaction as a widget.</p>
               <h3>Tags</h3>
               <figure style="max-width:1596px" class="w-richtext-align-fullwidth w-richtext-figure-type-image">
-                <div><img src="images/wiget-details-ss.png" loading="lazy" alt=""></div>
+                <div class="w-full"><img src="images/tags-image_1.png" loading="lazy" alt="" class="w-full"></div>
               </figure>
               
-              <p><strong>‍</strong>Deploy Widget Example,</p>
+              <h3>Deploy Widget Example,</h3>
+              <br />
               <div class="mockup-code mb-4">
                 <pre class="px-4"><code class="language-js">
                   {`

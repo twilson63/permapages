@@ -156,7 +156,7 @@ font-size: inherit;
     <section class="section-home5-features-video">
       <div class="page-padding-3">
         <div class="container-large-2">
-          <div class="padding-xhuge">
+          <div class="">
             <div class="w-layout-grid home5-features-video_component">
               <a href="#" class="home5-features-video_lightbox w-inline-block w-lightbox">
                 <img src="images/PoAP-Arweave.png" loading="lazy" srcset="images/PoAP-Arweave-p-500.png 500w, images/PoAP-Arweave-p-800.png 800w, images/PoAP-Arweave.png 1000w" sizes="(max-width: 767px) 90vw, (max-width: 991px) 43vw, 41vw" alt="" class="large-sq-image-home" />
