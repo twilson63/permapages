@@ -134,7 +134,7 @@ font-size: inherit;
                     <p class="text-size-medium-main">Permapages now enables developers to extend dynamic functionality. <br>Get your dApp front and center via widgets. <br></p>
                     <div class="margin-top margin-medium">
                       <div class="button-row-2 is-button-row-center">
-                        <a href="#" class="button w-button">Get started</a>
+                        <a href="https://notes.arweave.dev/#/notes/CB9wDNrR7pdCB-BTepoYNWRUOT5RlB7KH2PPeOXow24" class="button w-button">Get started</a>
                         <a href="/widgets/build" class="button-2 w-button">Learn more</a>
                       </div>
                     </div>
@@ -158,9 +158,9 @@ font-size: inherit;
         <div class="container-large-2">
           <div class="">
             <div class="w-layout-grid home5-features-video_component">
-              <a href="#" class="home5-features-video_lightbox w-inline-block w-lightbox">
+              
                 <img src="images/PoAP-Arweave.png" loading="lazy" srcset="images/PoAP-Arweave-p-500.png 500w, images/PoAP-Arweave-p-800.png 800w, images/PoAP-Arweave.png 1000w" sizes="(max-width: 767px) 90vw, (max-width: 991px) 43vw, 41vw" alt="" class="large-sq-image-home" />
-              </a>
+              
               <div class="home5-features-video_content">
                 <div class="margin-bottom margin-xsmall">
                   <div class="text-weight-semibold-3">Where your dApp can shine</div>
@@ -203,12 +203,7 @@ font-size: inherit;
                   </div>
                 </div>
               </div>
-              <a href="#" class="home5-features-video_lightbox w-inline-block w-lightbox"><img src="images/building-widgets.png" loading="lazy" srcset="images/building-widgets-p-500.png 500w, images/building-widgets-p-800.png 800w, images/building-widgets.png 1000w" sizes="(max-width: 767px) 90vw, (max-width: 991px) 43vw, 41vw" alt="" class="large-sq-image-home">
-                <script type="application/json" class="w-json">{
-"items": [],
-"group": ""
-}</script>
-              </a>
+             <img src="images/building-widgets.png" loading="lazy" srcset="images/building-widgets-p-500.png 500w, images/building-widgets-p-800.png 800w, images/building-widgets.png 1000w" sizes="(max-width: 767px) 90vw, (max-width: 991px) 43vw, 41vw" alt="" class="large-sq-image-home" />
             </div>
           </div>
         </div>
