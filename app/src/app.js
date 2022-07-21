@@ -13,6 +13,7 @@ import head from 'ramda/src/head'
 import isEmpty from 'ramda/src/isEmpty'
 import identity from 'ramda/src/identity'
 import propEq from 'ramda/src/propEq'
+import { assoc } from 'ramda'
 
 export function widgets({gql}) {
   async function list() {
@@ -58,7 +59,7 @@ export function profiles({ gql, post, load }) {
   }
 }
 
-export function pages({ register, post, gql, postWebpage, load }) {
+export function pages({ register, post, gql, postWebpage, load, loadState }) {
   const deployPage = post ? Async.fromPromise(post) : () => Async.of(null)
   const registerPage = register ? Async.fromPromise(register) : () => Async.of(null)
 
@@ -75,9 +76,11 @@ export function pages({ register, post, gql, postWebpage, load }) {
       .chain(pageModel.validate)
       .map(x => (console.log(x), x))
       .chain(page =>
-        Async.of(page).map(({ title, owner, description, widgets, html, theme, includeFooter }) => ({
+        Async.of(page).map(({ title, owner, description, widgets, html, theme, includeFooter, state }) => ({
           title,
-          html: htmlTemplate(title, owner, description, widgets, html, theme, includeFooter)
+          html: htmlTemplate(title, owner, description, widgets, html, theme, includeFooter),
+          state,
+          owner
         })).chain(Async.fromPromise(postWebpage))
           .map((id) => ({ ...page, webpage: id }))
       )
@@ -103,6 +106,11 @@ export function pages({ register, post, gql, postWebpage, load }) {
   async function get(id) {
     return Async.of(id)
       .chain(Async.fromPromise(load))
+      .chain(page => Async.fromPromise(loadState)(page.webpage)
+        .map(state => assoc('state', state, page))
+      )
+      // validate page 
+      .chain(pageModel.validate)
       .toPromise()
   }
 

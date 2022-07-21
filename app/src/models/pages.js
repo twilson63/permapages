@@ -32,7 +32,19 @@ const schema = z.object({
       name: z.string(),
       description: z.string()
     })
-  )
+  ),
+  state: z.object({
+    ticker: z.string(),
+    name: z.string(),
+    title: z.string(),
+    owner: z.string().optional(),
+    balances: z.object({}).passthrough(),
+    contentType: z.string(),
+    createdAt: z.number(),
+    stakes: z.object({}).passthrough().optional(),
+    locked: z.boolean(),
+    tags: z.array(z.string())
+  }).optional()
 })
 
 const getTag = name => compose(

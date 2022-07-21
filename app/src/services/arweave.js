@@ -114,6 +114,12 @@ export const loadProfile = async (id) => {
   return data
 }
 
+export const loadState = async (id) => {
+  const contract = warp.contract(id)
+  const { state } = await contract.readState()
+  return state
+}
+
 export const load = async (id) => {
   const { data } = await arweave.api.get(id)
   if (!data.public) {
@@ -142,6 +148,7 @@ export const load = async (id) => {
 }
 
 export const postWebpage = async (data) => {
+  
   const dispatch = Async.fromPromise(window.arweaveWallet.dispatch.bind(window.arweaveWallet))
 
   const slugify = compose(
@@ -149,6 +156,19 @@ export const postWebpage = async (data) => {
     join('-'),
     split(' ')
   )
+  const initState = data.state || {
+    ticker: 'PASSPORT-' + slugify(data.title),
+    name: 'Permapage NFT',
+    title: data.title,
+    owner: data.owner,
+    balances: {},
+    locked: false, 
+    views: {},
+    contentType: 'text/html',
+    createdAt: Date.now(),
+    tags: [],
+  }
+
   // create data-entry
   const de = {
     data: data.html,
@@ -158,18 +178,7 @@ export const postWebpage = async (data) => {
       {name: SDK, value: 'RedStone'},
       {name: CONTENT_TYPE, value: 'text/html'},
       {name: CONTRACT_SRC, value: PAGE_SRC},
-      {name: INIT_STATE, value: JSON.stringify({
-        ticker: 'PAGE-' + slugify(data.title),
-        name: 'Permapage NFT',
-        title: data.title,
-        owner: data.owner,
-        balances: {},
-        locked: false, 
-        views: {},
-        contentType: 'text/html',
-        createdAt: Date.now(),
-        tags: [],
-      })},
+      {name: INIT_STATE, value: JSON.stringify(initState)},
       {name: 'Page-Title', value: data.title},
       {name: 'Type', value: 'PermaWebPage'}
     ]

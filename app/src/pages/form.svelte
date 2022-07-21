@@ -7,6 +7,7 @@
     postWebpage,
     loadPage,
     loadProfile,
+    loadState,
     gql,
   } from "../services/arweave.js";
   import { register, listANTs, updateSubDomain } from "../services/registry.js";
@@ -19,6 +20,7 @@
   import compose from "ramda/src/compose";
   import pluck from "ramda/src/pluck";
   import append from "ramda/src/append";
+import { assoc } from "crocks/helpers";
 
   var easymde = null;
   let error = null;
@@ -67,7 +69,7 @@
 
   if (meta().query.fork) {
     // getNote from meta().query.fork
-    pages({ load: loadPage })
+    pages({ load: loadPage, loadState })
       .get(meta().query.fork)
       .then((p) => {
         page.title = p.title;
@@ -81,6 +83,7 @@
         page.theme = p.theme;
         page.widgets = p.widgets || [];
         page.includeFooter = p.includeFooter || true;
+        page.state = p.state;
       });
   } else {
   }
@@ -441,7 +444,7 @@
   <p class="my-4">{errorMessage}</p>
 </Modal>
 <Modal open={widgetDialog} on:click={() => widgetDialog = false}>
-  <h3 class="text-2x mb-8">Widgets</h3>
+  <h3 class="text-2xl mb-8">Widgets</h3>
   <div>
     {#await availableWidets}
       <div>Loading...</div>
@@ -453,9 +456,14 @@
             {widget.name} 
             <span class="badge badge-primary">{widget.version}</span>
           </div>
-          <div>{widget.description}</div>
+          <div class="flex">
+            <div class="flex-1">{widget.description}</div>
+            <div class="flex-none">
+              <a class="btn btn-sm btn-info" target="_blank" href={widget.docs}>docs</a>
+            </div>
+          </div>
           <div class="card-actions">
-            <button class="btn btn-sm" on:click={() => addWidget(widget)}>Add Widget</button>
+            <button class="btn btn-sm btn-primary" on:click={() => addWidget(widget)}>Add Widget</button>
           </div>
         </div>
         
