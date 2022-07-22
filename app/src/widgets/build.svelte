@@ -1,7 +1,8 @@
 <script>
   import hljs from "highlight.js";
   import { onMount } from "svelte";
-  
+  import MobileNav from './mobile-nav.svelte';
+
   let watchVideo = false 
 
   onMount(() => hljs.highlightAll())
@@ -29,22 +30,14 @@
 </svelte:head>
 
 <div data-collapse="medium" data-animation="default" data-duration="400" data-w-id="80358d73-3c52-6d7e-70ff-472fee424d84" data-easing="ease" data-easing2="ease" role="banner" class="navbar1_component w-nav">
-  <div class="navbar1_container-mobile">
+  <div class="navbar1_container-mobile flex flex-col">
     <a href="#" class="navbar1_logo-link w-nav-brand"></a>
     <nav role="navigation" class="navbar1_menu w-nav-menu">
       <a href="/widgets" class="navbar1_link w-nav-link">Intro</a>
       <a href="/widgets/build" aria-current="page" class="navbar1_link w-nav-link w--current">Build</a>
       <a href="/widgets/support" class="navbar1_link w-nav-link">Support</a>
     </nav>
-    <div class="navbar1_menu-button w-nav-button">
-      <div class="menu-icon1">
-        <div class="menu-icon1_line-top"></div>
-        <div class="menu-icon1_line-middle">
-          <div class="menu-icon_line-middle-inner"></div>
-        </div>
-        <div class="menu-icon1_line-bottom"></div>
-      </div>
-    </div>
+    <MobileNav active="build" />
   </div>
 </div>
 <div class="page-wrapper-2">
@@ -158,16 +151,11 @@ font-size: inherit;
         </div>
       </div>
     </header>
-    <section class="section-home5-features-image">
-      <div class="page-padding-3">
-        <div class="container-large-2"></div>
-      </div>
-    </section>
     <section class="section-home5-features-video">
       <div class="page-padding-3">
         <div class="container-large-2">
           <div class="padding-vertical">
-            <div class="w-layout-grid dev-guy-block">
+            <div class="w-layout-grid dev-guy-block-mobile">
                 <img src="images/esm-javascript.png" loading="lazy" srcset="images/esm-javascript-p-500.png 500w, images/esm-javascript-p-800.png 800w, images/esm-javascript.png 1000w" sizes="100vw" alt="" class="large-sq-image-home" />
                   
                 <div class="home5-features-video_content">

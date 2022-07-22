@@ -2185,6 +2185,8 @@ textarea.w-select {
 .wf-layout-cell {
   display: flex !important;
 }
+/** permpage css */
+
 .w-layout-grid {
   display: -ms-grid;
   display: grid;
@@ -5748,6 +5750,7 @@ figcaption {
 
 .how-it-works {
   padding-right: 5%;
+  padding-bottom: 20px;
   padding-left: 5%;
   border-top: 0px solid #000;
   background-color: #452bd8;
@@ -5764,6 +5767,7 @@ figcaption {
 
 .faq {
   padding-right: 5%;
+  padding-bottom: 100px;
   padding-left: 5%;
   background-color: #ececec;
 }
@@ -6739,6 +6743,7 @@ figcaption {
 }
 
 .cta-make-page {
+  padding-bottom: 20px;
   background-color: #7868e4;
   background-image: none;
 }
@@ -6860,7 +6865,7 @@ figcaption {
 }
 
 .page-padding-3 {
-  padding-top: 60px;
+  padding-top: 10px;
   padding-right: 5%;
   padding-left: 5%;
   background-color: #242424;
@@ -7668,7 +7673,7 @@ figcaption {
 }
 
 .padding-xhuge {
-  padding-top: 4rem;
+  padding-top: 5rem;
   padding-bottom: 0rem;
   color: #f8f8f8;
 }
@@ -8150,6 +8155,8 @@ figcaption {
 }
 
 .rich-text-block {
+  max-width: 100%;
+  min-width: 90%;
   margin-bottom: 0px;
   padding-top: 100px;
   padding-bottom: 60px;
@@ -8159,6 +8166,10 @@ figcaption {
 
 .rich-text-block img {
   max-width: 90%;
+}
+
+.rich-text-block a {
+  text-decoration: underline;
 }
 
 .navbar1_container-mobile {
@@ -8211,7 +8222,7 @@ figcaption {
 .dev-guy-block {
   display: -ms-grid;
   display: grid;
-  padding-top: 140px;
+  padding-top: 100px;
   -webkit-box-align: center;
   -webkit-align-items: center;
   -ms-flex-align: center;
@@ -8344,6 +8355,89 @@ figcaption {
   padding-top: 8rem;
   padding-bottom: 0rem;
   color: #f8f8f8;
+}
+
+.text-size-medium-2-home {
+  color: #242424;
+  font-size: 1.125rem;
+}
+
+.heading-pp-home {
+  color: #242424;
+}
+
+.heading-small-black {
+  padding-left: 5px;
+  background-color: transparent;
+  color: #242424;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.page-padding-6 {
+  padding-right: 5%;
+  padding-left: 5%;
+}
+
+.page-padding-6-main {
+  padding: 60px 5%;
+  background-color: #242424;
+}
+
+.text-size-medium-3-new {
+  padding-top: 0px;
+  font-size: 1.125rem;
+}
+
+.heading-small-white {
+  padding-left: 5px;
+  background-color: transparent;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.text-size-medium-3-no-space {
+  padding-top: 0px;
+  font-size: 1.125rem;
+}
+
+.text-size-medium-3-no-space.text-color-white {
+  padding-bottom: 0px;
+}
+
+.page-padding-home {
+  padding-top: 60px;
+  padding-right: 5%;
+  padding-left: 5%;
+  background-color: #242424;
+  color: #f8f8f8;
+}
+
+.dev-guy-block-mobile {
+  display: -ms-grid;
+  display: grid;
+  padding-top: 100px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  grid-auto-columns: 1fr;
+  grid-column-gap: 5rem;
+  grid-row-gap: 4rem;
+  -ms-grid-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  -ms-grid-rows: auto;
+  grid-template-rows: auto;
+}
+
+.paragraph-2 {
+  padding-bottom: 0px;
+}
+
+.paragraph-3 {
+  padding-bottom: 0px;
 }
 
 @media screen and (max-width: 991px) {
@@ -9220,6 +9314,14 @@ figcaption {
   .contact20_component {
     grid-column-gap: 2rem;
   }
+
+  .dev-guy-block-mobile {
+    min-height: auto;
+    grid-auto-flow: row;
+    grid-column-gap: 3rem;
+    -ms-grid-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -9903,6 +10005,32 @@ figcaption {
     -ms-grid-columns: 1fr;
     grid-template-columns: 1fr;
   }
+
+  .text-size-medium-2-home {
+    font-size: 1rem;
+  }
+
+  .heading-small-black {
+    font-size: 1.25rem;
+  }
+
+  .text-size-medium-3-new {
+    font-size: 1rem;
+  }
+
+  .heading-small-white {
+    font-size: 1.25rem;
+  }
+
+  .text-size-medium-3-no-space {
+    font-size: 1rem;
+  }
+
+  .dev-guy-block-mobile {
+    grid-row-gap: 3rem;
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+  }
 }
 
 @media screen and (max-width: 479px) {
@@ -10328,6 +10456,10 @@ figcaption {
     grid-template-columns: 1fr;
   }
 
+  .page-padding-4 {
+    padding-bottom: 40px;
+  }
+
   .header19_component {
     -ms-grid-columns: 1fr;
     grid-template-columns: 1fr;
@@ -10346,7 +10478,7 @@ figcaption {
   }
 
   .rich-text-block {
-    padding-top: 0px;
+    padding-top: 60px;
   }
 
   .rich-text-block img {
@@ -10366,6 +10498,28 @@ figcaption {
   .contact20_component {
     -ms-grid-columns: 1fr;
     grid-template-columns: 1fr;
+  }
+
+  .padding-xhuge-big {
+    padding-top: 1rem;
+  }
+
+  .page-padding-home {
+    padding-top: 0px;
+  }
+
+  .dev-guy-block-mobile {
+    padding-top: 10px;
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+  }
+
+  .paragraph-2 {
+    padding-bottom: 0px;
+  }
+
+  .paragraph-3 {
+    padding-bottom: 0px;
   }
 }
 

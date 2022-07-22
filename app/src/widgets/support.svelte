@@ -1,3 +1,7 @@
+<script>
+  import MobileNav from "./mobile-nav.svelte";
+
+</script>
 <svelte:head>
   <title>Permapages Widgets - Support</title>
   <meta
@@ -100,22 +104,14 @@ font-size: inherit;
     </div>
     <main class="main-wrapper">
       <div data-collapse="medium" data-animation="default" data-duration="400" data-w-id="1907f46e-a90e-11ad-1498-a92c908156fe" data-easing="ease" data-easing2="ease" role="banner" class="navbar1_component w-nav">
-        <div class="navbar1_container">
+        <div class="navbar1_container flex flex-col">
           <a href="#" class="navbar1_logo-link w-nav-brand"></a>
           <nav role="navigation" class="navbar1_menu w-nav-menu">
             <a href="/widgets" class="navbar1_link w-nav-link">Intro</a>
             <a href="/widgets/build" class="navbar1_link w-nav-link">Build</a>
             <a href="/support" aria-current="page" class="navbar1_link w-nav-link w--current">Support</a>
           </nav>
-          <div class="navbar1_menu-button w-nav-button">
-            <div class="menu-icon1">
-              <div class="menu-icon1_line-top"></div>
-              <div class="menu-icon1_line-middle">
-                <div class="menu-icon_line-middle-inner"></div>
-              </div>
-              <div class="menu-icon1_line-bottom"></div>
-            </div>
-          </div>
+          <MobileNav active="support" />
         </div>
       </div>
       <header class="section-home5-header">
