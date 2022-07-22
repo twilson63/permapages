@@ -6,6 +6,15 @@
 
   let showNavBar = false
 </script>
+<style>
+  ul {
+    padding-left: 0px;
+    padding-right: 8px;
+  }
+  li a {
+    border-radius: 0px;
+  }
+</style>
 <div on:click={() => showNavBar = !showNavBar } class="navbar1_menu-button w-nav-button">
   <div class="menu-icon1">
     <div class="menu-icon1_line-top" style="{showNavBar ? 'transform: translate3d(0px, 8px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(-45deg) skew(0deg, 0deg); transform-style: preserve-3d;' : '' }"></div>
@@ -20,7 +29,10 @@
   transition:scale="{{duration: 500, delay: 500, opacity: 0.5, start: 0.5, easing: quintOut}}"
 >
   <li><a class={active === 'intro' ? 'active' : ''} href="/widgets">Intro</a></li>
-  <li><a class={active === 'build' ? 'active' : ''} href="/widgets/build">Build</a></li>
-  <li><a class={active === 'support' ? 'active' : ''} href="/widgets/support">Support</a></li>
+  <li>
+    <a class={active === 'build' ? 'active' : ''} href="/widgets/build">Build</a></li>
+  <li>
+    <a class={active === 'support' ? 'active' : ''} href="/widgets/support">Support</a>
+  </li>
 </ul>
 {/if}
