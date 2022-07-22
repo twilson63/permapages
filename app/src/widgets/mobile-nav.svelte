@@ -16,7 +16,7 @@
   </div>
 </div>
 {#if showNavBar}
-<ul class="menu menu-compact lg:menu-normal bg-base-100 w-full"
+<ul class="menu bg-base-100 text-base-content w-full rounded"
   transition:scale="{{duration: 500, delay: 500, opacity: 0.5, start: 0.5, easing: quintOut}}"
 >
   <li><a class={active === 'intro' ? 'active' : ''} href="/widgets">Intro</a></li>
