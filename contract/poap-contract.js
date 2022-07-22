@@ -6,7 +6,7 @@
  *   poapCoin: '', // Play Token ContractId for permapages PoAP Game
  *   title: '',
  *   description: '',
- *   ticker: 'PAGE-',
+ *   ticker: 'STAMPS-',
  *   name: '',
  *   balances: {},
  *   contentType: '',
