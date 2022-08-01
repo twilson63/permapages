@@ -71,7 +71,8 @@
           <ProfileView profile={p} />
           <div class="flex space-x-2">
             <a href="/pages" class="btn btn-secondary">Pages</a>
-            <a class="btn btn-primary" href="/account/edit">Edit Profile</a>
+            <a href="/arns" class="btn btn-primary">ArNS</a>
+            <a class="btn btn-info" href="/account/edit">Edit Profile</a>
             <button class="btn btn-outline" on:click|preventDefault={disconnect}
               >Disconnect</button
             >

@@ -149,8 +149,9 @@ export async function getANT(ANT) {
     const regState = await registry.currentState()
 
     subdomain = getSubdomain(ANT, regState.records)
-
-    return { ...(await ant.currentState()), id: ANT, subdomain }
+    const antState = await ant.currentState()
+    console.log(antState)
+    return { ...antState, id: ANT, subdomain }
   } catch (e) {
     return { id: ANT, subdomain }
   }
