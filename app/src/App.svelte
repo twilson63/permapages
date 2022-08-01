@@ -13,12 +13,13 @@
   import PageLink from "./pages/link.svelte";
   import PageForm from "./pages/form.svelte";
   import Arns from "./arns/index.svelte";
-  import Claim from './arns/claim.svelte';
+  import Ant from "./arns/show.svelte";
+  import Claim from "./arns/claim.svelte";
   import Preview from "./pages/show.svelte";
-  import Widgets from "./widgets.svelte"
-  import WidgetsSupport from './widgets/support.svelte'
-  import WidgetsBuild from './widgets/build.svelte'
-  import WidgetsHome from './widgets/index.svelte'
+  import Widgets from "./widgets.svelte";
+  import WidgetsSupport from "./widgets/support.svelte";
+  import WidgetsBuild from "./widgets/build.svelte";
+  import WidgetsHome from "./widgets/index.svelte";
 
   import not from "ramda/src/not";
   import isEmpty from "ramda/src/isEmpty";
@@ -43,15 +44,20 @@
       <Connect />
     {/if}
   </Route>
-  <Route path="/arns/claim">
+  <Route path="/arns/*">
     {#if not(isEmpty($address))}
-      <Claim />
+      <Route path="/claim">
+        <Claim />
+      </Route>
+      <Route path="/:ant">
+        <Ant />
+      </Route>
+      <Route fallback>
+        <Arns />
+      </Route>
     {:else}
       <Connect />
     {/if}
-  </Route>
-  <Route path="/arns">
-    <Arns />
   </Route>
 
   <Route path="/pages/*">
