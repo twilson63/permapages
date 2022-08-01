@@ -21,7 +21,7 @@ LoggerFactory.INST.logLevel("error");
 const warp = WarpWebFactory.memCachedBased(arweave).useArweaveGateway().build()
 
 const REGISTRY = "bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"
-const ANT_SOURCE = "JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg"
+const ANT_SOURCE = "PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY"
 
 export async function search(name) {
   const registry = warp.pst(REGISTRY).connect('use_wallet')
@@ -51,6 +51,7 @@ export async function register({ name, owner, transactionId }) {
       ticker: `ANT-${name.toUpperCase()}`,
       name,
       owner,
+      controller: owner,
       evolve: null,
       records: {
         ["@"]: transactionId
@@ -123,7 +124,7 @@ query {
   const result = await arweave.api.post('graphql', query)
 
   const ids = pluck('id', pluck('node', result.data.data.transactions.edges))
-  
+
   const ants = await Promise.all(
     map(getANT, ids)
   )
@@ -155,18 +156,18 @@ export async function getANT(ANT) {
   }
 }
 
-export async function updateSubDomain(ANT, transactionId) {
+export async function updateSubDomain(ANT, subDomain = '@', transactionId) {
   const ant = warp.pst(ANT).connect('use_wallet')
   await ant.writeInteraction({
     function: 'setRecord',
-    subDomain: '@',
+    subDomain,
     transactionId
   })
   return { ok: true }
 }
 
 export async function removeSubDomain(ANT, subDomain) {
-  
+
   const ant = warp.pst(ANT).connect('use_wallet')
   await ant.writeInteraction({
     function: 'removeRecord',

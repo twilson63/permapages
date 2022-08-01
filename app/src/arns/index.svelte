@@ -27,7 +27,7 @@
 
   let removeDialog = false;
   let removeData = {};
-  
+
   let transferDialog = false;
   let transferData = {};
 
@@ -62,13 +62,13 @@
       searchText = "";
       searchMessage = "This subdomain is not allowed";
       searchDialog = true;
-      return
+      return;
     }
-    if (searchText === 'www') {
+    if (searchText === "www") {
       searchText = "";
       searchMessage = "This subdomain is not allowed";
       searchDialog = true;
-      return
+      return;
     }
     const result = await search(searchText);
     if (result.ok) {
@@ -152,6 +152,7 @@
 
     const result = await updateSubDomain(
       changeData.ANT,
+      "@",
       changeData.transactionId
     );
     if (result.ok) {
@@ -176,7 +177,7 @@
     const result = await transferSubdomain(
       transferData.ANT,
       transferData.target
-    )
+    );
     if (result.ok) {
       successData = {
         message: "Successfully removed transferred subdomain",
@@ -190,18 +191,14 @@
   }
 
   function showRemoveDialog(e) {
-    
     removeData = e.detail;
     removeDialog = true;
   }
 
   async function handleRemove() {
     removeDialog = false;
-    
-    const result = await removeSubDomain(
-      removeData.ANT,
-      removeData.subdomain
-    );
+
+    const result = await removeSubDomain(removeData.ANT, removeData.subdomain);
     if (result.ok) {
       successData = {
         message: "Successfully removed transaction id",
@@ -255,7 +252,9 @@
 
   async function doListANTS($address) {
     // load from localstorage
-    $arnsCache = JSON.parse(localStorage.getItem(`arnsCache-${$address}`) || '[]')
+    $arnsCache = JSON.parse(
+      localStorage.getItem(`arnsCache-${$address}`) || "[]"
+    );
     // load for arweave
     const results = await listANTs($address);
     // keep only the ones not showing up in arweave gql yet
@@ -263,7 +262,7 @@
       find(propEq("name", n.name), results) ? false : true
     );
     // update store keeping only the uncached
-    $arnsCache = pending // keep only the ANTS not found
+    $arnsCache = pending; // keep only the ANTS not found
     // return list
     return [...pending, ...results].reduce(
       (acc, v) => (find(propEq("id", v.id), acc) ? acc : [...acc, v]),
@@ -282,7 +281,6 @@
   checkDomains();
 
   let list = doListANTS($address);
-
 </script>
 
 <NavBar />
@@ -306,14 +304,12 @@
             </div>
             <div class="flex-none">
               <button
-                disabled={balance === 'Not Found' || ar === 'Not Found'}
+                disabled={balance === "Not Found" || ar === "Not Found"}
                 on:click={registerDomain}
                 class="btn btn-secondary">Register</button
               >
-              {#if balance === 'Not Found'}
-              <a class="btn" href="/arns/claim">
-                Claim Tokens
-              </a>
+              {#if balance === "Not Found"}
+                <a class="btn" href="/arns/claim"> Claim Tokens </a>
               {/if}
             </div>
           </div>
@@ -408,16 +404,34 @@
     </div>
   {/if}
 </Modal>
-<Modal open={transferDialog} cancel={true} on:click={handleTransfer} on:cancel={() => transferDialog = false}>
-  <h3 class="text-2xl"></h3>
+<Modal
+  open={transferDialog}
+  cancel={true}
+  on:click={handleTransfer}
+  on:cancel={() => (transferDialog = false)}
+>
+  <h3 class="text-2xl" />
   <div class="form-control">
     <label class="label">Target Wallet Address</label>
-    <input type="text" class="input input-bordered" bind:value={transferData.target} />
+    <input
+      type="text"
+      class="input input-bordered"
+      bind:value={transferData.target}
+    />
   </div>
 </Modal>
-<Modal open={removeDialog} on:click={handleRemove} cancel={true} on:cancel={() => removeDialog = false }>
+<Modal
+  open={removeDialog}
+  on:click={handleRemove}
+  cancel={true}
+  on:cancel={() => (removeDialog = false)}
+>
   <h3 class="text-2xl">Remove Transaction</h3>
-  <p>By dropping the transaction from the subdomain, the subdomain will still remain under your control, the subdomain will no longer point to any arweave transaction.</p>
+  <p>
+    By dropping the transaction from the subdomain, the subdomain will still
+    remain under your control, the subdomain will no longer point to any arweave
+    transaction.
+  </p>
 </Modal>
 <Modal open={searchDialog} on:click={() => (searchDialog = false)}>
   <h3 class="text-2xl">Search Result</h3>
