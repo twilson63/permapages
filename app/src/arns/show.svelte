@@ -1,16 +1,25 @@
 <script>
   import NavBar from "../components/navbar.svelte";
+  import Modal from "../components/modal.svelte";
+
   import { meta } from "tinro";
   import {
     updateSubDomain,
     removeSubDomain,
     getANT,
   } from "../services/registry.js";
-  const ANT = "OofLO5E3LLI1OBsvhrda8BPd8RG-CyNlrExGMpUHxBc";
-  // GET /arns/:ant
-  // show Ticker, Name, Owner, Controller
-  // show Records
-  // actions, add, update, remove records
+
+  let changeDialog = false;
+  let changeData = {};
+
+  let removeDialog = false;
+  let removeData = {};
+
+  function handleChange() {}
+
+  function handleRemove() {}
+
+  function listPermapages() {}
 </script>
 
 <NavBar />
@@ -58,7 +67,9 @@
               <p>{`TransactionId: ${ant.records[key]} TTL: 900`}</p>
               <div class="card-actions justify-end">
                 <button class="btn">Change</button>
-                <button class="btn">Remove</button>
+                <button class="btn" on:click={() => (removeDialog = true)}
+                  >Remove</button
+                >
               </div>
             </div>
           </div>
@@ -67,3 +78,72 @@
     </section>
   {/await}
 </main>
+<Modal
+  cancel={true}
+  on:cancel={() => (changeDialog = false)}
+  open={changeDialog}
+  on:click={handleChange}
+>
+  <h3 class="text-3xl">Change Transaction Id</h3>
+  <div class="form-control">
+    <label class="label">Choose reference</label>
+    <label class="label">
+      <input
+        type="radio"
+        name="reference"
+        class="radio radio-primary"
+        value="permapage"
+        bind:group={changeData.type}
+      />
+      Permapage
+    </label>
+    <label class="label">
+      <input
+        type="radio"
+        name="reference"
+        class="radio radio-primary"
+        bind:group={changeData.type}
+        value="arweave"
+      />
+      Arweave Transaction
+    </label>
+  </div>
+  {#if changeData.type === "permapage"}
+    <div class="form-control">
+      <label class="label">Select Permapage</label>
+      <select
+        class="select select-bordered"
+        bind:value={changeData.transactionId}
+      >
+        <option class="option" value="">Select Permapage</option>
+        {#await listPermapages() then permapages}
+          {#each permapages as p}
+            <option value={p.webpage}>{p.title}</option>
+          {/each}
+        {/await}
+      </select>
+    </div>
+  {/if}
+  {#if changeData.type === "arweave"}
+    <div class="form-control">
+      <label class="label">Arweave Transaction</label>
+      <input
+        class="input input-bordered"
+        bind:value={changeData.transactionId}
+      />
+    </div>
+  {/if}
+</Modal>
+<Modal
+  open={removeDialog}
+  on:click={handleRemove}
+  cancel={true}
+  on:cancel={() => (removeDialog = false)}
+>
+  <h3 class="text-2xl">Remove Transaction</h3>
+  <p>
+    By dropping the transaction from the subdomain, the subdomain will still
+    remain under your control, the subdomain will no longer point to any arweave
+    transaction.
+  </p>
+</Modal>
