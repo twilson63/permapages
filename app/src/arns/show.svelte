@@ -1,6 +1,12 @@
 <script>
   import NavBar from "../components/navbar.svelte";
   import Modal from "../components/modal.svelte";
+  import { pages } from "../app.js";
+  import { gql } from "../services/arweave.js";
+  import { address } from "../store.js";
+
+  import find from "ramda/src/find";
+  import propEq from "ramda/src/propEq";
 
   import { meta } from "tinro";
   import {
@@ -15,11 +21,50 @@
   let removeDialog = false;
   let removeData = {};
 
-  function handleChange() {}
+  let successDialog = false;
+  let successData = {};
 
-  function handleRemove() {}
+  let errorDialog = false;
+  let errorData = {};
 
-  function listPermapages() {}
+  async function handler(dialog, data, fn) {
+    dialog = false;
+    if (!data.ant) {
+      errorData = { message: "Could not find ANT" };
+      errorDialog = true;
+      return;
+    }
+    const result = await fn(data);
+    if (result.ok) {
+      successData = {
+        message: result.message,
+      };
+      successDialog = true;
+    } else {
+      errorData = {
+        message: result.message,
+      };
+      errorDialog = true;
+    }
+    data = {};
+  }
+
+  function handleChange() {
+    handler(changeDialog, changeData, updateSubDomain);
+  }
+
+  function handleRemove() {
+    handler(removeDialog, removeData, removeSubDomain);
+  }
+
+  async function listPermapages() {
+    const ps = await pages({ gql }).list($address);
+
+    return ps.reduce(
+      (acc, v) => (find(propEq("title", v.title), acc) ? acc : [...acc, v]),
+      []
+    );
+  }
 </script>
 
 <NavBar />
@@ -66,9 +111,25 @@
               </h3>
               <p>{`TransactionId: ${ant.records[key]} TTL: 900`}</p>
               <div class="card-actions justify-end">
-                <button class="btn">Change</button>
-                <button class="btn" on:click={() => (removeDialog = true)}
-                  >Remove</button
+                <button
+                  class="btn"
+                  on:click={() => {
+                    changeData = {
+                      ant: ant.id,
+                      subdomain: key,
+                    };
+                    changeDialog = true;
+                  }}>Change</button
+                >
+                <button
+                  class="btn"
+                  on:click={() => {
+                    removeData = {
+                      ant: ant.id,
+                      subdomain: key,
+                    };
+                    removeDialog = true;
+                  }}>Remove</button
                 >
               </div>
             </div>
@@ -145,5 +206,23 @@
     By dropping the transaction from the subdomain, the subdomain will still
     remain under your control, the subdomain will no longer point to any arweave
     transaction.
+  </p>
+</Modal>
+
+<Modal open={successDialog} on:click={() => (successDialog = false)}>
+  <h3 class="text-3xl text-success">Success!</h3>
+  <p class="my-8">
+    🎉 {successData.message}!
+  </p>
+  <p class="my-8">
+    The processing of the gateway does take some time, it will take a few
+    minutes to get your subdomain installed on the gateway.
+  </p>
+</Modal>
+
+<Modal open={errorDialog} on:click={() => (errorDialog = false)}>
+  <h3 class="text-3xl text-error">Error!</h3>
+  <p class="my-8">
+    {errorData.message}
   </p>
 </Modal>

@@ -157,24 +157,24 @@ export async function getANT(ANT) {
   }
 }
 
-export async function updateSubDomain(ANT, subDomain = '@', transactionId) {
-  const ant = warp.pst(ANT).connect('use_wallet')
-  await ant.writeInteraction({
-    function: 'setRecord',
-    subDomain,
-    transactionId
-  })
-  return { ok: true }
+export async function updateSubDomain({ ant, subdomain = '@', transactionId }) {
+  await warp.pst(ant).connect('use_wallet')
+    .writeInteraction({
+      function: 'setRecord',
+      subdomain,
+      transactionId
+    })
+  return { ok: true, message: 'successfully updated subdomain' }
 }
 
-export async function removeSubDomain(ANT, subDomain) {
+export async function removeSubDomain({ ant, subdomain }) {
 
-  const ant = warp.pst(ANT).connect('use_wallet')
-  await ant.writeInteraction({
-    function: 'removeRecord',
-    subDomain
-  })
-  return { ok: true }
+  await warp.pst(ant).connect('use_wallet')
+    .writeInteraction({
+      function: 'removeRecord',
+      subdomain
+    })
+  return { ok: true.message: 'successfully removed subdomain' }
 }
 
 export async function transfer(ANT, target) {
