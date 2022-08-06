@@ -21,8 +21,8 @@ LoggerFactory.INST.logLevel("error");
 const warp = WarpWebFactory.memCachedBased(arweave).useArweaveGateway().build()
 
 const REGISTRY = "bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"
-const ANT_SOURCE = "PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY"
-//const ANT_SOURCE = "JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg"
+//const ANT_SOURCE = "PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY"
+const ANT_SOURCE = "JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg"
 
 export async function search(name) {
   const registry = warp.pst(REGISTRY).connect('use_wallet')
