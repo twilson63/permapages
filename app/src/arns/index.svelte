@@ -150,11 +150,11 @@
       return;
     }
 
-    const result = await updateSubDomain(
-      changeData.ANT,
-      "@",
-      changeData.transactionId
-    );
+    const result = await updateSubDomain({
+      ant: changeData.ANT,
+      subdomain: "@",
+      transactionId: changeData.transactionId,
+    });
     if (result.ok) {
       successData = {
         message: "Successfully changed transaction id",
@@ -198,7 +198,10 @@
   async function handleRemove() {
     removeDialog = false;
 
-    const result = await removeSubDomain(removeData.ANT, removeData.subdomain);
+    const result = await removeSubDomain({
+      ant: removeData.ANT,
+      subdomain: removeData.subdomain,
+    });
     if (result.ok) {
       successData = {
         message: "Successfully removed transaction id",

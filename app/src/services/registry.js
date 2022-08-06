@@ -147,10 +147,10 @@ export async function getANT(ANT) {
     const registry = warp.pst(REGISTRY)
     const ant = warp.pst(ANT)
     const regState = await registry.currentState()
-
+    //console.log('getANT')
     subdomain = getSubdomain(ANT, regState.records)
     const antState = await ant.currentState()
-    console.log(antState)
+    //console.log(antState)
     return { ...antState, id: ANT, subdomain }
   } catch (e) {
     return { id: ANT, subdomain }
@@ -174,7 +174,7 @@ export async function removeSubDomain({ ant, subdomain }) {
       function: 'removeRecord',
       subdomain
     })
-  return { ok: true.message: 'successfully removed subdomain' }
+  return { ok: true, message: 'successfully removed subdomain' }
 }
 
 export async function transfer(ANT, target) {

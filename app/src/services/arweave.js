@@ -24,7 +24,7 @@ import { Async } from 'crocks'
 const WARP_URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
 const PAGE_SRC = 'kSiq990WBHkz6uYO_1z7jylm3YbRrcpm7UfhYUb8Cg0'
 
-const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] = 
+const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] =
   ['App-Name', 'App-Version', 'SDK', 'Content-Type', 'Contract-Src', 'Init-State']
 
 const FEE = '.004'
@@ -37,29 +37,29 @@ export const arweave = Arweave.init({
 })
 
 // global warp
-const { WarpWebFactory } = window.warp 
+const { WarpWebFactory } = window.warp
 const warp = WarpWebFactory.memCached(arweave)
 
 let wallet = null
 
 //--- Helper functions
-const createDataEntry = data => Async.fromPromise(arweave.createTransaction.bind(arweave))({data})
+const createDataEntry = data => Async.fromPromise(arweave.createTransaction.bind(arweave))({ data })
 const addTags = tags => tx => {
-  tags.map(({name, value}) => tx.addTag(name, value))
-  return tx 
+  tags.map(({ name, value }) => tx.addTag(name, value))
+  return tx
 }
 
-const sign = tx => 
+const sign = tx =>
   Async.fromPromise(arweave.transactions.sign.bind(arweave.transactions))(tx).map(always(tx))
 const post = contractTx => Async.fromPromise(fetch)(WARP_URL, {
   method: 'POST',
-  body: JSON.stringify({contractTx}),
+  body: JSON.stringify({ contractTx }),
   headers: {
     'Accept-Encoding': 'gzip, deflate, br',
     'Content-Type': 'application/json',
     Accept: 'application/json'
   }
-}).chain(response => response.ok ? Async.fromPromise(response.json.bind(response))() : Async.Rejected(response))  
+}).chain(response => response.ok ? Async.fromPromise(response.json.bind(response))() : Async.Rejected(response))
 
 //--- end ---
 
@@ -115,9 +115,13 @@ export const loadProfile = async (id) => {
 }
 
 export const loadState = async (id) => {
-  const contract = warp.contract(id)
-  const { state } = await contract.readState()
-  return state
+  try {
+    const contract = warp.contract(id)
+    const { state } = await contract.readState()
+    return state
+  } catch (e) {
+    return {}
+  }
 }
 
 export const load = async (id) => {
@@ -148,7 +152,7 @@ export const load = async (id) => {
 }
 
 export const postWebpage = async (data) => {
-  
+
   const dispatch = Async.fromPromise(window.arweaveWallet.dispatch.bind(window.arweaveWallet))
 
   const slugify = compose(
@@ -162,7 +166,7 @@ export const postWebpage = async (data) => {
     title: data.title,
     owner: data.owner,
     balances: {},
-    locked: false, 
+    locked: false,
     views: {},
     contentType: 'text/html',
     createdAt: Date.now(),
@@ -173,20 +177,20 @@ export const postWebpage = async (data) => {
   const de = {
     data: data.html,
     tags: [
-      {name: APP_NAME, value: 'SmartWeaveContract'},
-      {name: APP_VERSION, value: '0.3.0'},
-      {name: SDK, value: 'RedStone'},
-      {name: CONTENT_TYPE, value: 'text/html'},
-      {name: CONTRACT_SRC, value: PAGE_SRC},
-      {name: INIT_STATE, value: JSON.stringify(initState)},
-      {name: 'Page-Title', value: data.title},
-      {name: 'Type', value: 'PermaWebPage'}
+      { name: APP_NAME, value: 'SmartWeaveContract' },
+      { name: APP_VERSION, value: '0.3.0' },
+      { name: SDK, value: 'RedStone' },
+      { name: CONTENT_TYPE, value: 'text/html' },
+      { name: CONTRACT_SRC, value: PAGE_SRC },
+      { name: INIT_STATE, value: JSON.stringify(initState) },
+      { name: 'Page-Title', value: data.title },
+      { name: 'Type', value: 'PermaWebPage' }
     ]
   }
-    
+
   // dispatch to bundlr
   return createDataEntry(de.data).map(addTags(de.tags)).chain(dispatch)
-  // post to Warp 
+    // post to Warp 
     .chain(result => createDataEntry(de.data)
       .map(addTags(de.tags))
       .chain(sign)
@@ -196,7 +200,7 @@ export const postWebpage = async (data) => {
     .map(prop('contractId'))
     .toPromise()
 
-  
+
 }
 
 // make generic way to deploy to arweave....

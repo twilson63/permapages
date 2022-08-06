@@ -20,7 +20,7 @@
   import compose from "ramda/src/compose";
   import pluck from "ramda/src/pluck";
   import append from "ramda/src/append";
-import { assoc } from "crocks/helpers";
+  import { assoc } from "crocks/helpers";
 
   var easymde = null;
   let error = null;
@@ -41,8 +41,14 @@ import { assoc } from "crocks/helpers";
   let lastTx = meta().query.fork;
 
   let themes = [
-    "synthwave", "retro", "cyberpunk", "valentine", "aqua", "night", "coffee"
-  ]
+    "synthwave",
+    "retro",
+    "cyberpunk",
+    "valentine",
+    "aqua",
+    "night",
+    "coffee",
+  ];
 
   onMount(async () => {
     easymde = new window.EasyMDE({
@@ -72,6 +78,7 @@ import { assoc } from "crocks/helpers";
     pages({ load: loadPage, loadState })
       .get(meta().query.fork)
       .then((p) => {
+        console.log(p);
         page.title = p.title;
         page.description = p.description;
         page.subdomain = p.subdomain;
@@ -93,7 +100,7 @@ import { assoc } from "crocks/helpers";
   }
 
   async function doConfirm() {
-    let widgetMarkup = ''
+    let widgetMarkup = "";
     try {
       confirm = false;
       submitting = true;
@@ -103,13 +110,18 @@ import { assoc } from "crocks/helpers";
 
       // handle widgets
       if (page.widgets) {
-        widgetMarkup = page.widgets.reduce((a,w) => a + `<div id="${w.name}"></div>`, '')
+        widgetMarkup = page.widgets.reduce(
+          (a, w) => a + `<div id="${w.name}"></div>`,
+          ""
+        );
       }
 
-      page.html = `<div class="flex space-x-4">  
-        <div class="prose prose-lg m-8 md:m-24 flex-1">${marked.parse(page.content)}</div>
+      page.html = `<div class="flex flex-col md:flex-row space-x-4">  
+        <div class="flex-1 md:min-h-screen">
+          <div class="prose prose-lg m-8 md:mx-24">
+          ${marked.parse(page.content)}</div></div>
         <div class="flex-none">
-          <div class="flex flex-col space-y-8">
+          <div class="flex flex-col max-w-[300px] justify-end space-y-8">
             ${widgetMarkup}
           </div>
         </div
@@ -175,7 +187,9 @@ import { assoc } from "crocks/helpers";
 
   async function preview() {
     let html = marked.parse(easymde.value());
-    html = `<div class="prose-lg m-16" ${page.theme === 'default' ? '' : ` data-theme="${page.theme}"`}>${html}</div>`;
+    html = `<div class="prose-lg m-16" ${
+      page.theme === "default" ? "" : ` data-theme="${page.theme}"`
+    }>${html}</div>`;
     // if (page.ethwallet) {
     //   const data = await opensea.code.preRender({ address: page.ethwallet });
     //   html = Mustache.render(opensea.template(), data) + "\n" + html;
@@ -203,26 +217,25 @@ import { assoc } from "crocks/helpers";
   }
 
   async function loadWidgets() {
-    const ws = await widgets({gql}).list()
+    const ws = await widgets({ gql }).list();
     return ws
-    .filter(w => !['widget-connector','widget-poap'].includes(w.name))
-    .filter(w => 
-      page.widgets.find(a => a.elementId === w.elementId) ? false : true
-    )
-
+      .filter((w) => !["widget-connector", "widget-poap"].includes(w.name))
+      .filter((w) =>
+        page.widgets.find((a) => a.elementId === w.elementId) ? false : true
+      );
   }
 
   function addWidget(w) {
-    page.widgets = append(w, page.widgets)
-    availableWidets = loadWidgets()
+    page.widgets = append(w, page.widgets);
+    availableWidets = loadWidgets();
   }
 
   function removeWidget(id) {
-    page.widgets = page.widgets.filter(w => w.elementId !== id) 
-    availableWidets = loadWidgets()
+    page.widgets = page.widgets.filter((w) => w.elementId !== id);
+    availableWidets = loadWidgets();
   }
 
-  let availableWidets = loadWidgets()
+  let availableWidets = loadWidgets();
 </script>
 
 <Navbar />
@@ -251,10 +264,10 @@ import { assoc } from "crocks/helpers";
         </div>
         <div class="mt-4 form-control">
           <label for="gallery" class="label cursor-pointer">
-            <span class="label-text text-xl"
-              >NFT Gallery</span
+            <span class="label-text text-xl">NFT Gallery</span>
+            <small class="hidden md:inline-block"
+              >Enter Ethereum Wallet Address</small
             >
-            <small class="hidden md:inline-block">Enter Ethereum Wallet Address</small>
             <input
               type="input"
               class="input input-bordered w-1/2"
@@ -265,34 +278,51 @@ import { assoc } from "crocks/helpers";
         <div class="my-8 form-control">
           <label class="label">
             <span class="label-text text-xl">Select Theme</span>
-            <small class="hidden md:inline-block">Select a fun theme for your page, by default, the `light` theme is chosen unless browser is set to dark mode, then the `dark` theme is chosen.</small>
-            <select id="theme-select" class="select select-bordered" bind:value={page.theme}>
+            <small class="hidden md:inline-block"
+              >Select a fun theme for your page, by default, the `light` theme
+              is chosen unless browser is set to dark mode, then the `dark`
+              theme is chosen.</small
+            >
+            <select
+              id="theme-select"
+              class="select select-bordered"
+              bind:value={page.theme}
+            >
               <option value="default">default</option>
               {#each themes as theme}
                 <option value={theme}>{theme}</option>
               {/each}
             </select>
-            
           </label>
-          
         </div>
-        
+
         <div class="my-8 form-control">
           <label class="label">
             <span class="label-text text-xl">Widgets</span>
-            <small class="hidden md:inline-block">Add widgets to permapages to add interactive functionality to your page.</small>
-            <button type="button" class="btn btn-secondary" on:click={() => widgetDialog = true}>Add Widget</button>
+            <small class="hidden md:inline-block"
+              >Add widgets to permapages to add interactive functionality to
+              your page.</small
+            >
+            <button
+              type="button"
+              class="btn btn-secondary"
+              on:click={() => (widgetDialog = true)}>Add Widget</button
+            >
           </label>
-          
         </div>
         {#if page.widgets.length > 0}
           <div class="flex space-x-4 mb-8">
             {#each page.widgets as w}
-            <div class="badge badge-primary" on:click={removeWidget(w.elementId)}>{w.name}</div>
+              <div
+                class="badge badge-primary"
+                on:click={removeWidget(w.elementId)}
+              >
+                {w.name}
+              </div>
             {/each}
           </div>
         {/if}
-        
+
         <div class="mt-4 form-control">
           <label for="footer" class="label cursor-pointer">
             <span class="label-text text-xl"
@@ -443,31 +473,37 @@ import { assoc } from "crocks/helpers";
   <h3 class="text-2xl text-error">Error</h3>
   <p class="my-4">{errorMessage}</p>
 </Modal>
-<Modal open={widgetDialog} on:click={() => widgetDialog = false}>
+<Modal open={widgetDialog} on:click={() => (widgetDialog = false)}>
   <h3 class="text-2xl mb-8">Widgets</h3>
   <div>
     {#await availableWidets}
       <div>Loading...</div>
     {:then widgets}
       {#each widgets as widget}
-      <div class="card">
-        <div class="card-body">
-          <div class="card-title">
-            {widget.name} 
-            <span class="badge badge-primary">{widget.version}</span>
-          </div>
-          <div class="flex">
-            <div class="flex-1">{widget.description}</div>
-            <div class="flex-none">
-              <a class="btn btn-sm btn-info" target="_blank" href={widget.docs}>docs</a>
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              {widget.name}
+              <span class="badge badge-primary">{widget.version}</span>
+            </div>
+            <div class="flex">
+              <div class="flex-1">{widget.description}</div>
+              <div class="flex-none">
+                <a
+                  class="btn btn-sm btn-info"
+                  target="_blank"
+                  href={widget.docs}>docs</a
+                >
+              </div>
+            </div>
+            <div class="card-actions">
+              <button
+                class="btn btn-sm btn-primary"
+                on:click={() => addWidget(widget)}>Add Widget</button
+              >
             </div>
           </div>
-          <div class="card-actions">
-            <button class="btn btn-sm btn-primary" on:click={() => addWidget(widget)}>Add Widget</button>
-          </div>
         </div>
-        
-      </div>
       {/each}
     {/await}
   </div>

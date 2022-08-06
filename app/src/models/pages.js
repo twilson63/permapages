@@ -23,8 +23,8 @@ const schema = z.object({
   ethwallet: z.string().default(''),
   webpage: z.string().optional(),
   timestamp: z.string(),
-  theme: z.string(),
-  includeFooter: z.boolean(),
+  theme: z.string().default('default'),
+  includeFooter: z.boolean().optional(),
   widgets: z.array(
     z.object({
       source: z.string(),
@@ -32,18 +32,18 @@ const schema = z.object({
       name: z.string(),
       description: z.string()
     })
-  ),
+  ).optional(),
   state: z.object({
-    ticker: z.string(),
-    name: z.string(),
-    title: z.string(),
+    ticker: z.string().optional(),
+    name: z.string().optional(),
+    title: z.string().optional(),
     owner: z.string().optional(),
-    balances: z.object({}).passthrough(),
-    contentType: z.string(),
-    createdAt: z.number(),
+    balances: z.object({}).passthrough().optional(),
+    contentType: z.string().optional(),
+    createdAt: z.number().optional(),
     stakes: z.object({}).passthrough().optional(),
-    locked: z.boolean(),
-    tags: z.array(z.string())
+    locked: z.boolean().optional(),
+    tags: z.array(z.string()).optional()
   }).optional()
 })
 

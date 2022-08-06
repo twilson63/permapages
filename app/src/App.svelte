@@ -12,7 +12,7 @@
   import Pages from "./pages/index.svelte";
   import PageLink from "./pages/link.svelte";
   import PageForm from "./pages/form.svelte";
-  import Arns from "./arns/index2.svelte";
+  import Arns from "./arns/index.svelte";
   import Ant from "./arns/show.svelte";
   import Claim from "./arns/claim.svelte";
   import Preview from "./pages/show.svelte";
