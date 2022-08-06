@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { Jumper } from "svelte-loading-spinners";
-import { record } from "zod";
+  import { record } from "zod";
 
   const dispatch = createEventDispatcher();
 
@@ -13,11 +13,11 @@ import { record } from "zod";
       dispatch(type, { id });
     };
   }
-  
+
   function handleRemove(data) {
     return () => {
-      dispatch('remove', data)
-    }
+      dispatch("remove", data);
+    };
   }
 
   async function checkSubdomain(subdomain) {
@@ -58,12 +58,19 @@ import { record } from "zod";
                 {/if}
               {/await}
             </td>
-            <th><a
-              target="_blank"
-              class="link"
-              href="https://{record.subdomain}.arweave.dev"
-              >{record.subdomain}</a></th>
-            <td class="hidden md:table-cell">{record.records["@"]}</td>
+            <th
+              ><a
+                target="_blank"
+                class="link"
+                href="https://{record.subdomain}.arweave.dev"
+                >{record.subdomain}</a
+              ></th
+            >
+            <td class="hidden md:table-cell"
+              >{record.records["@"].transactionId
+                ? record.records["@"].transactionId
+                : record.records["@"]}</td
+            >
             <td class="hidden md:table-cell"
               ><a
                 target="_blank"
@@ -84,7 +91,10 @@ import { record } from "zod";
               >
               -->
               <button
-                on:click={handleRemove({ ANT: record.id, subdomain: record.subdomain})}
+                on:click={handleRemove({
+                  ANT: record.id,
+                  subdomain: record.subdomain,
+                })}
                 class="link uppercase">RM</button
               >
             </td>
