@@ -9,10 +9,6 @@
       window.dispatchEvent(new Event("pageTransactionIdLoaded"));
     }, 500);
   });
-
-  async function loadPassport() {
-    return Promise.resolve(true);
-  }
 </script>
 
 <svelte:window bind:scrollY />
@@ -1266,11 +1262,6 @@
   </div>
 </div>
 
-<div class="sticky bottom-[100px] left-[16px] w-[300px]">
-  {#await loadPassport() then x}
-    <div id="passport" />
-  {/await}
-</div>
 <a href="http://arweave.org" target="_blank" class="seal-desktop w-inline-block"
   ><img src="images/light.svg" loading="lazy" alt="" class="image-2" /></a
 >
