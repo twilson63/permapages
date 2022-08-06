@@ -14,6 +14,10 @@ window.addEventListener("arweaveWalletLoaded", async () => {
             logo: `${window.location.origin}/permapages_logo.svg`,
           }
         );
+        const walletConnected = new Event('arweaveWalletConnected')
+        setTimeout(() => {
+          window.dispatchEvent(walletConnected)
+        }, 500)
 
         address.set(await arweaveWallet.getActiveAddress());
 

@@ -2,6 +2,17 @@
   import { address } from "./store.js";
   let version = __APP_VERSION__.split(".")[2];
   let scrollY;
+  window.transactionId = "QIvEeaJiwUBs3sZZGR_6O3fd6I5y-0FgRuPf2liPTns";
+
+  window.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+      window.dispatchEvent(new Event("pageTransactionIdLoaded"));
+    }, 500);
+  });
+
+  async function loadPassport() {
+    return Promise.resolve(true);
+  }
 </script>
 
 <svelte:window bind:scrollY />
@@ -64,10 +75,12 @@
     })(window, document);
   </script>
   <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon" />
-  <link
-    href="images/webclip.png"
-    rel="apple-touch-icon"
-  /><!--  Please keep this css code to improve the font quality -->
+  <link href="images/webclip.png" rel="apple-touch-icon" />
+  <!--  Please keep this css code to improve the font quality -->
+  <script
+    defer
+    type="module"
+    src="https://arweave.net/yr70Anti_gtkj_plOwnCyaiutFcPhQIH4bv5uEsy77U"></script>
 </svelte:head>
 <div class="page-wrapper">
   <div class="global-styles w-embed">
@@ -1253,6 +1266,11 @@
   </div>
 </div>
 
+<div class="sticky bottom-[100px] left-[16px] w-[300px]">
+  {#await loadPassport() then x}
+    <div id="passport" />
+  {/await}
+</div>
 <a href="http://arweave.org" target="_blank" class="seal-desktop w-inline-block"
   ><img src="images/light.svg" loading="lazy" alt="" class="image-2" /></a
 >
