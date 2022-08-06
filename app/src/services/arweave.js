@@ -23,6 +23,8 @@ import { Async } from 'crocks'
 //const PAGE_SRC = 'OhGbHpgw-GIXhUaDZIzUjVm5rXWtd_2hrABWlB83rb8'
 const WARP_URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
 const PAGE_SRC = 'kSiq990WBHkz6uYO_1z7jylm3YbRrcpm7UfhYUb8Cg0'
+const DATAFI_PAGE_SRC = 'M7Z1ag4OBmW7D4fkYyUUGKTneIeCFoURESBKXJGBFXo'
+
 
 const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] =
   ['App-Name', 'App-Version', 'SDK', 'Content-Type', 'Contract-Src', 'Init-State']
@@ -161,16 +163,21 @@ export const postWebpage = async (data) => {
     split(' ')
   )
   const initState = data.state || {
-    ticker: 'PASSPORT-' + slugify(data.title),
-    name: 'Permapage NFT',
+    ticker: 'DATAFI-' + slugify(data.title),
+    name: 'Permapage DataFi NFT',
     title: data.title,
     owner: data.owner,
-    balances: {},
-    locked: false,
-    views: {},
+    balances: {
+      [data.owner]: 1
+    },
     contentType: 'text/html',
     createdAt: Date.now(),
-    tags: [],
+    invocations: [],
+    emergencyHaltWallet: '',
+    halted: false,
+    pairs: [],
+    usedTransfers: [],
+    foreignCalls: []
   }
 
   // create data-entry
@@ -181,7 +188,7 @@ export const postWebpage = async (data) => {
       { name: APP_VERSION, value: '0.3.0' },
       { name: SDK, value: 'RedStone' },
       { name: CONTENT_TYPE, value: 'text/html' },
-      { name: CONTRACT_SRC, value: PAGE_SRC },
+      { name: CONTRACT_SRC, value: DATAFI_PAGE_SRC },
       { name: INIT_STATE, value: JSON.stringify(initState) },
       { name: 'Page-Title', value: data.title },
       { name: 'Type', value: 'PermaWebPage' }

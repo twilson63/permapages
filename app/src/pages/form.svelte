@@ -21,6 +21,12 @@
   import pluck from "ramda/src/pluck";
   import append from "ramda/src/append";
   import { assoc } from "crocks/helpers";
+  import mergeAll from "ramda/src/mergeAll";
+  import join from "ramda/src/join";
+  import split from "ramda/src/split";
+  import toLower from "ramda/src/toLower";
+  import find from "ramda/src/find";
+  import propEq from "ramda/src/propEq";
 
   var easymde = null;
   let error = null;
@@ -51,6 +57,7 @@
   ];
 
   onMount(async () => {
+    const slugify = compose(toLower, join("-"), split(" "));
     easymde = new window.EasyMDE({
       autosave: {
         enabled: true,
@@ -90,7 +97,26 @@
         page.theme = p.theme;
         page.widgets = p.widgets || [];
         page.includeFooter = p.includeFooter || true;
-        page.state = p.state;
+        page.state = mergeAll(
+          {
+            ticker: "DATAFI-" + slugify(p.title),
+            name: "Permapage DataFi NFT",
+            title: p.title,
+            owner: p.owner,
+            balances: {
+              [$address]: 1,
+            },
+            contentType: "text/html",
+            createdAt: Date.now(),
+            invocations: [],
+            emergencyHaltWallet: "",
+            halted: false,
+            pairs: [],
+            usedTransfers: [],
+            foreignCalls: [],
+          },
+          p.state
+        );
       });
   } else {
   }
@@ -219,7 +245,11 @@
   async function loadWidgets() {
     const ws = await widgets({ gql }).list();
     return ws
-      .filter((w) => !["widget-connector", "widget-poap"].includes(w.name))
+      .filter(
+        (w) =>
+          !["widget-connector", "widget-poap", "widget-stamp"].includes(w.name)
+      )
+      .reduce((a, v) => (find(propEq("name", v.name), a) ? a : [...a, v]), []) // only show latest widgets
       .filter((w) =>
         page.widgets.find((a) => a.elementId === w.elementId) ? false : true
       );
@@ -501,6 +531,14 @@
                 class="btn btn-sm btn-primary"
                 on:click={() => addWidget(widget)}>Add Widget</button
               >
+            </div>
+          </div>
+        </div>
+      {:else}
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title">
+              No more widgets available. Click OK to continue.
             </div>
           </div>
         </div>

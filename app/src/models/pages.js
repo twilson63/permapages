@@ -41,9 +41,12 @@ const schema = z.object({
     balances: z.object({}).passthrough().optional(),
     contentType: z.string().optional(),
     createdAt: z.number().optional(),
-    stakes: z.object({}).passthrough().optional(),
-    locked: z.boolean().optional(),
-    tags: z.array(z.string()).optional()
+    invocations: z.array(z.any()).optional(),
+    emergencyHaltWallet: z.string().optional(),
+    halted: z.boolean().optional(),
+    pairs: z.array(z.string()).optional(),
+    usedTransfers: z.array(z.any()).optional(),
+    foreignCalls: z.array(z.any()).optional()
   }).optional()
 })
 
