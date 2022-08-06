@@ -22,6 +22,7 @@ const warp = WarpWebFactory.memCachedBased(arweave).useArweaveGateway().build()
 
 const REGISTRY = "bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"
 const ANT_SOURCE = "PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY"
+//const ANT_SOURCE = "JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg"
 
 export async function search(name) {
   const registry = warp.pst(REGISTRY).connect('use_wallet')
@@ -158,13 +159,15 @@ export async function getANT(ANT) {
 }
 
 export async function updateSubDomain({ ant, subdomain = '@', transactionId }) {
-  await warp.pst(ant).connect('use_wallet')
+  console.log('ANT', ant)
+  const id = await warp.pst(ant).connect('use_wallet')
     .writeInteraction({
       function: 'setRecord',
-      subdomain,
+      subDomain: subdomain,
       transactionId
     })
-  return { ok: true, message: 'successfully updated subdomain' }
+
+  return { ok: true, id, message: 'successfully updated subdomain' }
 }
 
 export async function removeSubDomain({ ant, subdomain }) {
@@ -172,7 +175,7 @@ export async function removeSubDomain({ ant, subdomain }) {
   await warp.pst(ant).connect('use_wallet')
     .writeInteraction({
       function: 'removeRecord',
-      subdomain
+      subDomain: subdomain
     })
   return { ok: true, message: 'successfully removed subdomain' }
 }
