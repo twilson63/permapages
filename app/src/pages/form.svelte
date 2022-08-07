@@ -467,7 +467,7 @@
     </form>
   </div>
 </div>
-<Modal open={submitting}>
+<Modal open={submitting} ok={false}>
   <h3 class="text-2xl">Creating Webpage!</h3>
   <ul class="steps steps-vertical">
     <li class="step {step === 1 ? 'step-primary' : ''}">Generating Page</li>
