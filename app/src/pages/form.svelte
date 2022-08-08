@@ -43,6 +43,7 @@
 
   let profileWidgetUrl = "https://profile-widget.arweave.dev";
 
+  let allWidgets = [];
   let ant = null;
   let lastTx = meta().query.fork;
 
@@ -55,9 +56,12 @@
     "night",
     "coffee",
   ];
+  const slugify = compose(toLower, join("-"), split(" "));
 
   onMount(async () => {
-    const slugify = compose(toLower, join("-"), split(" "));
+    loadWidgets().then((widgets) => {
+      allWidgets = widgets;
+    });
     easymde = new window.EasyMDE({
       autosave: {
         enabled: true,
@@ -133,6 +137,20 @@
 
       page.content = easymde.value();
       page.owner = $address;
+
+      // upgrade widgets
+
+      // upgrade current page widgets
+      page.widgets = page.widgets.map((w) => {
+        const latestWidgets = allWidgets.reduce(
+          (a, v) => (find(propEq("name", v.name), a) ? a : [...a, v]),
+          []
+        ); // only show latest widgets
+        return latestWidgets.find(
+          (_widget) => _widget.elementId === w.elementId
+        );
+      });
+      // console.log("widgets", page.widgets);
 
       // handle widgets
       if (page.widgets) {
@@ -244,6 +262,7 @@
 
   async function loadWidgets() {
     const ws = await widgets({ gql }).list();
+
     return ws
       .filter(
         (w) =>
@@ -347,7 +366,7 @@
                 class="badge badge-primary"
                 on:click={removeWidget(w.elementId)}
               >
-                {w.name}
+                {w.name} - {w.version || "latest"}
               </div>
             {/each}
           </div>

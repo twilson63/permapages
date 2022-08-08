@@ -30,7 +30,8 @@ const schema = z.object({
       source: z.string(),
       elementId: z.string(),
       name: z.string(),
-      description: z.string()
+      description: z.string(),
+      version: z.string().optional()
     })
   ).optional(),
   state: z.object({
