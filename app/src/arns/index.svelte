@@ -44,6 +44,7 @@
   let registering = false;
   let timeout = null;
   let timeout2 = null;
+  let submitDialog = false;
 
   $: balance = "Checking...";
   let ar = "Checking...";
@@ -140,6 +141,7 @@
 
   async function handleChange(e) {
     changeDialog = false;
+    submitDialog = true;
     if (!changeData.transactionId || changeData.transactionId === "") {
       errorMessage = `ERROR: ${
         changeData.type === "arweave"
@@ -155,6 +157,8 @@
       subdomain: "@",
       transactionId: changeData.transactionId,
     });
+
+    submitDialog = false;
     if (result.ok) {
       successData = {
         message: "Successfully changed transaction id",
@@ -568,6 +572,13 @@
 
 <Modal open={registering} ok={false}>
   <h3 class="text-3xl text-secondary">Registering Domain</h3>
+  <div class="my-8 flex items-center justify-center">
+    <Jumper size="60" color="rebeccapurple" />
+  </div>
+</Modal>
+
+<Modal open={submitDialog} ok={false}>
+  <h3 class="text-3xl text-secondary">Submiting Update</h3>
   <div class="my-8 flex items-center justify-center">
     <Jumper size="60" color="rebeccapurple" />
   </div>

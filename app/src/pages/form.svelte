@@ -45,6 +45,7 @@
 
   let allWidgets = [];
   let ant = null;
+
   let lastTx = meta().query.fork;
 
   let themes = [
@@ -77,9 +78,6 @@
     //   easymde.value = "";
     //   page.content = "";
     // }
-    const ants = await listANTs($address);
-    const txs = compose(pluck("@"), pluck("records"))(ants);
-    ant = ants[txs.indexOf(page.webpage)];
   });
 
   let page = { public: true, widgets: [], includeFooter: true };
@@ -88,8 +86,7 @@
     // getNote from meta().query.fork
     pages({ load: loadPage, loadState })
       .get(meta().query.fork)
-      .then((p) => {
-        console.log(p);
+      .then(async (p) => {
         page.title = p.title;
         page.description = p.description;
         page.subdomain = p.subdomain;
@@ -108,7 +105,7 @@
             title: p.title,
             owner: p.owner,
             balances: {
-              [$address]: 1,
+              [$address]: 10000,
             },
             contentType: "text/html",
             createdAt: Date.now(),
@@ -121,6 +118,13 @@
           },
           p.state
         );
+
+        const ants = await listANTs($address);
+        ant = ants.find((ant) =>
+          ant.records["@"]?.transactionId
+            ? ant.records["@"].transactionId === page.webpage
+            : ant.records["@"] === page.webpage
+        )?.id;
       });
   } else {
   }
@@ -150,7 +154,6 @@
           (_widget) => _widget.elementId === w.elementId
         );
       });
-      // console.log("widgets", page.widgets);
 
       // handle widgets
       if (page.widgets) {
@@ -199,10 +202,13 @@
       $pageCache = [result, ...$pageCache];
 
       if (updateSubdomain) {
-        console.log("ANT", ant.id);
-        console.log("result", result.id);
-        //await updateSubDomain(ant.id, result.id);
+        const updateResult = await updateSubDomain({
+          ant: ant,
+          subdomain: "@",
+          transactionId: result.webpage,
+        });
       }
+
       submitting = false;
 
       if (!result.foundPost) {
@@ -214,7 +220,6 @@
       }
     } catch (e) {
       submitting = false;
-      console.log(e);
       errorMessage = e.message;
       errorDialog = true;
       window.scrollTo(0, 0);
@@ -225,7 +230,7 @@
     const results = await fetch(
       "https://api.opensea.io/api/v1/assets?owner=" + wallet
     ).then((res) => res.json());
-    console.log(results);
+
     return results.assets;
   }
 
@@ -366,7 +371,7 @@
                 class="badge badge-primary"
                 on:click={removeWidget(w.elementId)}
               >
-                {w.name} - {w.version || "latest"}
+                {w.name} - {w.version || "v0.0.6"}
               </div>
             {/each}
           </div>
