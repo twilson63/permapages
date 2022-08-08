@@ -73,10 +73,6 @@
   <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon" />
   <link href="images/webclip.png" rel="apple-touch-icon" />
   <!--  Please keep this css code to improve the font quality -->
-  <script
-    defer
-    type="module"
-    src="https://arweave.net/yr70Anti_gtkj_plOwnCyaiutFcPhQIH4bv5uEsy77U"></script>
 </svelte:head>
 <div class="page-wrapper">
   <div class="global-styles w-embed">

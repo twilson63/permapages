@@ -580,6 +580,6 @@
 <Modal open={submitDialog} ok={false}>
   <h3 class="text-3xl text-secondary">Submiting Update</h3>
   <div class="my-8 flex items-center justify-center">
-    <Jumper size="60" color="rebeccapurple" />
+    <Jumper size="60" color="#a991f7" />
   </div>
 </Modal>
