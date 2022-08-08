@@ -52,6 +52,9 @@
       <Route path="/:ant">
         <Ant />
       </Route>
+      <Route path="/">
+        <Arns />
+      </Route>
       <Route fallback>
         <Arns />
       </Route>
@@ -67,6 +70,9 @@
       </Route>
       <Route path="/new">
         <PageForm />
+      </Route>
+      <Route path="/">
+        <Pages />
       </Route>
       <Route fallback>
         <Pages />
