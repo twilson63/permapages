@@ -146,13 +146,7 @@
 
       // upgrade current page widgets
       page.widgets = page.widgets.map((w) => {
-        const latestWidgets = allWidgets.reduce(
-          (a, v) => (find(propEq("name", v.name), a) ? a : [...a, v]),
-          []
-        ); // only show latest widgets
-        return latestWidgets.find(
-          (_widget) => _widget.elementId === w.elementId
-        );
+        return allWidgets.find((_widget) => _widget.elementId === w.elementId);
       });
 
       // handle widgets
