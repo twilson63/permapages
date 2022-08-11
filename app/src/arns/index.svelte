@@ -241,6 +241,7 @@
         ![
           "result is null",
           "Cannot read properties of null (reading 'balance')",
+          "arns is null",
         ].includes(e.message)
       ) {
         errorMessage =
