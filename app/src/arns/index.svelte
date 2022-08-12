@@ -236,21 +236,8 @@
       balance = arns.balance;
       ar = _ar;
     } catch (e) {
-      console.log(e);
-      if (
-        ![
-          "result is null",
-          "Cannot read properties of null (reading 'balance')",
-          "arns is null",
-        ].includes(e.message)
-      ) {
-        errorMessage =
-          "An error occurred trying to check you ArNS Test token balance.";
-        errorDialog = true;
-      } else {
-        balance = "Not Found";
-        ar = "Not Found";
-      }
+      balance = "Not Found";
+      ar = "Not Found";
     }
   }
 

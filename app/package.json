@@ -1,7 +1,7 @@
 {
   "name": "permapages",
   "private": true,
-  "version": "0.1.9j",
+  "version": "0.1.9l",
   "type": "module",
   "scripts": {
     "dev": "vite",
