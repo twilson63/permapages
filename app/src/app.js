@@ -82,7 +82,8 @@ export function pages({ register, post, gql, postWebpage, load, loadState }) {
           title,
           html: htmlTemplate(title, owner, code, description, widgets, html, theme, includeFooter),
           state,
-          owner
+          owner,
+          code
         })).chain(Async.fromPromise(postWebpage))
           .map((id) => ({ ...page, webpage: id }))
       )

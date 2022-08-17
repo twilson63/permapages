@@ -88,6 +88,9 @@
       .get(meta().query.fork)
       .then(async (p) => {
         page.title = p.title;
+        if (p.code) {
+          page.code = p.code;
+        }
         page.description = p.description;
         page.subdomain = p.subdomain;
         easymde.value(p.content);
@@ -145,9 +148,13 @@
       // upgrade widgets
 
       // upgrade current page widgets
-      page.widgets = page.widgets.map((w) => {
-        return allWidgets.find((_widget) => _widget.elementId === w.elementId);
-      });
+      if (allWidgets.length > 0) {
+        page.widgets = page.widgets.map((w) => {
+          return allWidgets.find(
+            (_widget) => _widget.elementId === w.elementId
+          );
+        });
+      }
 
       // handle widgets
       if (page.widgets) {
@@ -274,16 +281,20 @@
   }
 
   function addWidget(w) {
-    page.widgets = append(w, page.widgets);
-    availableWidets = loadWidgets();
+    try {
+      page.widgets = append(w, page.widgets);
+      availableWidgets = loadWidgets();
+    } catch (e) {
+      console.log("ERROR", e);
+    }
   }
 
   function removeWidget(id) {
     page.widgets = page.widgets.filter((w) => w.elementId !== id);
-    availableWidets = loadWidgets();
+    availableWidgets = loadWidgets();
   }
 
-  let availableWidets = loadWidgets();
+  let availableWidgets = loadWidgets();
 </script>
 
 <Navbar />
@@ -524,7 +535,7 @@
 <Modal open={widgetDialog} on:click={() => (widgetDialog = false)}>
   <h3 class="text-2xl mb-8">Widgets</h3>
   <div>
-    {#await availableWidets}
+    {#await availableWidgets}
       <div>Loading...</div>
     {:then widgets}
       {#each widgets as widget}
