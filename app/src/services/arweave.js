@@ -163,8 +163,8 @@ export const postWebpage = async (data) => {
     split(' ')
   )
   const initState = data.state || {
-    ticker: 'DATAFI-' + slugify(data.title),
-    name: 'Permapage DataFi NFT',
+    ticker: 'PAGE-' + slugify(data.title),
+    name: 'Permapage',
     title: data.title,
     owner: data.owner,
     balances: {
@@ -191,6 +191,7 @@ export const postWebpage = async (data) => {
       { name: CONTRACT_SRC, value: DATAFI_PAGE_SRC },
       { name: INIT_STATE, value: JSON.stringify(initState) },
       { name: 'Page-Title', value: data.title },
+      { name: 'Page-Code', value: data.code },
       { name: 'Type', value: 'PermaWebPage' }
     ]
   }
@@ -251,6 +252,7 @@ export const postPageTx = async (page) => {
   tx.addTag('App-Name', 'PermaPages')
   tx.addTag('Protocol', page.protocol)
   tx.addTag('Page-Title', page.title)
+  tx.addTag('Page-Code', page.code)
   tx.addTag('Status', page.status)
   tx.addTag('Webpage', page.webpage)
   tx.addTag('Timestamp', new Date().toISOString())

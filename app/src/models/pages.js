@@ -8,6 +8,7 @@ import find from 'ramda/src/find'
 
 const schema = z.object({
   id: z.string().optional(),
+  code: z.string().optional(),
   type: z.literal('page').default('page'),
   owner: z.string(),
   contentType: z.literal('text/html').default('text/html'),
