@@ -26,6 +26,7 @@ const schema = z.object({
   timestamp: z.string(),
   theme: z.string().default('default'),
   includeFooter: z.boolean().optional(),
+  allowStamps: z.boolean().optional(),
   widgets: z.array(
     z.object({
       source: z.string(),

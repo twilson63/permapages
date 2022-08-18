@@ -46,7 +46,6 @@
             <h2 class="text-2xl mb-2 flex-1">Permapages</h2>
             <div class="flex-none6">
               <a href="/pages/new" class="btn btn-primary">New Permapage</a>
-              <a href="/arns" class="btn btn-secondary">Register Subdomain</a>
             </div>
           </div>
           <div class="overflow-x-auto">

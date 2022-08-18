@@ -57,7 +57,8 @@ export function profiles({ gql, post, load }) {
         {
           stamper: x,
           count: stampers[x].length,
-          assets: stampers[x].map((o) => o.asset),
+          assets: stampers[x].map(prop('asset'))
+          // assets: stampers[x].map((o) => ({ asset: o.asset, timestamp: o.timestamp })), Need this to add timestamp
         },
       ], [], keys(stampers)
       ))
@@ -66,6 +67,10 @@ export function profiles({ gql, post, load }) {
       .map(buildAssetQuery)
       .chain(Async.fromPromise(gql))
       .map(pluckNodes)
+      .map(map(tx => ({
+        id: tx.id,
+        title: find(propEq('name', 'Page-Title'), tx.tags).value
+      })))
       .toPromise()
   }
 

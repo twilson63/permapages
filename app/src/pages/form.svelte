@@ -28,6 +28,7 @@
   import find from "ramda/src/find";
   import propEq from "ramda/src/propEq";
 
+  let advanced = false;
   var easymde = null;
   let error = null;
   let submitting = false;
@@ -80,7 +81,12 @@
     // }
   });
 
-  let page = { public: true, widgets: [], includeFooter: true };
+  let page = {
+    public: true,
+    widgets: [],
+    includeFooter: true,
+    allowStamps: true,
+  };
 
   if (meta().query.fork) {
     // getNote from meta().query.fork
@@ -101,10 +107,11 @@
         page.theme = p.theme;
         page.widgets = p.widgets || [];
         page.includeFooter = p.includeFooter || true;
+        page.allowStamps = p.allowStamps || true;
         page.state = mergeAll(
           {
-            ticker: "DATAFI-" + slugify(p.title),
-            name: "Permapage DataFi NFT",
+            ticker: "PAGE-" + slugify(p.title),
+            name: "Permapage",
             title: p.title,
             owner: p.owner,
             balances: {
@@ -145,7 +152,23 @@
       page.content = easymde.value();
       page.owner = $address;
 
-      // upgrade widgets
+      // allowStamps is set
+      if (page.allowStamps) {
+        if (!find(propEq("name", "passport"), page.widgets)) {
+          page.widgets = [
+            ...page.widgets,
+            {
+              source: "https://stamp-widget.arweave.dev",
+              elementId: "passport",
+              name: "passport",
+              description: "Permapage Passport Widget",
+              version: "latest",
+            },
+          ];
+        }
+      } else {
+        page.widgets = page.widgets.filter((w) => w.elementId !== "passport");
+      }
 
       // upgrade current page widgets
       if (allWidgets.length > 0) {
@@ -306,96 +329,13 @@
           {error}
         </div>
       {/if}
-      <h1 class="text-2xl">Create Permapage</h1>
       <form class="w-full" on:submit|preventDefault={submit}>
-        <div class="mt-4 form-control">
-          <label for="profile" class="label cursor-pointer">
-            <span class="label-text text-xl"
-              >Profile (if marked the page will insert your account as a header
-              to the page.)</span
-            >
-            <input
-              type="checkbox"
-              class="toggle toggle-secondary"
-              bind:checked={page.profile}
-            />
-          </label>
-        </div>
-        <div class="mt-4 form-control">
-          <label for="gallery" class="label cursor-pointer">
-            <span class="label-text text-xl">NFT Gallery</span>
-            <small class="hidden md:inline-block"
-              >Enter Ethereum Wallet Address</small
-            >
-            <input
-              type="input"
-              class="input input-bordered w-1/2"
-              bind:value={page.ethwallet}
-            />
-          </label>
-        </div>
-        <div class="my-8 form-control">
-          <label class="label">
-            <span class="label-text text-xl">Select Theme</span>
-            <small class="hidden md:inline-block"
-              >Select a fun theme for your page, by default, the `light` theme
-              is chosen unless browser is set to dark mode, then the `dark`
-              theme is chosen.</small
-            >
-            <select
-              id="theme-select"
-              class="select select-bordered"
-              bind:value={page.theme}
-            >
-              <option value="default">default</option>
-              {#each themes as theme}
-                <option value={theme}>{theme}</option>
-              {/each}
-            </select>
-          </label>
-        </div>
-
-        <div class="my-8 form-control">
-          <label class="label">
-            <span class="label-text text-xl">Widgets</span>
-            <small class="hidden md:inline-block"
-              >Add widgets to permapages to add interactive functionality to
-              your page.</small
-            >
-            <button
-              type="button"
-              class="btn btn-secondary"
-              on:click={() => (widgetDialog = true)}>Add Widget</button
-            >
-          </label>
-        </div>
-        {#if page.widgets.length > 0}
-          <div class="flex space-x-4 mb-8">
-            {#each page.widgets as w}
-              <div
-                class="badge badge-primary"
-                on:click={removeWidget(w.elementId)}
-              >
-                {w.name} - {w.version || "v0.0.6"}
-              </div>
-            {/each}
-          </div>
-        {/if}
-
-        <div class="mt-4 form-control">
-          <label for="footer" class="label cursor-pointer">
-            <span class="label-text text-xl"
-              >Footer (toggle off to not include footer)</span
-            >
-            <input
-              type="checkbox"
-              class="toggle toggle-secondary"
-              bind:checked={page.includeFooter}
-            />
-          </label>
-        </div>
         <div class="form-control">
-          <label for="content" class="label">Page Content(markdown)</label>
+          <label for="content" class="label"
+            >Page Content <span class="text-sm"
+              >(use the markdown language or html to add content your page)</span
+            ></label
+          >
           <textarea
             class="textarea textarea-bordered textarea-secondary bg-white"
             id="content"
@@ -403,24 +343,146 @@
             bind:value={page.content}
           />
         </div>
+        <button
+          type="button"
+          class="btn btn-ghost my-16"
+          on:click={() => (advanced = !advanced)}>Show Advanced Options</button
+        >
+        {#if advanced}
+          <div class="mt-4 form-control">
+            <label for="profile" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Add Profile</span>
+                <br />
+                <span class="text-sm"
+                  >toggle on to include your profile as the web page header.</span
+                >
+              </div>
 
-        <p class="mt-4 alert alert-info">
-          When you create a page, it will be posted on the permaweb, and can
-          never be removed, once published you register a subdomain on ArNS
-          https://[subdomain].arweave.net. <a
-            target="_blank"
-            class="btn btn-ghost"
-            href="https://ar.io/arns">Learn more about ArNS</a
+              <input
+                type="checkbox"
+                class="toggle toggle-secondary"
+                bind:checked={page.profile}
+              />
+            </label>
+          </div>
+          <div class="mt-4 form-control">
+            <label for="gallery" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">NFT Gallery</span>
+                <br />
+                <span class="hidden md:inline-block text-sm"
+                  >Enter Ethereum Wallet Address</span
+                >
+              </div>
+              <input
+                type="input"
+                class="input input-bordered w-1/2"
+                bind:value={page.ethwallet}
+              />
+            </label>
+          </div>
+          <div class="my-8 form-control">
+            <label class="label">
+              <div>
+                <span class="label-text text-xl">Select Theme</span>
+                <br />
+                <span class="hidden md:inline-block text-sm"
+                  >Select a fun theme for your page, by default, the `light`
+                  theme is chosen unless browser is set to dark mode, then the
+                  `dark` theme is chosen.</span
+                >
+              </div>
+              <select
+                id="theme-select"
+                class="select select-bordered"
+                bind:value={page.theme}
+              >
+                <option value="default">default</option>
+                {#each themes as theme}
+                  <option value={theme}>{theme}</option>
+                {/each}
+              </select>
+            </label>
+          </div>
+          <div class="mt-4 form-control">
+            <label for="footer" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Allow Stamps</span>
+                <br />
+                <span class="text-sm">toggle off to not receive stamps</span>
+              </div>
+              <input
+                type="checkbox"
+                class="toggle toggle-secondary"
+                bind:checked={page.allowStamps}
+              />
+            </label>
+          </div>
+          <div class="mt-4 form-control">
+            <label for="footer" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Footer</span>
+                <br />
+                <span class="text-sm">toggle off to not include footer</span>
+              </div>
+              <input
+                type="checkbox"
+                class="toggle toggle-secondary"
+                bind:checked={page.includeFooter}
+              />
+            </label>
+          </div>
+
+          <div class="my-8 form-control">
+            <label class="label">
+              <span class="label-text text-xl">Widgets</span>
+              <br />
+              <span class="hidden md:inline-block text-sm"
+                >Add widgets to permapages to add interactive functionality to
+                your page.</span
+              >
+              <button
+                type="button"
+                class="btn btn-secondary"
+                on:click={() => (widgetDialog = true)}>Add Widget</button
+              >
+            </label>
+          </div>
+          {#if page.widgets.length > 0}
+            <div class="flex space-x-4 mb-8">
+              {#each page.widgets as w}
+                <div
+                  class="badge badge-primary"
+                  on:click={removeWidget(w.elementId)}
+                >
+                  {w.name} - {w.version || "v0.0.6"}
+                </div>
+              {/each}
+            </div>
+          {/if}
+        {/if}
+
+        <div class="mt-4 alert alert-info flex flex-col space-y-8 py-8">
+          <div class="text-xl font-bold">Want a subdomain? Check out ArNS</div>
+          <p>
+            When you publish a page, it will be posted on the permaweb, once
+            published you can attach a registered subdomain using ArNS
+            https://[subdomain].arweave.dev. Want to learn more about ArNS
+          </p>
+          <a class="link" href="https://ar.io/arns">Click here to learn more.</a
           >
-        </p>
-        <div class="mt-8">
+        </div>
+        <div class="mt-8 flex justify-end space-x-2">
           <!--
           <button type="button" class="btn btn-secondary" on:click={preview}
             >Preview</button
           >
           -->
           <button type="submit" class="btn btn-primary">Publish</button>
-          <a class="btn" href="/pages">Cancel</a>
+          <a class="btn" href="/pages" on:click={() => easymde.value("")}
+            >Cancel</a
+          >
         </div>
       </form>
     </div>

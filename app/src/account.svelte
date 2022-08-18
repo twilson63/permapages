@@ -32,7 +32,6 @@
 
   async function getStamps(address) {
     const result = await profileMgr.stamps(address);
-    console.log(result);
     return result;
   }
 
@@ -72,24 +71,30 @@
 <Navbar />
 <main>
   <section class="hero min-h-screen bg-base-200 items-start">
-    <div class="hero-content flex-col w-full">
+    <div class="flex flex-col md:flex-row w-full items-start">
       {#await profileObject then p}
         {#if p}
-          <ProfileView profile={p} />
-          <div class="flex">
-            {#await getStamps($address) then stamps}
-              <Passport {stamps} />
-            {/await}
-            <div class="flex space-x-2">
-              <a href="/pages" class="btn btn-secondary">Pages</a>
-              <a href="/arns" class="btn btn-primary">ArNS</a>
-              <a class="btn btn-info" href="/account/edit">Edit Profile</a>
-              <button
-                class="btn btn-outline"
-                on:click|preventDefault={disconnect}>Disconnect</button
-              >
+          <div class="flex-1 flex flex-col ">
+            <ProfileView profile={p} />
+            <div class="mt-16 flex justify-center items-center">
+              <div class="flex space-x-2">
+                <a href="/pages" class="btn btn-secondary">Pages</a>
+                <a href="/arns" class="btn btn-primary">ArNS</a>
+                <a class="btn btn-info" href="/account/edit">Edit Profile</a>
+                <button
+                  class="btn btn-outline"
+                  on:click|preventDefault={disconnect}>Disconnect</button
+                >
+              </div>
             </div>
           </div>
+          {#await getStamps($address) then stamps}
+            <div class="flex-none w-full md:w-[300px]">
+              <h3 class="px-8 pt-4 text-3xl">Stamps ({stamps.length})</h3>
+              <p class="px-8">Pages stamped.</p>
+              <Passport {stamps} />
+            </div>
+          {/await}
         {:else}
           <div class="flex space-x-8">
             <div class="card shadow-xl w-1/2 flex-1">

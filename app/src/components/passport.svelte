@@ -1,4 +1,5 @@
 <script>
+  import { take, takeLast } from "ramda";
   export let stamps = [];
 </script>
 
@@ -25,7 +26,12 @@
                 <p class="text-sm font-medium text-gray-900">
                   {stamp.title}
                 </p>
-                <a href="/assets/{stamp.id}">View Asset</a>
+                <a
+                  class="text-sm"
+                  target="_blank"
+                  href="https://arweave.dev/{stamp.id}"
+                  >{take(6, stamp.id)}...{takeLast(6, stamp.id)}</a
+                >
               </a>
             </div>
           </div>
