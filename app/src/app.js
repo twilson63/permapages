@@ -2,19 +2,11 @@ import * as pageModel from './models/pages.js'
 import * as profileModel from './models/profiles.js'
 import Async from 'crocks/Async/index.js'
 
-import compose from 'ramda/src/compose'
-import pluck from 'ramda/src/pluck'
-import reverse from 'ramda/src/reverse'
-import sortBy from 'ramda/src/sortBy'
-import prop from 'ramda/src/prop'
-import map from 'ramda/src/map'
-import path from 'ramda/src/path'
-import head from 'ramda/src/head'
-import isEmpty from 'ramda/src/isEmpty'
-import identity from 'ramda/src/identity'
-import propEq from 'ramda/src/propEq'
-import assoc from 'ramda/src/assoc'
-import has from 'ramda/src/has'
+import {
+  compose, pluck, reverse, sortBy, groupBy, prop, map, path, head,
+  isEmpty, identity, propEq, assoc, has,
+  values, reduce, find, keys
+} from 'ramda'
 
 export function widgets({ gql }) {
   async function list() {
@@ -53,10 +45,35 @@ export function profiles({ gql, post, load }) {
       .toPromise()
   }
 
+  async function stamps(addr) {
+    return Async.fromPromise(fetch)('https://cache.permapages.app')
+      .chain(res => Async.fromPromise(res.json.bind(res))())
+      .map(prop('stamps'))
+      .map(values)
+      .map(reverse)
+      .map(groupBy((s) => s.address))
+      .map(stampers => reduce((a, x) => [
+        ...a,
+        {
+          stamper: x,
+          count: stampers[x].length,
+          assets: stampers[x].map((o) => o.asset),
+        },
+      ], [], keys(stampers)
+      ))
+      .map(find(propEq('stamper', addr)))
+      .map(prop('assets'))
+      .map(buildAssetQuery)
+      .chain(Async.fromPromise(gql))
+      .map(pluckNodes)
+      .toPromise()
+  }
+
   return {
     get,
     create,
-    load
+    load,
+    stamps
   }
 }
 
@@ -166,6 +183,29 @@ query {
     }
   }
 }  
+  `
+}
+
+function buildAssetQuery(assets) {
+  return `
+query {
+  transactions(
+    first: 100,
+    ids: [${assets.map(a => `"${a}"`).join(',')}]) {
+    edges {
+      node {
+        id
+        owner {
+          address
+        },
+        tags {
+          name
+          value
+        }
+      }
+    }
+  }
+}
   `
 }
 

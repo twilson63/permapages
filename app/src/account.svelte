@@ -4,6 +4,7 @@
   import { profiles } from "./app.js";
   import { Jumper } from "svelte-loading-spinners";
   import ProfileView from "./components/profile.svelte";
+  import Passport from "./components/passport.svelte";
 
   import {
     gql,
@@ -26,6 +27,12 @@
   async function getPageProfile(address) {
     const result = await profileMgr.get(address);
     $account = { id: address, profile: result };
+    return result;
+  }
+
+  async function getStamps(address) {
+    const result = await profileMgr.stamps(address);
+    console.log(result);
     return result;
   }
 
@@ -69,13 +76,19 @@
       {#await profileObject then p}
         {#if p}
           <ProfileView profile={p} />
-          <div class="flex space-x-2">
-            <a href="/pages" class="btn btn-secondary">Pages</a>
-            <a href="/arns" class="btn btn-primary">ArNS</a>
-            <a class="btn btn-info" href="/account/edit">Edit Profile</a>
-            <button class="btn btn-outline" on:click|preventDefault={disconnect}
-              >Disconnect</button
-            >
+          <div class="flex">
+            {#await getStamps($address) then stamps}
+              <Passport {stamps} />
+            {/await}
+            <div class="flex space-x-2">
+              <a href="/pages" class="btn btn-secondary">Pages</a>
+              <a href="/arns" class="btn btn-primary">ArNS</a>
+              <a class="btn btn-info" href="/account/edit">Edit Profile</a>
+              <button
+                class="btn btn-outline"
+                on:click|preventDefault={disconnect}>Disconnect</button
+              >
+            </div>
           </div>
         {:else}
           <div class="flex space-x-8">
