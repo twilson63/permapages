@@ -85,7 +85,7 @@
     public: true,
     widgets: [],
     includeFooter: true,
-    allowStamps: true,
+    allowStamps: false,
   };
 
   if (meta().query.fork) {
@@ -154,30 +154,30 @@
 
       // allowStamps is set
       if (page.allowStamps) {
-        if (!find(propEq("name", "passport"), page.widgets)) {
-          page.widgets = [
-            ...page.widgets,
-            {
-              source: "https://stamp-widget.arweave.dev",
-              elementId: "passport",
-              name: "passport",
-              description: "Permapage Passport Widget",
-              version: "latest",
-            },
-          ];
-        }
+        //if (!find(propEq("elementId", "passport"), page.widgets)) {
+        page.widgets = [
+          ...page.widgets.filter((w) => w.elementId !== "passport"),
+          {
+            source: "https://stamp-widget.arweave.dev",
+            elementId: "passport",
+            name: "passport",
+            description: "Permapage Passport Widget",
+            version: "latest",
+          },
+        ];
+        // }
       } else {
         page.widgets = page.widgets.filter((w) => w.elementId !== "passport");
       }
 
       // upgrade current page widgets
-      if (allWidgets.length > 0) {
-        page.widgets = page.widgets.map((w) => {
-          return allWidgets.find(
-            (_widget) => _widget.elementId === w.elementId
-          );
-        });
-      }
+      // if (allWidgets.length > 0) {
+      //   page.widgets = page.widgets.map((w) => {
+      //     return allWidgets.find(
+      //       (_widget) => _widget.elementId === w.elementId
+      //     );
+      //   });
+      // }
 
       // handle widgets
       if (page.widgets) {
