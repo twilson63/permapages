@@ -23,8 +23,8 @@ import { Async } from 'crocks'
 //const PAGE_SRC = 'OhGbHpgw-GIXhUaDZIzUjVm5rXWtd_2hrABWlB83rb8'
 const WARP_URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
 const PAGE_SRC = 'kSiq990WBHkz6uYO_1z7jylm3YbRrcpm7UfhYUb8Cg0'
-const DATAFI_PAGE_SRC = 'M7Z1ag4OBmW7D4fkYyUUGKTneIeCFoURESBKXJGBFXo'
-
+//const DATAFI_PAGE_SRC = 'M7Z1ag4OBmW7D4fkYyUUGKTneIeCFoURESBKXJGBFXo'
+const DATAFI_PAGE_SRC = 'xI4CQJIanHs0nmg4jU2APZf1S92WwUOng30ncLIC4n8'
 
 const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] =
   ['App-Name', 'App-Version', 'SDK', 'Content-Type', 'Contract-Src', 'Init-State']
@@ -168,16 +168,19 @@ export const postWebpage = async (data) => {
     title: data.title,
     owner: data.owner,
     balances: {
-      [data.owner]: 1
+      [data.owner]: 10000
     },
     contentType: 'text/html',
     createdAt: Date.now(),
     invocations: [],
-    emergencyHaltWallet: '',
+    emergencyHaltWallet: data.owner,
     halted: false,
     pairs: [],
     usedTransfers: [],
-    foreignCalls: []
+    foreignCalls: [],
+    claims: [],
+    claimable: [],
+    settings: [["isTradeable", true]]
   }
 
   // create data-entry
@@ -191,6 +194,7 @@ export const postWebpage = async (data) => {
       { name: CONTRACT_SRC, value: DATAFI_PAGE_SRC },
       { name: INIT_STATE, value: JSON.stringify(initState) },
       { name: 'Page-Title', value: data.title },
+      { name: 'Page-Description', value: data.description },
       { name: 'Page-Code', value: data.code },
       { name: 'Type', value: 'PermaWebPage' }
     ]

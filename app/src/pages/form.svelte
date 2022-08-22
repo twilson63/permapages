@@ -125,6 +125,9 @@
             pairs: [],
             usedTransfers: [],
             foreignCalls: [],
+            claims: [],
+            claimable: [],
+            settings: [["isTradeable", true]],
           },
           p.state
         );
