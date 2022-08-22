@@ -102,6 +102,7 @@ export function pages({ register, post, gql, postWebpage, load, loadState }) {
       .chain(page =>
         Async.of(page).map(({ title, owner, code, description, widgets, html, theme, includeFooter, state }) => ({
           title,
+          description,
           html: htmlTemplate(title, owner, code, description, widgets, html, theme, includeFooter),
           state,
           owner,

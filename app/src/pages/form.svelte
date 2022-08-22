@@ -120,18 +120,18 @@
             contentType: "text/html",
             createdAt: Date.now(),
             invocations: [],
-            emergencyHaltWallet: "",
             halted: false,
             pairs: [],
             usedTransfers: [],
             foreignCalls: [],
+            emergencyHaltWallet: $address,
             claims: [],
             claimable: [],
             settings: [["isTradeable", true]],
           },
           p.state
         );
-
+        console.log({ state: page.state });
         const ants = await listANTs($address);
         ant = ants.find((ant) =>
           ant.records["@"]?.transactionId

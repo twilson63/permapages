@@ -49,7 +49,10 @@ const schema = z.object({
     halted: z.boolean().optional(),
     pairs: z.array(z.string()).optional(),
     usedTransfers: z.array(z.any()).optional(),
-    foreignCalls: z.array(z.any()).optional()
+    foreignCalls: z.array(z.any()).optional(),
+    claims: z.array(z.any()).optional(),
+    claimable: z.array(z.any()).optional(),
+    settings: z.array(z.any()).optional()
   }).optional()
 })
 
