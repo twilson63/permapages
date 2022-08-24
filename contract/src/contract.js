@@ -180,18 +180,22 @@ export async function handle(state, action) {
   }
 
   if (input.function === "addPair") {
-    return { state: await AddPair(state, action) };
+    const _ = await AddPair(state, action)
+    return { state: _.state };
   }
 
   if (input.function === "cancelOrder") {
-    return { state: await CancelOrder(state, action) };
+    const _ = await CancelOrder(state, actoin)
+    return { state: _.state };
   }
 
   if (input.function === "createOrder") {
-    return { state: await CreateOrder(state, action) };
+    const _ = await CreateOrder(state, action)
+    return { state: _.state };
   }
 
   if (input.function === "halt") {
-    return { state: await Halt(state, action) };
+    const _ = await Halt(state, action)
+    return { state: _.state };
   }
 }
