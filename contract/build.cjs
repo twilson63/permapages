@@ -2,7 +2,7 @@ const { build } = require("esbuild");
 const replace = require("replace-in-file");
 
 build({
-  entryPoints: ["./src/contract.js"],
+  entryPoints: ["./src/contract.ts"],
   outdir: "./dist",
   minify: false,
   bundle: true,

@@ -1,6 +1,15 @@
-import { AddPair, CancelOrder, CreateOrder, Halt } from '@verto/flex'
+import { AddPair, CancelOrder, CreateOrder, Halt } from "@verto/flex";
+import {
+  StateInterface,
+  ActionInterface,
+  BalanceInterface,
+  ForeignCallInterface,
+} from "./faces";
 
-export async function handle(state, action) {
+export async function handle(
+  state: StateInterface,
+  action: ActionInterface
+): Promise<{ state: StateInterface } | { result: BalanceInterface }> {
   const balances = state.balances;
   const claimable = state.claimable;
   const claims = state.claims;
@@ -64,14 +73,14 @@ export async function handle(state, action) {
     );
 
     // Get foreign calls for this contract that have not been executed
-    const calls = foreignState.foreignCalls.filter(
-      (element) =>
+    const calls: ForeignCallInterface[] = foreignState.foreignCalls.filter(
+      (element: ForeignCallInterface) =>
         element.contract === SmartWeave.contract.id &&
         !state.invocations.includes(element.txID)
     );
 
     // Run all invocations
-    let res = state;
+    let res: StateInterface = state;
 
     for (const entry of calls) {
       // Run invocation
@@ -204,17 +213,17 @@ export async function handle(state, action) {
   }
 
   if (input.function === "cancelOrder") {
-    const _ = await CancelOrder(state, actoin)
+    const _ = await CancelOrder(state, action)
     return { state: _.state };
   }
 
   if (input.function === "createOrder") {
-    const _ = await CreateOrder(state, action)
-    return { state: _.state };
+    const _ = await CreateOrder(state, action);
+    return { state: _.state }
   }
 
   if (input.function === "halt") {
-    const _ = await Halt(state, action)
+    const _ = await Halt(state, action);
     return { state: _.state };
   }
 }
