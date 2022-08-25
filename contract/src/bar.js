@@ -7,6 +7,16 @@ export async function handle(state, action) {
   const input = action.input;
   const caller = action.caller;
 
+  if (input.function === "mint") {
+    const amountToMint = parseInt(SmartWeave.transaction.reward) / 1e6;
+    if (!balances[caller]) {
+      balances[caller] = amountToMint;
+    } else {
+      balances[caller] += amountToMint;
+    }
+    return { state };
+  }
+
   if (input.function === "transfer") {
     const target = input.target;
     const quantity = input.qty;

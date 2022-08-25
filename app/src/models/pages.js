@@ -36,24 +36,7 @@ const schema = z.object({
       version: z.string().optional()
     })
   ).optional(),
-  state: z.object({
-    ticker: z.string().optional(),
-    name: z.string().optional(),
-    title: z.string().optional(),
-    owner: z.string().optional(),
-    balances: z.object({}).passthrough().optional(),
-    contentType: z.string().optional(),
-    createdAt: z.number().optional(),
-    invocations: z.array(z.any()).optional(),
-    emergencyHaltWallet: z.string().optional(),
-    halted: z.boolean().optional(),
-    pairs: z.array(z.string()).optional(),
-    usedTransfers: z.array(z.any()).optional(),
-    foreignCalls: z.array(z.any()).optional(),
-    claims: z.array(z.any()).optional(),
-    claimable: z.array(z.any()).optional(),
-    settings: z.array(z.any()).optional()
-  }).optional()
+  state: z.object({}).passthrough().optional()
 })
 
 const getTag = name => compose(
