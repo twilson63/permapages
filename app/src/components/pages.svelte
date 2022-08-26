@@ -1,4 +1,6 @@
 <script>
+  import take from "ramda/src/take";
+
   export let records = [];
 </script>
 
@@ -16,7 +18,7 @@
     <tbody>
       <!-- row 1 -->
       <tr>
-        <td>{title}</td>
+        <td>{title.length > 30 ? take(30, title) + "..." : title}</td>
         <td>{status ? status.split(0, 50) : "no status"}...</td>
         <td>{webpage}</td>
 

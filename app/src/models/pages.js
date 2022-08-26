@@ -13,7 +13,7 @@ const schema = z.object({
   owner: z.string(),
   contentType: z.literal('text/html').default('text/html'),
   subdomain: z.string().max(20).optional(),
-  title: z.string().max(20),
+  title: z.string().max(150),
   description: z.string().max(150),
   status: z.string().max(150).optional(),
   protocol: z.string().default('PermaPages-v0.3'),

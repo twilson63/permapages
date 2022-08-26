@@ -512,11 +512,11 @@
           class="input input-bordered"
           id="title"
           name="title"
-          maxlength="20"
+          maxlength="150"
           bind:value={page.title}
           placeholder="Enter title of your page that will appear on the browser tab."
         />
-        <small>(max: 20 characters)</small>
+        <small>(max: 150 characters)</small>
       </div>
       <div class="form-control">
         <label for="description" class="label">Description</label>
