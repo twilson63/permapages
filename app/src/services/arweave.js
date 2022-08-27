@@ -24,7 +24,8 @@ import { Async } from 'crocks'
 const WARP_URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
 const PAGE_SRC = 'kSiq990WBHkz6uYO_1z7jylm3YbRrcpm7UfhYUb8Cg0'
 //const DATAFI_PAGE_SRC = 'M7Z1ag4OBmW7D4fkYyUUGKTneIeCFoURESBKXJGBFXo'
-const DATAFI_PAGE_SRC = 'iSKCrc_-JoMmzk2Cqn2j2HAoYulmy_9Ni4rXiGSurfk'
+//const DATAFI_PAGE_SRC = 'iSKCrc_-JoMmzk2Cqn2j2HAoYulmy_9Ni4rXiGSurfk'
+const DATAFI_PAGE_SRC = '9OE9LRURVAxW24Sbia1XezsydXeCqhc34x0PCT0Tg7U'
 
 const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] =
   ['App-Name', 'App-Version', 'SDK', 'Content-Type', 'Contract-Src', 'Init-State']

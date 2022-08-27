@@ -85,14 +85,6 @@
         tradeableSetting === true || tradeableSetting === void 0,
         `This token does not allow trading (${newPair})`
       );
-      ContractAssert(
-        !!tokenState.invocations,
-        'Contract does not have an "invocations" filed, making it incompatible with FCP'
-      );
-      ContractAssert(
-        !!tokenState.foreignCalls,
-        'Contract does not have an "foreignCalls" filed, making it incompatible with FCP'
-      );
     } catch (e) {
       throw new ContractError(e);
     }

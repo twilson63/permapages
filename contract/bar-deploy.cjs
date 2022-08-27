@@ -13,7 +13,6 @@ const arweave = Arweave.init({
 
 async function main() {
 
-
   const addr = await arweave.wallets.jwkToAddress(wallet)
   const warp = WarpNodeFactory.memCached(arweave)
 
@@ -21,21 +20,19 @@ async function main() {
     wallet,
     src: source,
     initState: JSON.stringify({
-      ticker: 'TEST-BARv2',
-      owner: addr,
-      balances: {
-        [addr]: Number(arweave.ar.arToWinston('100'))
+      "ticker": "TEST-BARv3",
+      "name": "TEST-BARv3",
+      "balances": {
+        [addr]: 100000000000,
+        'hB-g6Eed6n_26f5yj8geR3WjO5khTfYIPrLopJgND0Y': 100000000000
       },
-      createdAt: Date.now(),
-      invocations: [],
-      emergencyHaltWallet: addr,
-      halted: false,
-      pairs: [],
-      usedTransfers: [],
-      foreignCalls: [],
-      claims: [],
-      claimable: [],
-      settings: [["isTradeable", true]]
+      "settings": [
+        ["communityLogo", "_32hAgwNt4ZVPisYAP3UQNUbwi_6LPUuZldPFCLm0fo"],
+        ["isTradeable", true]
+      ],
+      "divisibility": 6,
+      "claims": [],
+      "claimable": [],
     })
   }, true)
 

@@ -2,7 +2,7 @@ const { build } = require("esbuild");
 const replace = require("replace-in-file");
 
 build({
-  entryPoints: ["./src/bar.ts"],
+  entryPoints: ["./src/bar.js"],
   outdir: "./dist",
   minify: false,
   bundle: true,
