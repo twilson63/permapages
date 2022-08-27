@@ -36,6 +36,7 @@ async function main() {
       pairs: [],
       usedTransfers: [],
       foreignCalls: [],
+      canEvolve: true,
       claims: [],
       claimable: [],
       settings: [["isTradeable", true]]
