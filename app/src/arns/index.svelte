@@ -171,8 +171,9 @@
 
     submitDialog = false;
     if (result.ok) {
+      list = doListANTS($address);
       successData = {
-        message: "Successfully changed transaction id",
+        message: "Successfully added undername",
       };
       successDialog = true;
     } else {
@@ -187,7 +188,7 @@
   }
 
   function showChangeDialog(e) {
-    changeData = { ANT: e.detail.id };
+    changeData = { ANT: e.detail.ANT, subdomain: e.detail.subdomain };
     changeDialog = true;
   }
 
@@ -206,7 +207,7 @@
 
     const result = await updateSubDomain({
       ant: changeData.ANT,
-      subdomain: "@",
+      subdomain: changeData.subdomain,
       transactionId: changeData.transactionId,
     });
 
@@ -405,6 +406,9 @@
   on:click={handleChange}
 >
   <h3 class="text-3xl">Change Transaction Id</h3>
+  {#if changeData.subdomain !== "@"}
+    <p class="my-8">Undername: {changeData.subdomain}</p>
+  {/if}
   <div class="form-control">
     <label class="label">Choose reference</label>
     <label class="label">

@@ -14,6 +14,12 @@
     };
   }
 
+  function handleChange(data) {
+    return () => {
+      dispatch("change", data);
+    };
+  }
+
   function handleRemove(data) {
     return () => {
       dispatch("remove", data);
@@ -46,59 +52,113 @@
       </thead>
       <tbody>
         {#each records as record}
-          <tr>
-            <td>
-              {#await checkSubdomain(record.subdomain) then active}
-                {#if active}
-                  <div class="bg-success text-success rounded-2xl w-[24px]">
-                    U
-                  </div>
-                {:else}
-                  <Jumper size="32" color="pink" />
-                {/if}
-              {/await}
-            </td>
-            <th
-              ><a
-                target="_blank"
-                class="link"
-                href="https://{record.subdomain}.arweave.dev"
-                >{record.subdomain}</a
-              ></th
-            >
-            <td class="hidden md:table-cell"
-              >{record.records["@"].transactionId
-                ? record.records["@"].transactionId
-                : record.records["@"]}</td
-            >
-            <td class="hidden md:table-cell"
-              ><a
-                target="_blank"
-                class="link"
-                href="https://{record.subdomain}.arweave.dev"
-                >https://{record.subdomain}.arweave.dev</a
-              >
-            </td>
-            <td>
-              <button
-                on:click={handle("change", record.id)}
-                class="link uppercase">CHG</button
-              >
-              <!--
+          {#each Object.entries(record.records) as x}
+            {#if x[0] === "@"}
+              <tr>
+                <td>
+                  {#await checkSubdomain(record.subdomain) then active}
+                    {#if active}
+                      <div class="bg-success text-success rounded-2xl w-[24px]">
+                        U
+                      </div>
+                    {:else}
+                      <Jumper size="32" color="pink" />
+                    {/if}
+                  {/await}
+                </td>
+                <th
+                  ><a
+                    target="_blank"
+                    class="link"
+                    href="https://{record.subdomain}.arweave.dev"
+                    >{record.subdomain}</a
+                  ></th
+                >
+                <td class="hidden md:table-cell"
+                  >{record.records["@"].transactionId
+                    ? record.records["@"].transactionId
+                    : record.records["@"]}</td
+                >
+                <td class="hidden md:table-cell"
+                  ><a
+                    target="_blank"
+                    class="link"
+                    href="https://{record.subdomain}.arweave.dev"
+                    >https://{record.subdomain}.arweave.dev</a
+                  >
+                </td>
+                <td>
+                  <button
+                    on:click={handleChange({ ANT: record.id, subdomain: "@" })}
+                    class="link uppercase">CHG</button
+                  >
+                  <!--
               <button
                 on:click={handle("transfer", record.id)}
                 class="link uppercase">TSFR</button
               >
               -->
-              <button
-                on:click={handleRemove({
-                  ANT: record.id,
-                  subdomain: record.subdomain,
-                })}
-                class="link uppercase">RM</button
-              >
-            </td>
-          </tr>
+                  <button
+                    on:click={handleRemove({
+                      ANT: record.id,
+                      subdomain: record.subdomain,
+                    })}
+                    class="link uppercase">RM</button
+                  >
+                </td>
+              </tr>
+            {:else}
+              <tr>
+                <td>
+                  {#await checkSubdomain(record.subdomain) then active}
+                    {#if active}
+                      <div class="bg-success text-success rounded-2xl w-[24px]">
+                        U
+                      </div>
+                    {:else}
+                      <Jumper size="32" color="pink" />
+                    {/if}
+                  {/await}
+                </td>
+                <th
+                  ><a
+                    target="_blank"
+                    class="link"
+                    href="https://{x[0]}_{record.subdomain}.arweave.dev"
+                    >{x[0]}_{record.subdomain}</a
+                  ></th
+                >
+                <td class="hidden md:table-cell">{x[1]}</td>
+                <td class="hidden md:table-cell"
+                  ><a
+                    target="_blank"
+                    class="link"
+                    href="https://{x[0]}_{record.subdomain}.arweave.dev"
+                    >https://{x[0]}_{record.subdomain}.arweave.dev</a
+                  >
+                </td>
+                <td>
+                  <button
+                    on:click={handleChange({ ANT: record.id, subdomain: x[0] })}
+                    class="link uppercase">CHG</button
+                  >
+                  <!--
+            <button
+              on:click={handle("transfer", record.id)}
+              class="link uppercase">TSFR</button
+            >
+            -->
+                  <button
+                    on:click={handleRemove({
+                      ANT: record.id,
+                      subdomain: x[0],
+                    })}
+                    class="link uppercase">RM</button
+                  >
+                </td>
+              </tr>
+            {/if}
+          {/each}
         {/each}
       </tbody>
     </table>
