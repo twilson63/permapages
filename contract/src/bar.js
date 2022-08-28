@@ -88,6 +88,14 @@ export async function handle(state, action) {
   if (input.function === "claim") {
     const txID = input.txID;
     const qty = input.qty;
+
+    // make claim idempotent - if already claimed just return success
+    for (let i = 0; i < claims.length; i++) {
+      if (claims[i] === txID) {
+        return { state }
+      }
+    }
+
     if (!claimable.length) {
       throw new ContractError("Contract has no claims available");
     }
@@ -96,12 +104,6 @@ export async function handle(state, action) {
     }
     if (qty === void 0 || typeof qty !== "number") {
       throw new ContractError("Qty must be a number");
-    }
-
-    for (let i = 0; i < claims.length; i++) {
-      if (claims[i] === txID) {
-        return { state }
-      }
     }
 
     let obj, index;
