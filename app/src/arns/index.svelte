@@ -37,6 +37,11 @@
   let connectDialog = false;
   let registerDialog = false;
   let registerData = { subdomain: "", type: "permapage" };
+  let undernameDialog = false;
+  let undernameData = {
+    record: "",
+    type: "permaapge",
+  };
   let successDialog = false;
   let successData = {};
   let errorDialog = false;
@@ -132,6 +137,53 @@
       errorMessage = result.message;
       errorDialog = true;
     }
+  }
+
+  async function addUndername() {
+    if ($address) {
+      undernameDialog = true;
+      // load pages
+      // show dialog
+    } else {
+      // show message dialog
+      connectDialog = true;
+    }
+  }
+
+  async function submitUndername() {
+    undernameDialog = false;
+    submitDialog = true;
+    undernameData.id = (await doListANTS($address)).find(
+      (rec) => rec.subdomain === undernameData.subdomain
+    ).id;
+    if (undernameData.id === null) {
+      submitDialog = false;
+      errorMessage = "Could not find ANT for subdomain";
+      errorDialog = true;
+      return;
+    }
+
+    const result = await updateSubDomain({
+      ant: undernameData.id,
+      subdomain: undernameData.record,
+      transactionId: undernameData.transactionId,
+    });
+
+    submitDialog = false;
+    if (result.ok) {
+      successData = {
+        message: "Successfully changed transaction id",
+      };
+      successDialog = true;
+    } else {
+      errorMessage = result.message;
+      errorDialog = true;
+    }
+
+    undernameData = {
+      record: "",
+      type: "permaapge",
+    };
   }
 
   function showChangeDialog(e) {
@@ -302,6 +354,9 @@
                 disabled={balance === "Not Found" || ar === "Not Found"}
                 on:click={registerDomain}
                 class="btn btn-secondary">Register</button
+              >
+              <button on:click={addUndername} class="btn btn-outline"
+                >Add Undername</button
               >
               {#if balance === "Not Found"}
                 <a class="btn" href="/arns/claim"> Claim Tokens </a>
@@ -570,4 +625,100 @@
   <div class="my-8 flex items-center justify-center">
     <Jumper size="60" color="#a991f7" />
   </div>
+</Modal>
+<Modal open={undernameDialog} ok={false}>
+  <h3 class="text-2xl">Add Undername</h3>
+  <p>
+    An undername is a prefix to a subdomain combined with an underscore. There
+    is no additional cost for an undername.
+  </p>
+  <form on:submit|preventDefault={submitUndername}>
+    <div class="form-control">
+      <label class="label">Subdomain</label>
+      <select
+        class="select select-bordered w-full"
+        bind:value={undernameData.subdomain}
+      >
+        {#await list then records}
+          {#each records as record}
+            <option value={record.subdomain}>{record.subdomain}</option>
+          {/each}
+        {/await}
+      </select>
+    </div>
+    <div class="form-control">
+      <label class="label">Undername</label>
+      <label class="input-group w-full">
+        <input
+          class="input input-bordered w-full"
+          bind:value={undernameData.record}
+          minlength="1"
+          maxlength="20"
+          pattern="^(?:[a-zA-Z0-9])+[a-zA-Z0-9-]*(?:[a-zA-Z0-9])$"
+        />
+        <span>_{undernameData.subdomain}.arweave.dev</span>
+      </label>
+      <small class="mt-2 text-secondary"
+        >Only Letters and Numbers and '_,-' maybe used to create subdomain - no
+        '_,-' allowed as last character.</small
+      >
+    </div>
+    <div class="mt-8 form-control">
+      <label class="label">Choose reference</label>
+      <label class="label">
+        <input
+          type="radio"
+          name="reference"
+          class="radio radio-primary"
+          value="permapage"
+          bind:group={undernameData.type}
+        />
+        Permapage
+      </label>
+      <label class="label">
+        <input
+          type="radio"
+          name="reference"
+          class="radio radio-primary"
+          bind:group={undernameData.type}
+          value="arweave"
+        />
+        Arweave Transaction
+      </label>
+    </div>
+    {#if undernameData.type === "permapage"}
+      <div class="form-control">
+        <label class="label">Select Permapage</label>
+        <select
+          class="select select-bordered"
+          bind:value={undernameData.transactionId}
+        >
+          <option class="option" value="">Select Permapage</option>
+          {#await listPermapages() then permapages}
+            {#each permapages as p}
+              <option value={p.webpage}>{p.title}</option>
+            {/each}
+          {/await}
+        </select>
+      </div>
+    {/if}
+    {#if undernameData.type === "arweave"}
+      <div class="form-control">
+        <label class="label">Arweave Transaction</label>
+        <input
+          class="input input-bordered"
+          bind:value={undernameData.transactionId}
+          placeholder="Arweave Transaction Id"
+        />
+      </div>
+    {/if}
+    <div class="mt-16 flex space-x-2 justify-end">
+      <button class="btn btn-primary">Submit</button>
+      <button
+        type="button"
+        class="btn"
+        on:click={() => (undernameDialog = false)}>Cancel</button
+      >
+    </div>
+  </form>
 </Modal>
