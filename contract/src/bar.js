@@ -13,6 +13,16 @@ export async function handle(state, action) {
     }
     return { state };
   }
+
+  if (input.function === 'evolve') {
+    if (state.canEvolve) {
+      if (state.creator === action.caller) {
+        state.evolve = action.input.value
+      }
+    }
+    return { state }
+  }
+
   if (input.function === "transfer") {
     const target = input.target;
     const quantity = input.qty;
