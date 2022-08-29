@@ -16,6 +16,14 @@
       }
       return { state };
     }
+    if (input.function === "evolve") {
+      if (state.canEvolve) {
+        if (state.creator === action.caller) {
+          state.evolve = action.input.value;
+        }
+      }
+      return { state };
+    }
     if (input.function === "transfer") {
       const target = input.target;
       const quantity = input.qty;
@@ -91,6 +99,11 @@
     if (input.function === "claim") {
       const txID = input.txID;
       const qty = input.qty;
+      for (let i = 0; i < claims.length; i++) {
+        if (claims[i] === txID) {
+          return { state };
+        }
+      }
       if (!claimable.length) {
         throw new ContractError("Contract has no claims available");
       }
@@ -99,11 +112,6 @@
       }
       if (qty === void 0 || typeof qty !== "number") {
         throw new ContractError("Qty must be a number");
-      }
-      for (let i = 0; i < claims.length; i++) {
-        if (claims[i] === txID) {
-          return { state };
-        }
       }
       let obj, index;
       for (let i = 0; i < claimable.length; i++) {

@@ -20,11 +20,12 @@ async function main() {
     wallet,
     src: source,
     initState: JSON.stringify({
-      "ticker": "TEST-BARv3",
-      "name": "TEST-BARv3",
+      "ticker": "TEST-BARv4",
+      "name": "TEST-BARv4",
       "balances": {
         [addr]: 100000000000,
-        'hB-g6Eed6n_26f5yj8geR3WjO5khTfYIPrLopJgND0Y': 100000000000
+        'hB-g6Eed6n_26f5yj8geR3WjO5khTfYIPrLopJgND0Y': 100000000000,
+        'vLRHFqCw1uHu75xqB4fCDW-QxpkpJxBtFD9g4QYUbfw': 100000000000
       },
       "settings": [
         ["communityLogo", "_32hAgwNt4ZVPisYAP3UQNUbwi_6LPUuZldPFCLm0fo"],
