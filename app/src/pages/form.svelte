@@ -192,7 +192,7 @@
 
       page.html = `<div class="flex flex-col md:flex-row space-x-4">  
         <div class="flex-1 md:min-h-screen">
-          <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-24">
+          <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-24 dark:text-[#D3D7E0] dark:prose-headings:text-[#D3D7E0] dark:prose-headings:text-[#D3D7E0]">
           ${marked.parse(page.content)}</div></div>
         <div class="flex-none">
           <div class="flex flex-col max-w-[300px] justify-end space-y-8">
