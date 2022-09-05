@@ -194,10 +194,10 @@ export const postWebpage = async (data) => {
       { name: CONTENT_TYPE, value: 'text/html' },
       { name: CONTRACT_SRC, value: DATAFI_PAGE_SRC },
       { name: INIT_STATE, value: JSON.stringify(initState) },
-      { name: 'Page-Title', value: data.title },
-      { name: 'Page-Description', value: data.description },
+      { name: 'Title', value: data.title },
+      { name: 'Description', value: data.description },
       { name: 'Page-Code', value: data.code },
-      { name: 'Type', value: 'PermaWebPage' }
+      { name: 'Type', value: 'page' }
     ]
   }
 
@@ -256,7 +256,9 @@ export const postPageTx = async (page) => {
   tx.addTag('Content-Type', 'application/json')
   tx.addTag('App-Name', 'PermaPages')
   tx.addTag('Protocol', page.protocol)
-  tx.addTag('Page-Title', page.title)
+  tx.addTag('Title', page.title)
+  tx.addTag('Description', page.description)
+  tx.addTag('Type', 'page')
   tx.addTag('Page-Code', page.code)
   tx.addTag('Status', page.status)
   tx.addTag('Webpage', page.webpage)

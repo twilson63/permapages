@@ -69,7 +69,7 @@ export function profiles({ gql, post, load }) {
       .map(pluckNodes)
       .map(map(tx => ({
         id: tx.id,
-        title: find(propEq('name', 'Page-Title'), tx.tags).value
+        title: (find(propEq('name', 'Title'), tx.tags) || find(propEq('name', 'Page-Title'), tx.tags)).value
       })))
       .toPromise()
   }
