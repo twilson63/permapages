@@ -128,7 +128,7 @@
                     >{x[0]}_{record.subdomain}</a
                   ></th
                 >
-                <td class="hidden md:table-cell">{x[1]}</td>
+                <td class="hidden md:table-cell">{x[1].transactionId}</td>
                 <td class="hidden md:table-cell"
                   ><a
                     target="_blank"

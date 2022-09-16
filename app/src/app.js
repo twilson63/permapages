@@ -283,12 +283,6 @@ function htmlTemplate(title, owner, code, description, widgets, body, theme = "d
   </head>
   <body>
 
-  ${widgets.length > 0 ? `
-  <div id="widget-connector"></div>
-  <script defer type="module" src="https://arweave.net/tnnm13K86GcOhtkilZAk3DZeJeHSCZNj7cDTpnZ1lw8"></script>
-  ` : ''} 
-  
-  
     <main class="bg-base-100">
       ${body}
     </main>
