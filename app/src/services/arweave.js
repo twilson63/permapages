@@ -256,7 +256,7 @@ export const postPageTx = async (page) => {
   tx.addTag('Content-Type', 'application/json')
   tx.addTag('App-Name', 'PermaPages')
   tx.addTag('Protocol', page.protocol)
-  // tx.addTag('Title', page.title)
+  tx.addTag('Page-Title', page.title)
   // tx.addTag('Description', page.description)
   // tx.addTag('Type', 'page')
   tx.addTag('Page-Code', page.code)

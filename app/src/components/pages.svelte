@@ -19,7 +19,7 @@
       <!-- row 1 -->
       <tr>
         <td>{title.length > 30 ? take(30, title) + "..." : title}</td>
-        <td>{status ? status.split(0, 50) : "no status"}...</td>
+        <td>{status ? take(20, status) : "no status"}...</td>
         <td>{webpage}</td>
 
         <td>
