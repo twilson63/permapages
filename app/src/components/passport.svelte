@@ -20,7 +20,13 @@
               <img class="h-10 w-10" src="stamp-logo.webp" alt="" />
             </div>
             <div class="flex-1 min-w-0">
-              <a href="#" class="focus:outline-none">
+              <a
+                target="_new"
+                href={stamp.type === "image"
+                  ? `https://img.arweave.dev/#/show/${stamp.id}`
+                  : `https://arweave.net/${stamp.id}`}
+                class="focus:outline-none"
+              >
                 <!-- Extend touch target to entire panel -->
                 <span class="absolute inset-0" aria-hidden="true" />
                 <p class="text-sm font-medium text-gray-900">
@@ -29,7 +35,9 @@
                 <a
                   class="text-sm"
                   target="_blank"
-                  href="https://arweave.dev/{stamp.id}"
+                  href={stamp.type === "image"
+                    ? `https://img.arweave.dev/#/show/${stamp.id}`
+                    : `https://arweave.net/${stamp.id}`}
                   >{take(6, stamp.id)}...{takeLast(6, stamp.id)}</a
                 >
               </a>
