@@ -151,7 +151,7 @@ export async function getANT(ANT) {
     //console.log('getANT')
     subdomain = getSubdomain(ANT, regState.records)
     const antState = await ant.currentState()
-    console.log(antState)
+    //console.log(antState)
     return { ...antState, id: ANT, subdomain }
   } catch (e) {
     return { id: ANT, subdomain }
@@ -159,7 +159,7 @@ export async function getANT(ANT) {
 }
 
 export async function updateSubDomain({ ant, subdomain = '@', transactionId }) {
-  console.log('ANT', ant)
+  //console.log('ANT', ant)
   const id = await warp.pst(ant).connect('use_wallet')
     .writeInteraction({
       function: 'setRecord',

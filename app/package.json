@@ -1,7 +1,7 @@
 {
   "name": "permapages",
   "private": true,
-  "version": "0.1.10i",
+  "version": "0.1.10j",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -40,6 +40,7 @@
     "dompurify": "^2.3.8",
     "highlight.js": "^11.5.1",
     "markdown-it": "^13.0.1",
+    "markdown-it-attrs": "^4.1.4",
     "markdown-it-container": "^3.0.0",
     "marked": "^4.0.14",
     "mustache": "^4.2.0",

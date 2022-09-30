@@ -13,16 +13,15 @@
   import { register, listANTs, updateSubDomain } from "../services/registry.js";
   import { pages, profiles, widgets } from "../app.js";
   import { address, pageCache } from "../store.js";
-  //import { marked } from "marked";
   import markdownIt from "markdown-it";
   import container from "markdown-it-container";
+  import attrs from "markdown-it-attrs";
+  import hljs from "highlight.js";
   import opensea from "../widgets/opensea.js";
   import Mustache from "mustache";
   import { onMount } from "svelte";
   import compose from "ramda/src/compose";
-  import pluck from "ramda/src/pluck";
   import append from "ramda/src/append";
-  import { assoc } from "crocks/helpers";
   import mergeAll from "ramda/src/mergeAll";
   import join from "ramda/src/join";
   import split from "ramda/src/split";
@@ -66,21 +65,19 @@
 
   md.use(container, "info", {
     validate: function (params) {
-      return params.trim().match(/^(.*)\s+(.*)$/);
+      return params.trim().match(/^(info|success|warning|error)+$/);
     },
     render: function (tokens, idx) {
-      var m = tokens[idx].info.trim().match(/^(.*)\s+(.*)$/);
+      var m = tokens[idx].info.trim().match(/^(.*)+$/);
       if (tokens[idx].nesting === 1) {
-        return (
-          `<div class="my-2 alert alert-${m[1]}"><em>` +
-          md.utils.escapeHtml(m[2]) +
-          "</em>"
-        );
+        return `<div class="my-2 py-2 alert alert-${m[1]} block prose-p:block dark:prose-strong:text-black prose-code:rounded-full prose-code:bg-black prose-code:px-[8px] prose-code:py-[4px] prose-code:text-white prose-code:p-0 prose-code:m-0 prose-code:mt-[3px]">`;
       } else {
         return "</div>";
       }
     },
   });
+
+  md.use(attrs);
 
   const slugify = compose(toLower, join("-"), split(" "));
 
@@ -98,6 +95,13 @@
       nativeSpellcheck: false,
       //inputStyle: "contenteditable",
       //forceSync: true,
+      previewRender: (txt) => md.render(txt),
+      uploadImage: true,
+      renderingConfig: {
+        codeSyntaxHighlighting: true,
+        hljs: hljs,
+      },
+      //previewClass: "prose md:prose-lg lg:prose-xl m-8 md:mx-24",
     });
     // if (!meta().query.fork) {
     //   easymde.value = "";
@@ -353,6 +357,15 @@
 
   let availableWidgets = loadWidgets();
 </script>
+
+<svelte:head>
+  <link
+    href="https://cdn.jsdelivr.net/npm/daisyui@2.15.4/dist/full.css"
+    rel="stylesheet"
+    type="text/css"
+  />
+  <script src="https://cdn.tailwindcss.com/3.1.3?plugins=typography"></script>
+</svelte:head>
 
 <Navbar />
 <main>
