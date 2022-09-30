@@ -96,11 +96,6 @@
       //inputStyle: "contenteditable",
       //forceSync: true,
       previewRender: (txt) => md.render(txt),
-      uploadImage: true,
-      renderingConfig: {
-        codeSyntaxHighlighting: true,
-        hljs: hljs,
-      },
       //previewClass: "prose md:prose-lg lg:prose-xl m-8 md:mx-24",
     });
     // if (!meta().query.fork) {
