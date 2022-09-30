@@ -13,7 +13,9 @@
   import { register, listANTs, updateSubDomain } from "../services/registry.js";
   import { pages, profiles, widgets } from "../app.js";
   import { address, pageCache } from "../store.js";
-  import { marked } from "marked";
+  //import { marked } from "marked";
+  import markdownIt from "markdown-it";
+  import container from "markdown-it-container";
   import opensea from "../widgets/opensea.js";
   import Mustache from "mustache";
   import { onMount } from "svelte";
@@ -58,6 +60,28 @@
     "night",
     "coffee",
   ];
+
+  // create extenstion to support :::info
+  const md = markdownIt({ html: true, linkify: true });
+
+  md.use(container, "info", {
+    validate: function (params) {
+      return params.trim().match(/^(.*)\s+(.*)$/);
+    },
+    render: function (tokens, idx) {
+      var m = tokens[idx].info.trim().match(/^(.*)\s+(.*)$/);
+      if (tokens[idx].nesting === 1) {
+        return (
+          `<div class="my-2 alert alert-${m[1]}"><em>` +
+          md.utils.escapeHtml(m[2]) +
+          "</em>"
+        );
+      } else {
+        return "</div>";
+      }
+    },
+  });
+
   const slugify = compose(toLower, join("-"), split(" "));
 
   onMount(async () => {
@@ -131,7 +155,7 @@
           },
           p.state
         );
-        console.log({ state: page.state });
+
         const ants = await listANTs($address);
         ant = ants.find((ant) =>
           ant.records["@"]?.transactionId
@@ -200,7 +224,7 @@
       page.html = `<div class="flex flex-col md:flex-row space-x-4">  
         <div class="flex-1 md:min-h-screen">
           <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-24 ${altText}">
-          ${marked.parse(page.content)}</div></div>
+          ${md.render(page.content)}</div></div>
         <div class="flex-none">
           <div class="flex flex-col max-w-[300px] justify-end space-y-8">
             ${widgetMarkup}
@@ -269,7 +293,7 @@
   }
 
   async function preview() {
-    let html = marked.parse(easymde.value());
+    let html = md.render(easymde.value());
     html = `<div class="prose-lg m-16" ${
       page.theme === "default" ? "" : ` data-theme="${page.theme}"`
     }>${html}</div>`;
