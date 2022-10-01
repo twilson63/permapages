@@ -3,7 +3,7 @@
   import { address } from "./store.js";
   import Announcer from "./components/announcer.svelte";
   import Transition from "./components/transition.svelte";
-  import Home from "./home2.svelte";
+  import Home from "./home3.svelte";
   import Connect from "./connect.svelte";
   import Account from "./account.svelte";
   import AccountForm from "./accounts/form.svelte";

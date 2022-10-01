@@ -1,13 +1,13 @@
 import { writable } from 'svelte/store'
 
-let _addr = null 
+let _addr = null
 export const address = writable('')
 address.subscribe((addr = '') => {
-    _addr = addr 
-    if (addr.length > 0) {
-      localStorage.setItem('address', addr)
-    }
-    return true
+  _addr = addr
+  if (addr.length > 0) {
+    localStorage.setItem('address', addr)
+  }
+  return true
 })
 
 export const account = writable({})
