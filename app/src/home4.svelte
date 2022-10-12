@@ -8,7 +8,7 @@
 
 <main class="min-h-screen bg-[#364045] ">
   <div class="flex justify-end p-4">
-    <a href="/pages" class="inline-block text-right text-white">Explore Pages</a
+    <a href="/pages" class="inline-block text-right text-white hover:underline">Explore Pages</a
     >
   </div>
 
@@ -25,10 +25,10 @@
 
     <button
       on:click={() => (connectDlg = true)}
-      class="text-[#F7F7F7] border-4 rounded-full p-2 px-10 font-semibold mt-12 "
+      class="text-[#F7F7F7] border-4 rounded-full p-2 px-10 font-semibold mt-12 hover:bg-[#F7F7F7] hover:text-black"
       >connect</button
     >
-    <a href="/#/#" class="text-[#F7F7F7] inline-block mt-5">learn more</a>
+    <a href="/#/#" class="text-[#F7F7F7] inline-block mt-5 hover:underline">learn more</a>
   </div>
 
   <div class="">
