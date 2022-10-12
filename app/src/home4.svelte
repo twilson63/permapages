@@ -1,6 +1,15 @@
-<div class="min-h-screen bg-[#364045] ">
+<script>
+  import ConnectModal from "./dialogs/connect.svelte";
+  import WalletHelp from "./dialogs/help-wallet.svelte";
+
+  let connectDlg = false;
+  let walletHelp = false;
+</script>
+
+<main class="min-h-screen bg-[#364045] ">
   <div class="flex justify-end p-4">
-    <a href="/#/#" class="inline-block text-right text-white">Explore Pages</a>
+    <a href="/pages" class="inline-block text-right text-white">Explore Pages</a
+    >
   </div>
 
   <div class="w-full flex flex-col items-center justify-center">
@@ -15,6 +24,7 @@
     </p>
 
     <button
+      on:click={() => (connectDlg = true)}
       class="text-[#F7F7F7] border-4 rounded-full p-2 px-10 font-semibold mt-12 "
       >connect</button
     >
@@ -24,4 +34,7 @@
   <div class="">
     <img src="wave img.png" alt="wave" />
   </div>
-</div>
+</main>
+
+<ConnectModal bind:open={connectDlg} on:help={() => (walletHelp = true)} />
+<WalletHelp bind:open={walletHelp} />
