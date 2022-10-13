@@ -1,73 +1,60 @@
 <script>
-  import { router } from "tinro";
-  import { address, account } from "../store.js";
-  import * as R from "ramda";
-
   let version = __APP_VERSION__.split(".")[2];
 </script>
 
-<div class="navbar bg-base-100 max-w-full">
-  <div class="md:hidden dropdown">
-    <label tabindex="0" class="btn mask mask-circle">
-      {#if $account && $account.profile}
-        <img
-          src={$account.profile.avatar}
-          alt="avatar"
-          width="48"
-          heigth="48"
-        />
-      {:else}
-        <img
-          class="bg-base-100"
-          src="logo.svg"
-          alt="menu"
-          width="48"
-          height="48"
-        />
-      {/if}
-    </label>
-    <ul
-      tabindex="0"
-      class="dropdown-content menu p-2 shadow bg-base-100 rounded-box md:w-52"
-    >
-      <li>
-        <a
-          target="_blank"
-          href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE"
-          >Learn</a
-        >
-      </li>
-      {#if R.isEmpty($address)}
-        <li><a href="/arns">ArNS</a></li>
-        <li><a href="/connect">Connect</a></li>
-      {:else}
-        <li><a href="/pages">Pages</a></li>
-        <li><a href="/arns">ArNS</a></li>
-        <li><a href="/account">Account</a></li>
-      {/if}
-    </ul>
-  </div>
+<div class="navbar bg-base-100 container mx-auto">
   <div class="flex-1">
-    <a href="/" class="btn btn-ghost normal-case text-xl">🐘 PERMAPAGES</a>
-    <div class="badge badge-secondary">BETA {version}</div>
+    <a
+      href="/"
+      class="normal-case txt-gradient  
+    font-extrabold text-2xl inline-block tracking-wide">Compose</a
+    >
+    <div
+      class="badge text-xs ml-2 bg-[#F3F5FB] border-none text-black font-semibold"
+    >
+      BETA {version}
+    </div>
   </div>
-  <div class="flex-none">
-    <ul class="hidden md:inline-flex menu menu-horizontal p-0">
+
+  <nav class="flex-none">
+    <ul class="hidden md:inline-flex gap-2 items-center">
       <li>
-        <a
-          target="_blank"
-          href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE"
-          >Learn</a
+        <a href="/#/#">About</a>
+      </li>
+      <li>
+        <a href="/#/#">Dashboard</a>
+      </li>
+      <li>
+        <a href="/#/#">Invite</a>
+      </li>
+      <li>
+        <a href="/#/#" class="flex items-center gap-2">
+          <span>Transactions</span>
+          <img src="arrow-down.png" alt="arrow-down" width="10px"/></a
         >
       </li>
-      {#if R.isEmpty($address)}
-        <li><a href="/arns">ArNS</a></li>
-        <li><a href="/connect">Connect</a></li>
-      {:else}
-        <li><a href="/pages">Pages</a></li>
-        <li><a href="/arns">ArNS</a></li>
-        <li><a href="/account">Account</a></li>
-      {/if}
+      <li>
+        <a
+          href="/#/#"
+          class="gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC]"
+        >
+          <div class="px-4 py-1 bg-white inline-block rounded-full ">
+            <div class="txt-gradient inline-block">Explore Pages</div>
+          </div>
+        </a>
+      </li>
     </ul>
-  </div>
+  </nav>
 </div>
+
+<style>
+  nav ul li a {
+    @apply rounded-full px-4 py-2 font-semibold;
+  }
+  nav ul li a:hover {
+    @apply bg-gray-100 shadow-md;
+  }
+  nav ul li .gradient {
+    @apply p-[2px] shadow-md;
+  }
+</style>
