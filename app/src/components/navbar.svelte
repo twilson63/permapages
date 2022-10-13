@@ -17,7 +17,7 @@
   </div>
 
   <nav class="flex-none">
-    <ul class="hidden md:inline-flex gap-2 items-center">
+    <ul class="hidden md:inline-flex gap-2 items-center menu menu-horizontal">
       <li>
         <a href="/#/#">About</a>
       </li>
@@ -27,12 +27,26 @@
       <li>
         <a href="/#/#">Invite</a>
       </li>
-      <li>
-        <a href="/#/#" class="flex items-center gap-2">
-          <span>Transactions</span>
-          <img src="arrow-down.png" alt="arrow-down" width="10px"/></a
-        >
+      <li tabindex="0">
+        <a href="/#/#">
+          Transactions
+          <svg
+            class="fill-current"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            ><path
+              d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+            /></svg
+          >
+        </a>
+        <ul class="mt-1 p-2 ">
+          <li><a href="/#/#">Submenu 1</a></li>
+          <li><a href="/#/#">Submenu 2</a></li>
+        </ul>
       </li>
+
       <li>
         <a
           href="/#/#"
@@ -52,7 +66,7 @@
     @apply rounded-full px-4 py-2 font-semibold;
   }
   nav ul li a:hover {
-    @apply bg-gray-100 shadow-md;
+    @apply bg-gray-100 shadow-sm;
   }
   nav ul li .gradient {
     @apply p-[2px] shadow-md;
