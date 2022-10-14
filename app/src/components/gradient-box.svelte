@@ -3,7 +3,7 @@
 </script>
 
 <a
-  href={link}
+  href={"/#"+"/"+link}
   class="group gradient-box p-[1px] hover:bg-gradient-to-r hover:from-[#FF00E5] hover:to-[#7B55EC] hover:drop-shadow-md "
 >
   <div
@@ -15,6 +15,6 @@
 
 <style>
   .gradient-box {
-    @apply relative bg-gray-300 w-[32%] min-h-[200px] rounded-3xl drop-shadow-sm inline-block;
+    @apply relative bg-[#7D7D7D] w-[32%] min-h-[200px] rounded-3xl drop-shadow-sm inline-block;
   }
 </style>

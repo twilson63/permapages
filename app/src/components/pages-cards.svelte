@@ -12,7 +12,7 @@
 <div class="w-full mt-10 flex flex-wrap justify-between gap-4">
   <GradientBox link="#">
     <h4
-      class="group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
+      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
       group-hover:bg-clip-text text-2xl font-semibold mb-4"
     >
       Make a Blog Post
@@ -29,7 +29,7 @@
 
   <GradientBox link="#">
     <h4
-      class="group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
+      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
       group-hover:bg-clip-text text-2xl font-semibold mb-4"
     >
       Create your Profile
@@ -46,7 +46,7 @@
 
   <GradientBox link="#">
     <h4
-      class="group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
+      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
       group-hover:bg-clip-text text-2xl font-semibold mb-4"
     >
       Post Image(s)
@@ -63,7 +63,7 @@
 
   <GradientBox link="#">
     <h4
-      class="group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
+      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
       group-hover:bg-clip-text text-2xl font-semibold mb-4"
     >
       Upload Multimedia
@@ -83,7 +83,7 @@
 
   <GradientBox link="#">
     <h4
-      class="group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
+      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
       group-hover:bg-clip-text text-2xl font-semibold mb-4"
     >
       Create an NFT
@@ -100,7 +100,7 @@
 
   <GradientBox link="#">
     <h4
-      class="group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
+      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
       group-hover:bg-clip-text text-2xl font-semibold mb-4"
     >
       Free Space
