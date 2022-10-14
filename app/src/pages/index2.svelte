@@ -1,6 +1,30 @@
 <script>
   import NavBar from "../components/navbar.svelte";
   import PagesCards from "../components/pages-cards.svelte";
+
+  let blockchain = "eth"; //selected blockchain value
+  let blockchains = [
+    {
+      name: "Ethereum",
+      value: "eth",
+      icon: "eth-logo.png",
+    },
+    {
+      name: "Solana",
+      value: "sol",
+      icon: "sol-logo.png",
+    },
+    {
+      name: "Polygon",
+      value: "matic",
+      icon: "polygon-logo.png",
+    },
+    {
+      name: "Tezos",
+      value: "tezos",
+      icon: "tezos-logo.png",
+    },
+  ];
 </script>
 
 <NavBar />
@@ -25,38 +49,32 @@
           </p>
 
           <div class="flex flex-row items-center gap-2 justify-center mt-2">
-            <button>
-              <img
-                src="eth-logo.png"
-                alt="etherium"
-                width="40px"
-                class="drop-shadow-md"
-              />
-            </button>
-            <button>
-              <img
-                src="polygon-logo.png"
-                alt="polygon"
-                width="40px"
-                class="drop-shadow-md"
-              />
-            </button>
-            <button>
-              <img
-                src="sol-logo.png"
-                alt="solana"
-                width="40px"
-                class="drop-shadow-md"
-              />
-            </button>
-            <button>
-              <img
-                src="tezos-logo.png"
-                alt="tezos"
-                width="40px"
-                class="drop-shadow-md"
-              />
-            </button>
+            {#each blockchains as item}
+              <div>
+                <input
+                  on:change={(e) => (blockchain = e.target.value)}
+                  checked={blockchain === item.value}
+                  type="radio"
+                  name="blockchain"
+                  id={item.value}
+                  value={blockchain}
+                  class="peer sr-only"
+                />
+
+                <label
+                  for={item.value}
+                  class="cursor-pointer peer-checked:bg-gradient-to-r peer-checked:from-[#FF00E5] peer-checked:to-[#7B55EC]
+                 bg-white rounded-full w-[45px] h-[45px] inline-block flex justify-center items-center peer-checked:drop-shadow-md"
+                >
+                  <img
+                    src={item.icon}
+                    alt={item.name}
+                    width="40px"
+                    class="drop-shadow-md"
+                  />
+                </label>
+              </div>
+            {/each}
           </div>
         </div>
       </div>
@@ -153,10 +171,28 @@
 
   <PagesCards />
 
-  <div class="flex flex-row items-center gap-2 w-[220px] mx-auto justify-center my-10 py-2 rounded-full
+  <div
+    class="flex flex-row items-center gap-2 w-[220px] mx-auto justify-center my-10 py-2 rounded-full
   bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] drop-shadow-lg hover:from-[#7B55EC] 
-  hover:to-[#FF00E5] cursor-pointer">
-    <img src="magic-hand.png" alt="magic-hand" width="30px"/>
+  hover:to-[#FF00E5] cursor-pointer"
+  >
+    <img src="magic-hand.png" alt="magic-hand" width="30px" />
     <span class="text-white font-semibold">Created on Compose</span>
   </div>
 </main>
+
+<style>
+  input[type="radio"]:checked + label {
+    position: relative;
+  }
+  input[type="radio"]:checked + label::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: -10;
+    width: 12px;
+    height: 5px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #ff00e5 0%, #7b55ec 100%);
+  }
+</style>
