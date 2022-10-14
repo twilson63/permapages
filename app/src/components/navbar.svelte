@@ -41,7 +41,7 @@
             /></svg
           >
         </a>
-        <ul class="mt-1 p-2 ">
+        <ul class="mt-1 p-2 bg-white border rounded-3xl">
           <li><a href="/#/#">Submenu 1</a></li>
           <li><a href="/#/#">Submenu 2</a></li>
         </ul>
@@ -50,10 +50,13 @@
       <li>
         <a
           href="/#/#"
-          class="gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC]"
+          class="group gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC]"
         >
-          <div class="px-4 py-1 bg-white inline-block rounded-full ">
-            <div class="txt-gradient inline-block">Explore Pages</div>
+          <div
+            class="px-4 py-1 bg-white inline-block rounded-full group-hover:bg-gradient-to-r group-hover:to-[#7B55EC]
+             group-hover:from-[#FF00E5]"
+          >
+            <div class="txt-gradient inline-block group-hover:text-white">Explore Pages</div>
           </div>
         </a>
       </li>
@@ -69,6 +72,9 @@
     @apply bg-gray-100 shadow-sm;
   }
   nav ul li .gradient {
-    @apply p-[2px] shadow-md;
+    @apply p-[2px] drop-shadow-sm;
+  }
+  nav ul li .gradient:hover {
+    @apply p-[2px] drop-shadow-md;
   }
 </style>

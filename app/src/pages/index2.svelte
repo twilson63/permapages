@@ -4,7 +4,7 @@
 
 <NavBar />
 
-<main class="container mx-auto">
+<main class="container mx-auto min-h-screen">
   <div class="w-full">
     <div class="flex flex-row mt-10">
       <div class="w-[48%]">
@@ -150,5 +150,5 @@
     </div>
   </div>
 
-  
+
 </main>
