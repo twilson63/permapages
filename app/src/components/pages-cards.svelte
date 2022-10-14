@@ -9,7 +9,7 @@
   import Nft from "../svg/nft-svg.svelte";
 </script>
 
-<div class="w-full mt-10 flex flex-wrap justify-between gap-8">
+<div class="w-full mt-10 flex flex-wrap justify-between gap-4">
   <GradientBox link="#">
     <h4
       class="group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
@@ -116,9 +116,3 @@
     </p>
   </GradientBox>
 </div>
-
-<style>
-  .txt-style {
-    @apply;
-  }
-</style>

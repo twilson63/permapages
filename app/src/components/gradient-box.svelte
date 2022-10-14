@@ -15,6 +15,6 @@
 
 <style>
   .gradient-box {
-    @apply relative bg-gray-300 w-[30%] min-h-[200px] rounded-3xl drop-shadow-sm inline-block;
+    @apply relative bg-gray-300 w-[32%] min-h-[200px] rounded-3xl drop-shadow-sm inline-block;
   }
 </style>
