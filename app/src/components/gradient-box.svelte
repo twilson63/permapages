@@ -7,7 +7,7 @@
   class="group gradient-box p-[1px] hover:bg-gradient-to-r hover:from-[#FF00E5] hover:to-[#7B55EC] hover:drop-shadow-md "
 >
   <div
-    class="bg-white w-full h-full rounded-3xl p-4 flex flex-col items-center justify-center"
+    class="bg-[#F9F9F9] w-full h-full rounded-3xl p-4 flex flex-col items-center justify-center border"
   >
     <slot />
   </div>
@@ -15,6 +15,6 @@
 
 <style>
   .gradient-box {
-    @apply relative bg-[#7D7D7D] w-[32%] min-h-[200px] rounded-3xl drop-shadow-sm inline-block;
+    @apply relative bg-white w-[32%] min-h-[200px] rounded-3xl drop-shadow-sm inline-block;
   }
 </style>
