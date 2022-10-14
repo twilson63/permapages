@@ -1,5 +1,6 @@
 <script>
   import NavBar from "../components/navbar.svelte";
+  import PagesCards from "../components/pages-cards.svelte";
 </script>
 
 <NavBar />
@@ -136,7 +137,7 @@
                hover:bg-gray-200">Get ArNS tokens</button
             >
 
-            <a href="/#/#" class="text-gray-300 mt-1">What is ArNS?</a>
+            <a href="/#/#" class="text-gray-400 mt-1">What is ArNS?</a>
           </div>
         </div>
 
@@ -150,5 +151,6 @@
     </div>
   </div>
 
-
+ 
+  <PagesCards />
 </main>
