@@ -20,8 +20,7 @@
     <Write />
     <p
       class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs 
-      transition-all duration-500 ease-in transform scale-[0.5] group-hover:scale-[1]"
+      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
     >
       author your first permanent piece
     </p>
@@ -37,8 +36,7 @@
     <User />
     <p
       class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs 
-      transition-all duration-500 ease-in transform scale-[0.5] group-hover:scale-[1]"
+      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
     >
       your space on web3
     </p>
@@ -52,10 +50,10 @@
       Post Image(s)
     </h4>
     <Gallery />
+
     <p
       class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs 
-      transition-all duration-500 ease-in transform scale-[0.5] group-hover:scale-[1]"
+      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
     >
       upload your images in a gallery view and more
     </p>
@@ -72,10 +70,10 @@
       <Video />
       <Music />
     </div>
+
     <p
       class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs 
-      transition-all duration-500 ease-in transform scale-[0.5] group-hover:scale-[1]"
+      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
     >
       get your media files on the Permaweb
     </p>
@@ -89,10 +87,10 @@
       Create an NFT
     </h4>
     <Nft />
+
     <p
       class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs 
-      transition-all duration-500 ease-in transform scale-[0.5] group-hover:scale-[1]"
+      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
     >
       create tradeable atomic arweave NFTs
     </p>
@@ -107,10 +105,10 @@
     </h4>
 
     <Code />
+
     <p
       class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs 
-      transition-all duration-500 ease-in transform scale-[0.5] group-hover:scale-[1]"
+      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
     >
       make a fully custom page with html & more
     </p>
