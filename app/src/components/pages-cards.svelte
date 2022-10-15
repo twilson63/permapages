@@ -7,110 +7,54 @@
   import Video from "../svg/video-svg.svelte";
   import Music from "../svg/music-svg.svelte";
   import Nft from "../svg/nft-svg.svelte";
+
+  let boxslist = [
+    {
+      title: "Make a Blog Post",
+      subtitle: "author your first permanent piece",
+      icon: [Write],
+      link: "write",
+    },
+    {
+      title: "Create your Profile",
+      subtitle: "your space on web3",
+      icon: [User],
+      link: "user",
+    },
+    {
+      title: "Post Image(s)",
+      subtitle: "upload your images in a gallery view and more",
+      icon: [Gallery],
+      link: "images",
+    },
+    {
+      title: "Upload Multimedia",
+      subtitle: "get your media files on the Permaweb",
+      icon: [Video, Music],
+      link: "multimedia",
+    },
+    {
+      title: "Create an NFT",
+      subtitle: "create tradeable atomic arweave NFTs",
+      icon: [Nft],
+      link: "nft",
+    },
+    {
+      title: "Free Space",
+      subtitle: "make a fully custom page with html & more",
+      icon: [Code],
+      link: "code",
+    },
+  ];
 </script>
 
 <div class="w-full mt-10 flex flex-wrap justify-between gap-4">
-  <GradientBox link="#">
-    <h4
-      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
-      group-hover:bg-clip-text text-2xl font-semibold mb-4"
-    >
-      Make a Blog Post
-    </h4>
-    <Write />
-    <p
-      class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
-    >
-      author your first permanent piece
-    </p>
-  </GradientBox>
-
-  <GradientBox link="#">
-    <h4
-      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
-      group-hover:bg-clip-text text-2xl font-semibold mb-4"
-    >
-      Create your Profile
-    </h4>
-    <User />
-    <p
-      class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
-    >
-      your space on web3
-    </p>
-  </GradientBox>
-
-  <GradientBox link="#">
-    <h4
-      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
-      group-hover:bg-clip-text text-2xl font-semibold mb-4"
-    >
-      Post Image(s)
-    </h4>
-    <Gallery />
-
-    <p
-      class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
-    >
-      upload your images in a gallery view and more
-    </p>
-  </GradientBox>
-
-  <GradientBox link="#">
-    <h4
-      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
-      group-hover:bg-clip-text text-2xl font-semibold mb-4"
-    >
-      Upload Multimedia
-    </h4>
-    <div class="flex items-center gap-4">
-      <Video />
-      <Music />
-    </div>
-
-    <p
-      class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
-    >
-      get your media files on the Permaweb
-    </p>
-  </GradientBox>
-
-  <GradientBox link="#">
-    <h4
-      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
-      group-hover:bg-clip-text text-2xl font-semibold mb-4"
-    >
-      Create an NFT
-    </h4>
-    <Nft />
-
-    <p
-      class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
-    >
-      create tradeable atomic arweave NFTs
-    </p>
-  </GradientBox>
-
-  <GradientBox link="#">
-    <h4
-      class="text-[#7D7D7D] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] group-hover:from-[#FF00E5] group-hover:text-transparent
-      group-hover:bg-clip-text text-2xl font-semibold mb-4"
-    >
-      Free Space
-    </h4>
-
-    <Code />
-
-    <p
-      class="opacity-[0] group-hover:opacity-[1] group-hover:bg-gradient-to-r group-hover:to-[#7B55EC] 
-      group-hover:from-[#FF00E5] group-hover:text-transparent group-hover:bg-clip-text mt-4 text-xs"
-    >
-      make a fully custom page with html & more
-    </p>
-  </GradientBox>
+  {#each boxslist as box}
+    <GradientBox
+      title={box.title}
+      subtitle={box.subtitle}
+      link={box.link}
+      icons={box.icon}
+    />
+  {/each}
 </div>
