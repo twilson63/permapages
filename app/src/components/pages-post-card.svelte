@@ -47,7 +47,7 @@
 
     {#if posts.length > 2}
       <a
-        href="/#/#"
+        href="/#/pages/posts"
         class="inline-block text-center mt-auto text-[#7D7D7D] hover:no-underline underline font-semibold"
         >View all</a
       >

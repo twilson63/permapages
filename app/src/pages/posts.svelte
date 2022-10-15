@@ -1,13 +1,12 @@
 <script>
   import PagesHead from "../components/pages-head.svelte";
   import NavBar from "../components/navbar.svelte";
-  import ActionCards from "../components/pages-cards.svelte";
 </script>
 
 <NavBar />
 <main class="container mx-auto min-h-screen">
   <PagesHead />
-  <ActionCards />
+  <h1>Blog Post</h1>
 
   <div
     class="flex flex-row items-center gap-2 w-[220px] mx-auto justify-center my-10 py-2 rounded-full
