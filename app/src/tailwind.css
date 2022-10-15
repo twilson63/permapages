@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
+.txt-gradient {
+  @apply bg-clip-text bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] text-transparent;
+}
+
+.gradient-box:hover svg linearGradient stop:first-child {
+  stop-color: #7b55ec;
+}
+
+.gradient-box:hover svg linearGradient stop:last-child {
+  stop-color: #ff00e5;
+}
+
+.gradient-box:hover .nft-svg path{
+  fill: #ff00e5;
+}
 @tailwind utilities;
