@@ -1,15 +1,15 @@
 <div
-  class="w-[52%] border-4 rounded-3xl border-dashed border-gray-200 p-1 flex flex-row items-start"
->
-  <div class="h-full bg-gray-50 rounded-3xl p-4 px-5">
+  class="w-[52%] border-4 rounded-3xl border-dashed border-gray-100 p-1 flex flex-row items-start justify-between">
+
+  <div class="h-full bg-gray-50 rounded-3xl p-4 px-5 mr-auto">
     <h4 class="text-gray-400 text-lg font-semibold mt-4">Wallet balance</h4>
     <p class="text-black text-xl mt-2 font-semibold tracking-wide">
       $AR 0.<span class="text-[#6F9986]">0017</span>
-    </p>
+    </p> 
 
     <div class="w-full flex flex-row gap-2 mt-2">
-      <img src="shield-badge.png" alt="shield-badge" width="15px" />
-      <span class="text-xs text-gray-400">connected</span>
+      <img src="shield-badge.svg" alt="shield-badge" width="15px" />
+      <span class="text-xs text-gray-400 leading-5">connected</span>
     </div>
 
     <button
@@ -64,7 +64,7 @@
     </div>
   </div>
 
-  <div class="flex flex-row items-center gap-2 mt-8">
+  <div class="flex flex-row items-center gap-2 mt-8 ml-auto">
     <span class="text-lg font-semibold text-gray-400">...7dl6sK</span>
     <button><img src="drop-down.png" alt="drop-down" width="25px" /></button>
   </div>
