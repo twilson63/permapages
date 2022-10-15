@@ -7,14 +7,16 @@
   import Video from "../svg/video-svg.svelte";
   import Music from "../svg/music-svg.svelte";
   import Nft from "../svg/nft-svg.svelte";
+  import PagesPostCard from "./pages-post-card.svelte";
+
+  let firstbox = {
+    title: "Make a Blog Post",
+    subtitle: "author your first permanent piece",
+    icon: [Write],
+    link: "write",
+  };
 
   let boxslist = [
-    {
-      title: "Make a Blog Post",
-      subtitle: "author your first permanent piece",
-      icon: [Write],
-      link: "write",
-    },
     {
       title: "Create your Profile",
       subtitle: "your space on web3",
@@ -46,9 +48,38 @@
       link: "code",
     },
   ];
+
+  let postdata = [
+    {
+      id: 1,
+      title: "Arweave Grow Crew #7",
+      lastupdate: "3 days ago",
+    },
+    {
+      id: 2,
+      title: "Why the Permaweb matters",
+      lastupdate: "1 week ago",
+    },
+    {
+      id: 3,
+      title: "Arweave Grow Crew #5",
+      lastupdate: "2 weeks ago",
+    },
+  ];
 </script>
 
 <div class="w-full mt-10 flex flex-wrap justify-between gap-4">
+  {#if postdata.length > 0}
+    <PagesPostCard posts={postdata} />
+  {:else}
+    <GradientBox
+      title={firstbox.title}
+      subtitle={firstbox.subtitle}
+      link={firstbox.link}
+      icons={firstbox.icon}
+    />
+  {/if}
+
   {#each boxslist as box}
     <GradientBox
       title={box.title}
