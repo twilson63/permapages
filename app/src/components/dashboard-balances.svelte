@@ -66,6 +66,6 @@
 
   <div class="flex flex-row items-center gap-2 mt-8 ml-auto">
     <span class="text-lg font-semibold text-gray-400">...7dl6sK</span>
-    <button><img src="drop-down.png" alt="drop-down" width="25px" /></button>
+    <button><img src="arrow-down.svg" alt="drop-down" width="25px" /></button>
   </div>
 </div>

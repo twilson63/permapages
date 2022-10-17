@@ -10,6 +10,7 @@
   import Notfound from "./404.svelte";
   import About from "./about.svelte";
   import Pages from "./pages/index2.svelte";
+  import Posts from "./pages/posts.svelte";
   import PageLink from "./pages/link.svelte";
   import PageForm from "./pages/form.svelte";
   import Arns from "./arns/index.svelte";
@@ -65,6 +66,9 @@
 
   <Route path="/pages/*">
     {#if not(isEmpty($address))}
+      <Route path="/posts">
+        <Posts/>
+      </Route>
       <Route path="/link">
         <PageLink />
       </Route>

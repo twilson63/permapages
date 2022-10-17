@@ -11,15 +11,14 @@
   <div
     class="bg-[#F9F9F9] w-full h-full rounded-3xl flex flex-col items-center border p-6"
   >
-    <a
-      href="/#/#"
-      class="flex flex-row items-center gap-2 w-[220px] mx-auto justify-center py-2 rounded-full
-    drop-shadow-lg cursor-pointer bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] hover:from-[#7B55EC] 
-    hover:to-[#FF00E5]"
-    >
-      <span class="text-white">Create new Blog Post</span>
-      <WriteOther col="#ffffff" />
-    </a>
+  <a
+  href="/#/#"
+  class="btn flex flex-row items-center gap-2 w-[220px] justify-center p-2 rounded-full
+    drop-shadow-lg bg-[#A785F1] border-none normal-case min-h-[2.5rem] h-[2.5rem]"
+>
+  <span class="text-white">Create new Blog Post</span>
+  <WriteOther col="#ffffff" />
+</a>
 
     <ul
       class="divide-y divide-white divide-y-2 w-full flex flex-col gap-3 mt-8"
@@ -47,7 +46,7 @@
 
     {#if posts.length > 2}
       <a
-        href="/#/#"
+        href="/#/pages/posts"
         class="inline-block text-center mt-auto text-[#7D7D7D] hover:no-underline underline font-semibold"
         >View all</a
       >
