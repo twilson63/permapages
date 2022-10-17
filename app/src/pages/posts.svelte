@@ -1,8 +1,8 @@
 <script>
   import PagesHead from "../components/pages-head.svelte";
-  import WriteOther from "../svg/write-other-svg.svelte";
   import NavBar from "../components/navbar.svelte";
   import PagesPosts from "../components/pages-posts.svelte";
+  import PagesDrafts from "../components/pages-drafts.svelte";
 
   let posts = [
     {
@@ -43,37 +43,31 @@
     },
   ];
 
-  const copyTrx = (id) => {
-    navigator.clipboard.writeText(id);
-  };
+  let drafts = [
+    {
+      postid: 1,
+      title: "untitled",
+      status: "Draft",
+    },
+    {
+      postid: 2,
+      title: "Concepts for product-led growth",
+      status: "Draft",
+    },
+    {
+      postid: 3,
+      title: "Making a new Atomic NFT",
+      status: "Draft",
+    },
+  ];
 </script>
 
 <NavBar />
 <main class="container mx-auto min-h-screen">
   <PagesHead />
 
-  <div class="mt-10 w-full flex flex-row items-center justify-between">
-    <div class="flex items-center gap-4">
-      <h1 class="text-2xl font-bold">Blog Posts</h1>
-      <select class="bg-white outline-none w-16  cursor-pointer">
-        <option selected>All</option>
-        <option>Drafts</option>
-        <option>Published</option>
-      </select>
-    </div>
-
-    <a
-      href="/#/#"
-      class="btn flex flex-row items-center gap-2 w-[220px] justify-center p-2 rounded-full
-        drop-shadow-lg bg-[#A785F1] border-none normal-case block ml-auto min-h-[2.5rem] h-[2.5rem]"
-    >
-      <span class="text-white">Create new Blog Post</span>
-      <WriteOther col="#ffffff" />
-    </a>
-  </div>
-
-  <div class="w-full flex flex-col" />
   <PagesPosts {posts} />
+  <PagesDrafts {drafts} />
 
   <div
     class="flex flex-row items-center gap-2 w-[220px] mx-auto justify-center my-10 py-2 rounded-full

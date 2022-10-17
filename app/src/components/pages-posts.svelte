@@ -1,8 +1,33 @@
 <script>
+  import WriteOther from "../svg/write-other-svg.svelte";
   export let posts;
+
+  const copyTrx = (id) => {
+    navigator.clipboard.writeText(id);
+  };
 </script>
 
-<div class="w-full">
+<div class="mt-10 w-full flex flex-row items-center justify-between">
+  <div class="flex items-center gap-4">
+    <h1 class="text-2xl font-bold">Blog Posts</h1>
+    <select class="bg-white outline-none w-16  cursor-pointer">
+      <option selected>All</option>
+      <option>Drafts</option>
+      <option>Published</option>
+    </select>
+  </div>
+
+  <a
+    href="/#/#"
+    class="btn flex flex-row items-center gap-2 w-[220px] justify-center p-2 rounded-full
+        drop-shadow-lg bg-[#A785F1] border-none normal-case block ml-auto min-h-[2.5rem] h-[2.5rem]"
+  >
+    <span class="text-white">Create new Blog Post</span>
+    <WriteOther col="#ffffff" />
+  </a>
+</div>
+
+<div class="w-full flex flex-col">
   {#each posts as post}
     <div
       class="w-[95%] mx-auto flex flex-row items-center mt-2 justify-between border-b-[1px] py-2"
