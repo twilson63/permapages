@@ -12,7 +12,7 @@
     class="bg-[#F9F9F9] w-full h-full rounded-3xl flex flex-col items-center border p-6"
   >
   <a
-  href="/#/#"
+  href="/#/pages/compose"
   class="btn flex flex-row items-center gap-2 w-[220px] justify-center p-2 rounded-full
     drop-shadow-lg bg-[#A785F1] border-none normal-case min-h-[2.5rem] h-[2.5rem]"
 >

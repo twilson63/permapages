@@ -11,6 +11,7 @@
   import About from "./about.svelte";
   import Pages from "./pages/index2.svelte";
   import Posts from "./pages/posts.svelte";
+  import Compose from "./pages/compose.svelte";
   import PageLink from "./pages/link.svelte";
   import PageForm from "./pages/form.svelte";
   import Arns from "./arns/index.svelte";
@@ -68,6 +69,9 @@
     {#if not(isEmpty($address))}
       <Route path="/posts">
         <Posts/>
+      </Route>
+      <Route path="/compose">
+        <Compose/>
       </Route>
       <Route path="/link">
         <PageLink />
