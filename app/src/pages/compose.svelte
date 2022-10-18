@@ -3,7 +3,7 @@
   import Navbar from "../components/navbar.svelte";
   import Modal from "../components/modal.svelte";
   import { loadPage, loadState, gql } from "../services/arweave.js";
-  import { register, listANTs, updateSubDomain } from "../services/registry.js";
+  import { listANTs } from "../services/registry.js";
   import { pages, widgets } from "../app.js";
   import { address } from "../store.js";
   import markdownIt from "markdown-it";
@@ -19,24 +19,12 @@
   import propEq from "ramda/src/propEq";
   import Copyright from "../widgets/copyright.svelte";
 
-  let advanced = false;
   var easymde = null;
   let error = null;
   let confirm = false;
-  let widgetDialog = false;
 
   let allWidgets = [];
   let ant = null;
-
-  let themes = [
-    "synthwave",
-    "retro",
-    "cyberpunk",
-    "valentine",
-    "aqua",
-    "night",
-    "coffee",
-  ];
 
   // create extenstion to support :::info
   const md = markdownIt({ html: true, linkify: true });
@@ -160,23 +148,8 @@
         page.widgets.find((a) => a.elementId === w.elementId) ? false : true
       );
   }
-
-  function removeWidget(id) {
-    page.widgets = page.widgets.filter((w) => w.elementId !== id);
-    availableWidgets = loadWidgets();
-  }
-
-  let availableWidgets = loadWidgets();
 </script>
 
-<!-- <svelte:head>
-  <link
-    href="https://cdn.jsdelivr.net/npm/daisyui@2.15.4/dist/full.css"
-    rel="stylesheet"
-    type="text/css"
-  />
-  <script src="https://cdn.tailwindcss.com/3.1.3?plugins=typography"></script>
-</svelte:head> -->
 
 <Navbar />
 <main class="container mx-auto">
