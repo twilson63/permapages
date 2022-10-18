@@ -17,6 +17,7 @@
   import toLower from "ramda/src/toLower";
   import find from "ramda/src/find";
   import propEq from "ramda/src/propEq";
+  import Copyright from "../widgets/copyright.svelte";
 
   let advanced = false;
   var easymde = null;
@@ -168,31 +169,91 @@
   let availableWidgets = loadWidgets();
 </script>
 
-<svelte:head>
+<!-- <svelte:head>
   <link
     href="https://cdn.jsdelivr.net/npm/daisyui@2.15.4/dist/full.css"
     rel="stylesheet"
     type="text/css"
   />
   <script src="https://cdn.tailwindcss.com/3.1.3?plugins=typography"></script>
-</svelte:head>
+</svelte:head> -->
 
 <Navbar />
 <main class="container mx-auto">
   <section class="hero bg-base-100 min-h-screen items-start">
-    <div class="hero-content flex-col">
+    <div class="hero-content flex-col w-full">
+      <div class="flex items-start w-full">
+        <a
+          href="/#/pages/posts"
+          class="btn rounded-full bg-[#F9F9F9] min-h-[2.5rem] h-[2.5rem] px-8 hover:bg-gray-200 border-none"
+        >
+          <img src="polygon-icon.svg" alt="polygon-icon" />
+          <span class="text-[#696969] ml-4">Back</span>
+        </a>
+      </div>
+
       {#if error}
         <div class="alert alert-error">
           {error}
         </div>
       {/if}
-      <form class="w-full" on:submit|preventDefault={submit}>
-        <div class="form-control">
-          <label for="content" class="label"
-            >Page Content <span class="text-sm"
-              >(use the markdown language or html to add content your page)</span
-            ></label
+
+      <div class="w-full flex flex-row items-center justify-between mt-10">
+        <div class="w-1/4 flex flex-row items-center">
+          <img src="onlyarweave.png" alt="onlyarweave" />
+          <div class="ml-4">
+            <h3 class="flex flex-row items-center text-lg font-bold">
+              <span>@onlyarweave</span>
+              <a href="/#/#" class="inline-block ml-2"
+                ><img src="twitter.svg" alt="twitter" /></a
+              >
+            </h3>
+            <p>Growing the Permaweb.</p>
+          </div>
+        </div>
+
+        <div class="w-1/4 flex flex-row items-center justify-end">
+          <p class="text-[#7D7D7D]">Edit in full screen mode</p>
+          <button
+            class="ml-4 btn m-0 bg-transparent hover:bg-transparent border-none"
           >
+            <img src="full-screen.svg" alt="full-screen" />
+          </button>
+        </div>
+      </div>
+
+      <form class="w-full" on:submit|preventDefault={submit}>
+        <div class="form-control w-full">
+          <label for="title" class="label font-semibold">Title</label>
+
+          <input
+            type="text"
+            class="input input-bordered w-full"
+            id="title"
+            bind:value={page.title}
+            placeholder="Enter Title of your note (max: 20 characters)"
+          />
+        </div>
+
+        <div class="form-control w-full mt-4">
+          <label for="description" class="label font-semibold"
+            >Description</label
+          >
+
+          <input
+            type="text"
+            class="input input-bordered w-full"
+            id="description"
+            bind:value={page.description}
+            placeholder="Enter a 50 character description of your note"
+          />
+        </div>
+
+        <div class="form-control w-full mt-4">
+          <label for="content" class="label font-semibold">
+            Content(markdown)
+          </label>
+
           <textarea
             class="textarea textarea-bordered textarea-secondary bg-white"
             id="content"
@@ -200,148 +261,66 @@
             bind:value={page.content}
           />
         </div>
+
+        <div class="form-control w-full mt-4">
+          <label for="topic" class="label font-semibold">Topics</label>
+
+          <input
+            type="text"
+            class="input input-bordered w-full"
+            id="topic"
+            bind:value={page.topic}
+            placeholder="(optional) Enter a topic of your note."
+          />
+        </div>
+
+        <div
+          class="form-control w-full flex flex-row items-center justify-between mt-4"
+        >
+          <label for="public" class="label font-semibold cursor-pointer"
+            >Public (if marked public the note will be unencrypted and viewable
+            by everyone.)</label
+          >
+
+          <input
+            type="checkbox"
+            class="toggle toggle-secondary"
+            id="public"
+            bind:value={page.public}
+            placeholder="Enter Title of your note (max: 20 characters)"
+          />
+        </div>
+
         <button
-          type="button"
-          class="btn btn-ghost my-16"
-          on:click={() => (advanced = !advanced)}>Show Advanced Options</button>
-
-        {#if advanced}
-          <div class="mt-4 form-control">
-            <label for="profile" class="label cursor-pointer">
-              <div>
-                <span class="label-text text-xl">Add Profile</span>
-                <br />
-                <span class="text-sm"
-                  >toggle on to include your profile as the web page header.</span
-                >
-              </div>
-
-              <input
-                type="checkbox"
-                class="toggle toggle-secondary"
-                bind:checked={page.profile}
-              />
-            </label>
-          </div>
-          <div class="mt-4 form-control">
-            <label for="gallery" class="label cursor-pointer">
-              <div>
-                <span class="label-text text-xl">NFT Gallery</span>
-                <br />
-                <span class="hidden md:inline-block text-sm"
-                  >Enter Ethereum Wallet Address</span
-                >
-              </div>
-              <input
-                type="input"
-                class="input input-bordered w-1/2"
-                bind:value={page.ethwallet}
-              />
-            </label>
-          </div>
-          <div class="my-8 form-control">
-            <label class="label">
-              <div>
-                <span class="label-text text-xl">Select Theme</span>
-                <br />
-                <span class="hidden md:inline-block text-sm"
-                  >Select a fun theme for your page, by default, the `light`
-                  theme is chosen unless browser is set to dark mode, then the
-                  `dark` theme is chosen.</span
-                >
-              </div>
-              <select
-                id="theme-select"
-                class="select select-bordered"
-                bind:value={page.theme}
-              >
-                <option value="default">default</option>
-                {#each themes as theme}
-                  <option value={theme}>{theme}</option>
-                {/each}
-              </select>
-            </label>
-          </div>
-          <div class="mt-4 form-control">
-            <label for="footer" class="label cursor-pointer">
-              <div>
-                <span class="label-text text-xl">Allow Stamps</span>
-                <br />
-                <span class="text-sm">toggle off to not receive stamps</span>
-              </div>
-              <input
-                type="checkbox"
-                class="toggle toggle-secondary"
-                bind:checked={page.allowStamps}
-              />
-            </label>
-          </div>
-          <div class="mt-4 form-control">
-            <label for="footer" class="label cursor-pointer">
-              <div>
-                <span class="label-text text-xl">Footer</span>
-                <br />
-                <span class="text-sm">toggle off to not include footer</span>
-              </div>
-              <input
-                type="checkbox"
-                class="toggle toggle-secondary"
-                bind:checked={page.includeFooter}
-              />
-            </label>
-          </div>
-
-          <div class="my-8 form-control">
-            <label class="label">
-              <span class="label-text text-xl">Widgets</span>
-              <br />
-              <span class="hidden md:inline-block text-sm"
-                >Add widgets to permapages to add interactive functionality to
-                your page.</span
-              >
-              <button
-                type="button"
-                class="btn btn-secondary"
-                on:click={() => (widgetDialog = true)}>Add Widget</button
-              >
-            </label>
-          </div>
-          {#if page.widgets.length > 0}
-            <div class="flex space-x-4 mb-8">
-              {#each page.widgets as w}
-                <div
-                  class="badge badge-primary"
-                  on:click={removeWidget(w.elementId)}
-                >
-                  {w.name} - {w.version || "v0.0.6"}
-                </div>
-              {/each}
+          type="submit"
+          class="group gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] mt-4 btn p-[2px] min-h-[2.5rem] h-[2.5rem] 
+          hover:bg-[#7B55EC] border-none"
+        >
+          <div
+            class="w-full h-full px-10 py-3 bg-white inline-block rounded-full group-hover:bg-gradient-to-r group-hover:to-[#7B55EC]
+           group-hover:from-[#FF00E5]"
+          >
+            <div class="txt-gradient inline-block group-hover:text-white">
+              Publish
             </div>
-          {/if}
-        {/if}
+          </div>
+        </button>
 
-        <div class="mt-4 alert alert-info flex flex-col space-y-8 py-8">
-          <div class="text-xl font-bold">Want a subdomain? Check out ArNS</div>
-          <p>
-            When you publish a page, it will be posted on the permaweb, once
-            published you can attach a registered subdomain using ArNS
-            https://[subdomain].arweave.dev. Want to learn more about ArNS
-          </p>
-          <a class="link" href="https://ar.io/arns">Click here to learn more.</a
-          >
-        </div>
-        <div class="mt-8 flex justify-end space-x-2">
-          <!--
-          <button type="button" class="btn btn-secondary" on:click={preview}
-            >Preview</button
-          >
-          -->
-          <button type="submit" class="btn btn-primary">Publish</button>
-          <a class="btn" href="/pages" on:click={() => easymde.value("")}
-            >Cancel</a
-          >
-        </div>
+        <p class="mt-4 text-[7D7D7D] text-sm">
+          $0.17 cost to upload this permanently on Arweave.
+        </p>
       </form>
     </div>
   </section>
+
+  <Copyright />
 </main>
+
+<style>
+  .gradient {
+    @apply drop-shadow-sm rounded-full;
+  }
+  .gradient:hover {
+    @apply p-[2px] drop-shadow-md;
+  }
+</style>
