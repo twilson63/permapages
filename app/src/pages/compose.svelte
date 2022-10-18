@@ -223,7 +223,14 @@
       </div>
 
       <form class="w-full" on:submit|preventDefault={submit}>
-        <div class="form-control w-full">
+        <div class="flex items-center gap-2 mt-4">
+          <button type="button"
+            ><img src="arrow-down.svg" alt="arrow-down" width="20px" /></button
+          >
+          <span class="font-semibold">only.arweave.dev/blog</span>
+        </div>
+
+        <div class="form-control w-full mt-4">
           <label for="title" class="label font-semibold">Title</label>
 
           <input
@@ -315,6 +322,38 @@
 
   <Copyright />
 </main>
+
+<Modal open={confirm} ok={false}>
+  <p>
+    This will be published on the permaweb and cannot be removed. If you choose
+    to keep it private it will be encrypted by your wallet. <br /><br />
+
+    Your connected
+    <span class="inline-flex items-center">
+      <span class="mr-2 font-semibold">Matic</span>
+      <button><img src="arrow-down.svg" alt="arrow-down" width="20px" /></button
+      >
+    </span>
+    wallet will be charged <b>{0.005}</b> MATIC for this blog post.
+  </p>
+
+  <div class="w-full flex flex-col justify-start mt-4">
+    <button
+      class="gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] mt-4 btn p-[2px] min-h-[2.5rem] h-[2.5rem] 
+    hover:bg-[#7B55EC] border-none w-full hover:from-[#7B55EC] hover:to-[#FF00E5]"
+    >
+      Publish Permanently ({page.public ? "Public" : "Private"})
+    </button>
+
+    <button
+      class="btn p-[2px] min-h-[2.5rem] h-[2.5rem] border-none w-full bg-gray-300 mt-4 rounded-full
+      drop-shadow-sm text-black hover:text-white"
+      on:click={() => (confirm = false)}
+    >
+      Go Back
+    </button>
+  </div>
+</Modal>
 
 <style>
   .gradient {
