@@ -1,6 +1,7 @@
 <script>
   import Copyright from "../widgets/copyright.svelte";
   import NavBar from "../components/navbar.svelte";
+  import DemoPost from "../components/demo-post.svelte";
 </script>
 
 <NavBar />
@@ -32,14 +33,27 @@
           </p>
         </div>
 
-        <a href="/#/#"  class="font-semibold bg-gray-100 text-gray-500 inline-block py-2 px-6 rounded-full">View as reader</a>
-
+        <a
+          href="/#/#"
+          target="_blank"
+          class="font-semibold bg-gray-100 text-gray-500 inline-block py-2 px-6 rounded-full"
+          >View as reader</a
+        >
 
         <div class="flex flex-row items-center gap-4">
-            <a href="/#/#" class="font-semibold text-[#7EBFFF] bg-[#F5FAFF] inline-block py-2 px-6 rounded-full">Update</a>
-            <button class="font-semibold py-2 px-6 rounded-full bg-gray-100 text-gray-500">Share</button>
+          <a
+            href="/#/#"
+            class="font-semibold text-[#7EBFFF] bg-[#F5FAFF] inline-block py-2 px-6 rounded-full"
+            >Update</a
+          >
+          <button
+            class="font-semibold py-2 px-6 rounded-full bg-gray-100 text-gray-500"
+            >Share</button
+          >
         </div>
       </div>
+
+      <DemoPost />
     </div>
   </div>
 </main>
