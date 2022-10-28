@@ -36,7 +36,7 @@
         }
       }}
       class="text-[#F7F7F7] border-4 rounded-full p-2 px-10 font-semibold mt-12 hover:bg-[#F7F7F7] hover:text-black"
-      >connect</button
+      >{$address ? "account" : "connect"}</button
     >
     <a href="/#/#" class="text-[#F7F7F7] inline-block mt-5 hover:underline"
       >learn more</a

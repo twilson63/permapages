@@ -62,7 +62,7 @@
     if (window.arweaveWallet) window.arweaveWallet.disconnect();
     localStorage.setItem("arweave-app", "");
     address.set("");
-    router.goto("/connect");
+    router.goto("/");
   }
 
   let profileObject = getPageProfile($address);
