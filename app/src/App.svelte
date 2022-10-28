@@ -25,6 +25,7 @@
 
   import not from "ramda/src/not";
   import isEmpty from "ramda/src/isEmpty";
+  import AuthorPreview from "./pages/author-preview.svelte";
 
   router.mode.hash();
   router.subscribe((_) => window.scrollTo(0, 0));
@@ -108,6 +109,9 @@
   </Route>
   <Route path="/preview">
     <Preview />
+  </Route>
+  <Route path="/author-preview">
+    <AuthorPreview />
   </Route>
   <Route path="/widgets">
     <WidgetsHome />
