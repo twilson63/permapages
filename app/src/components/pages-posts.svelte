@@ -73,7 +73,7 @@
 
       <div class="flex flex-col items-center mx-auto">
         <h3 class="text-lg font-bold text-[#7D7D7D]">View</h3>
-        <a href="/#/#"><img src="eye.svg" alt="eye" width="20px" /></a>
+        <a href="/#/author-preview"><img src="eye.svg" alt="eye" width="20px" /></a>
       </div>
 
       <div class="flex flex-col items-center ml-auto">
