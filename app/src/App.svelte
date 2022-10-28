@@ -9,7 +9,7 @@
   import AccountForm from "./accounts/form.svelte";
   import Notfound from "./404.svelte";
   import About from "./about.svelte";
-  import Pages from "./pages/index2.svelte";
+  import Pages from "./pages/index.svelte";
   import Posts from "./pages/posts.svelte";
   import Compose from "./pages/compose.svelte";
   import PageLink from "./pages/link.svelte";
@@ -68,10 +68,10 @@
   <Route path="/pages/*">
     {#if not(isEmpty($address))}
       <Route path="/posts">
-        <Posts/>
+        <Posts />
       </Route>
       <Route path="/compose">
-        <Compose/>
+        <Compose />
       </Route>
       <Route path="/link">
         <PageLink />

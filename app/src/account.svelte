@@ -88,6 +88,7 @@
               </div>
             </div>
           </div>
+          <!--
           {#await getStamps($address) then stamps}
             <div class="flex-none w-full md:w-[300px]">
               <h3 class="px-8 pt-4 text-3xl">Stamps ({stamps.length})</h3>
@@ -95,6 +96,7 @@
               <Passport {stamps} />
             </div>
           {/await}
+          -->
         {:else}
           <div class="flex space-x-8">
             <div class="card shadow-xl w-1/2 flex-1">

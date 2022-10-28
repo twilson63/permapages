@@ -9,16 +9,16 @@ import toPairs from 'ramda/src/toPairs'
 import equals from 'ramda/src/equals'
 import propOr from 'ramda/src/propOr'
 
-const { WarpWebFactory, LoggerFactory } = window.warp
+const { WarpFactory, defaultCacheOptions, LoggerFactory } = window.warp
 
 const arweave = Arweave.init({
-  host: 'arweave.net',
+  host: import.meta.env.PROD ? window.location.host : 'arweave.dev',
   port: 443,
   protocol: 'https'
 })
 
 LoggerFactory.INST.logLevel("error");
-const warp = WarpWebFactory.memCachedBased(arweave).useArweaveGateway().build()
+const warp = WarpFactory.custom(arweave, defaultCacheOptions, 'mainnet').useArweaveGateway().build()
 
 const REGISTRY = "bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"
 const ANT_SOURCE = "PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY"

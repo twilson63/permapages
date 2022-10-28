@@ -2,8 +2,9 @@
   import { createEventDispatcher } from "svelte";
   import Modal from "../components/modal.svelte";
   import { ArweaveWebWallet } from "arweave-wallet-connector";
+  import { router } from "tinro";
 
-  import { account } from "../store.js";
+  import { address } from "../store.js";
 
   export let open;
   const dispatch = createEventDispatcher();
@@ -19,9 +20,9 @@
         { name: "img" }
       );
       const addr = await arweaveWallet.getActiveAddress();
-      $account = { addr };
+      $address = addr;
       open = false;
-      dispatch("connected");
+      router.goto("/account");
     } catch (e) {
       console.log(e);
     }
@@ -30,15 +31,16 @@
   async function arwallet() {
     try {
       const wallet = new ArweaveWebWallet({
-        name: "img",
+        name: "pages",
+        logo: `${window.location.origin}/permapages_logo.svg`,
       });
       wallet.setUrl("arweave.app");
       await wallet.connect();
 
       const addr = await arweaveWallet.getActiveAddress();
-      $account = { addr };
+      $address = addr;
       open = false;
-      dispatch("connected");
+      router.goto("/account");
     } catch (e) {
       console.log(e);
     }

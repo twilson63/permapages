@@ -34,14 +34,15 @@ const FEE = '.004'
 const arweaveAccount = new Account()
 
 export const arweave = Arweave.init({
-  host: 'arweave.net',
+  host: 'arweave.dev',
   port: 443,
   protocol: 'https'
 })
 
 // global warp
-const { WarpWebFactory } = window.warp
-const warp = WarpWebFactory.memCached(arweave)
+const { WarpFactory, LoggerFactory } = window.warp
+LoggerFactory.INST.logLevel("error");
+const warp = WarpFactory.forMainnet()
 
 let wallet = null
 

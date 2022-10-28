@@ -46,7 +46,7 @@ export function profiles({ gql, post, load }) {
   }
 
   async function stamps(addr) {
-    return Async.fromPromise(fetch)('https://cache.permapages.app/aSMILD7cEJr93i7TAVzzMjtci_sGkXcWnqpDkG6UGcA')
+    return Async.fromPromise(fetch)('https://cache.permapages.app/FMRHYgSijiUNBrFy-XqyNNXenHsCV0ThR4lGAPO4chA')
       .chain(res => Async.fromPromise(res.json.bind(res))())
       .map(prop('stamps'))
       .map(values)

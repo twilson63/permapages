@@ -19,11 +19,22 @@
   <nav class="flex-none">
     <ul class="hidden md:inline-flex gap-2 items-center menu menu-horizontal">
       <li>
+        <a href="/pages">Pages</a>
+      </li>
+      <li>
+        <a href="/arns">ArNS</a>
+      </li>
+      <li>
+        <a href="/account">Account</a>
+      </li>
+      <!--
+      <li>
         <a href="/#/#">About</a>
       </li>
       <li>
         <a href="/#/#">Dashboard</a>
       </li>
+      
       <li>
         <a href="/#/#">Invite</a>
       </li>
@@ -60,6 +71,7 @@
           </div>
         </a>
       </li>
+    -->
     </ul>
   </nav>
 </div>
