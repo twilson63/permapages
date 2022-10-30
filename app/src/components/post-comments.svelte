@@ -1,5 +1,9 @@
 <script>
-    export let filteredcomments;
+  export let filteredcomments;
+
+  const compressWalletString= (walletid) => {
+    return walletid.slice(0, 6) + "...";
+  };
 </script>
 
 <div class="w-full">
@@ -22,7 +26,15 @@
                 <img src={comment.avtar} alt={comment.name} width="40px" />
                 <div class="ml-4 text-xs">
                   <p>
-                    {comment.date} responded to:
+                    {new Date(comment.date).toLocaleString("en-us", {
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })} @ {new Date(comment.date).toLocaleString("en-us",{
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                    })} responded to:
                     <a href="/#/#" class="underline hover:no-underline"
                       >{"version " + comment.version}</a
                     >
@@ -63,7 +75,7 @@
                     >{"version " + reply.version}</a
                   >
                 </p>
-                <span class="">{reply.name} (walletid)</span>
+                <span class="">{reply.name} ({compressWalletString(reply.walletid)})</span>
               </div>
               <img src={reply.avtar} alt={reply.name} width="40px" />
             </div>
@@ -88,12 +100,12 @@
                 <img src={comment.avtar} alt={comment.name} width="40px" />
                 <div class="ml-4 text-xs">
                   <p>
-                    {comment.date} responded to:
+                    {new Date(comment.date).toLocaleDateString()} responded to:
                     <a href="/#/#" class="underline hover:no-underline"
                       >{"version " + comment.version}</a
                     >
                   </p>
-                  <span>{comment.name}</span>
+                  <span>{comment.name} ({compressWalletString(comment.walletid)})</span>
                 </div>
               </div>
             </div>
@@ -120,12 +132,12 @@
             <div class="flex items-center gap-4 w-fit ml-auto mt-2">
               <div class="text-xs text-right">
                 <p>
-                  {reply.date} responded to:
+                  {new Date(reply.date).toLocaleDateString()} responded to:
                   <a href="/#/#" class="underline hover:no-underline"
                     >{"version " + reply.version}</a
                   >
                 </p>
-                <span class="">{reply.name} (walletid)</span>
+                <span class="">{reply.name} ({compressWalletString(comment.walletid)})</span>
               </div>
               <img src={reply.avtar} alt={reply.name} width="40px" />
             </div>
