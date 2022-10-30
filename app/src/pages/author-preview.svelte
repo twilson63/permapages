@@ -9,6 +9,7 @@
   import WalletHelp from "../dialogs/help-wallet.svelte";
 
   let showless = true;
+  let showcommentbox = false;
   const post = {
     id: 1,
     title: "Arweave Grow Crew #6",
@@ -97,13 +98,17 @@
     ],
   };
   let filteredcomments = post.comments.slice(0, 2);
+  let connectDlg = false;
+  let walletHelp = false;
 
   const showallcomments = () => {
     // display complete list of comments
   };
 
-  let connectDlg = false;
-  let walletHelp = false;
+  //   handle comment box submission
+  const submitComment = async () => {
+    connectDlg = true;
+  };
 </script>
 
 <NavBar />
@@ -112,7 +117,7 @@
     <PostStamp />
 
     <div class="w-full ml-4">
-      <PostPreviewHead {post}/>
+      <PostPreviewHead {post} />
 
       <DemoPost />
 
@@ -125,22 +130,64 @@
         <span>on Arweave</span>
       </div>
 
-      <button
-        class="group gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] rounded-full p-[2px] drop-shadow-sm 
+      {#if showcommentbox}
+        <form class="w-full my-10" on:submit|preventDefault={submitComment}>
+          <textarea
+            name="comment"
+            rows="4"
+            class="w-full border rounded-2xl p-4 outline-none"
+            placeholder="Enter your comment!"
+          />
+          <div class="w-full flex items-center px-4 mt-4">
+            <div class="flex items-center">
+              <img src="./paula.png" alt="paula" width="50px" />
+              <span class="text-[#999999] ml-4">Paula</span>
+            </div>
+
+            <div class="w-fit flex items-center gap-4 ml-auto">
+              <button
+                type="reset"
+                on:click={() => (showcommentbox = false)}
+                class="border hover:bg-[#999999] px-10 py-4 rounded-full hover:text-white font-semibold drop-shadow-sm"
+                >Cancel</button
+              >
+              <button
+                class="group gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] rounded-full p-[2px] drop-shadow-sm 
+            hover:drop-shadow-md"
+                type="submit"
+              >
+                <div
+                  class="px-4 py-1 bg-white inline-block rounded-full group-hover:bg-gradient-to-r group-hover:to-[#7B55EC]
+             group-hover:from-[#FF00E5]"
+                >
+                  <div
+                    class="txt-gradient inline-block group-hover:text-white px-6 py-2 font-semibold"
+                  >
+                    Respond
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </form>
+      {:else}
+        <button
+          class="group gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] rounded-full p-[2px] drop-shadow-sm 
           hover:drop-shadow-md my-10"
-        on:click={() => (connectDlg = true)}
-      >
-        <div
-          class="px-4 py-1 bg-white inline-block rounded-full group-hover:bg-gradient-to-r group-hover:to-[#7B55EC]
-           group-hover:from-[#FF00E5]"
+          on:click={() => (showcommentbox = true)}
         >
           <div
-            class="txt-gradient inline-block group-hover:text-white px-6 py-2 font-semibold"
+            class="px-4 py-1 bg-white inline-block rounded-full group-hover:bg-gradient-to-r group-hover:to-[#7B55EC]
+           group-hover:from-[#FF00E5]"
           >
-            Respond
+            <div
+              class="txt-gradient inline-block group-hover:text-white px-6 py-2 font-semibold"
+            >
+              Respond
+            </div>
           </div>
-        </div>
-      </button>
+        </button>
+      {/if}
 
       <PostComments {filteredcomments} />
     </div>
