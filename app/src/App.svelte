@@ -28,6 +28,7 @@
   import isEmpty from "ramda/src/isEmpty";
   import AuthorPreview from "./pages/author-preview.svelte";
   import ReaderPreview from "./pages/reader-preview.svelte";
+  import PostHistory from "./pages/post-history.svelte";
 
   router.mode.hash();
   router.subscribe((_) => window.scrollTo(0, 0));
@@ -112,11 +113,16 @@
   <Route path="/preview">
     <Preview />
   </Route>
-  <Route path="/author-preview">
-    <AuthorPreview />
-  </Route>
-  <Route path="/reader-preview">
-    <ReaderPreview />
+  <Route path="/post/*">
+    <Route path="/author-preview">
+      <AuthorPreview />
+    </Route>
+    <Route path="/reader-preview">
+      <ReaderPreview />
+    </Route>
+    <Route path="/history">
+      <PostHistory/>
+    </Route>
   </Route>
   <Route path="/widgets">
     <WidgetsHome />
