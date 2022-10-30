@@ -5,6 +5,8 @@
   import PostPreviewHead from "../components/post-preview-head.svelte";
   import PostStamp from "../components/post-stamp.svelte";
   import PostComments from "../components/post-comments.svelte";
+  import ConnectModal from "../dialogs/connect.svelte";
+  import WalletHelp from "../dialogs/help-wallet.svelte";
 
   let showless = true;
   const postcomments = [
@@ -84,6 +86,9 @@
   const showallcomments = () => {
     // display complete list of comments
   };
+
+  let connectDlg = false;
+  let walletHelp = false;
 </script>
 
 <NavBar />
@@ -107,7 +112,8 @@
 
       <button
         class="group gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] rounded-full p-[2px] drop-shadow-sm 
-          hover:drop-shadow-md mt-8"
+          hover:drop-shadow-md my-10"
+        on:click={() => (connectDlg = true)}
       >
         <div
           class="px-4 py-1 bg-white inline-block rounded-full group-hover:bg-gradient-to-r group-hover:to-[#7B55EC]
@@ -121,8 +127,7 @@
         </div>
       </button>
 
-
-      <PostComments {filteredcomments}/>
+      <PostComments {filteredcomments} />
     </div>
   </div>
 
@@ -138,3 +143,6 @@
   </div>
 </main>
 <Copyright />
+
+<ConnectModal bind:open={connectDlg} on:help={() => (walletHelp = true)} />
+<WalletHelp bind:open={walletHelp} />
