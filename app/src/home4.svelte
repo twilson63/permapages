@@ -8,7 +8,7 @@
   let walletHelp = false;
 </script>
 
-<main class="min-h-screen bg-[#364045] ">
+<main class="min-h-screen bg-[#364045] flex flex-col">
   <!--
   <div class="flex justify-end p-4">
     <a href="/pages" class="inline-block text-right text-white hover:underline"
@@ -43,7 +43,7 @@
     >
   </div>
 
-  <div class="">
+  <div class="mt-auto">
     <img src="wave img.png" alt="wave" />
   </div>
 </main>

@@ -8,14 +8,14 @@
   import ConnectModal from "../dialogs/connect.svelte";
   import WalletHelp from "../dialogs/help-wallet.svelte";
 
-  let showless = true;
   let showcommentbox = false;
+  let showless = true;
   const post = {
     id: 1,
     title: "Arweave Grow Crew #6",
     date: "2021-03-01T00:00:00.000Z",
     version: 3,
-    isAuthor: true,
+    isAuthor: false,
     author: {
       name: "Only Arweave",
       username: "onlyarweave",
@@ -97,6 +97,7 @@
       },
     ],
   };
+
   let filteredcomments = post.comments.slice(0, 2);
   let connectDlg = false;
   let walletHelp = false;

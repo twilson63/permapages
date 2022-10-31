@@ -9,8 +9,9 @@
   import AccountForm from "./accounts/form.svelte";
   import Notfound from "./404.svelte";
   import About from "./about.svelte";
-  import Pages from "./pages/index.svelte";
+  import Pages from "./pages/index2.svelte";
   import Posts from "./pages/posts.svelte";
+  import ViewPost from "./pages/posts.svelte";
   import Compose from "./pages/compose.svelte";
   import PageLink from "./pages/link.svelte";
   import PageForm from "./pages/form.svelte";
@@ -26,6 +27,8 @@
   import not from "ramda/src/not";
   import isEmpty from "ramda/src/isEmpty";
   import AuthorPreview from "./pages/author-preview.svelte";
+  import ReaderPreview from "./pages/reader-preview.svelte";
+  import PostHistory from "./pages/post-history.svelte";
 
   router.mode.hash();
   router.subscribe((_) => window.scrollTo(0, 0));
@@ -110,8 +113,16 @@
   <Route path="/preview">
     <Preview />
   </Route>
-  <Route path="/author-preview">
-    <AuthorPreview />
+  <Route path="/post/*">
+    <Route path="/author-preview">
+      <AuthorPreview />
+    </Route>
+    <Route path="/reader-preview">
+      <ReaderPreview />
+    </Route>
+    <Route path="/history">
+      <PostHistory/>
+    </Route>
   </Route>
   <Route path="/widgets">
     <WidgetsHome />
