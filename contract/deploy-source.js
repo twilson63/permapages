@@ -17,6 +17,7 @@ async function main() {
   tx.addTag('App-Version', '0.3.0')
 
   await arweave.transactions.sign(tx, wallet)
+  console.log('source: ', tx.id)
   const result = await arweave.transactions.post(tx)
   console.log(result)
 }

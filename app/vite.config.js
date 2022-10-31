@@ -24,7 +24,8 @@ export default defineConfig({
   base: '',
   plugins: [svelte()],
   define: {
-    '__APP_VERSION__': JSON.stringify(process.env.npm_package_version)
+    '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
+    '__ATOMIC_ASSET_SRC__': '"onUQmrLpgB630GXFo_uU8FUnt0bGvdA6e9CQbJM2zw8"'
   },
   optimizeDeps: {
     exclude: ['tinro']

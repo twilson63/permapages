@@ -136,7 +136,7 @@
             ticker: "PAGE-" + slugify(p.title),
             name: "Permapage",
             title: p.title,
-            owner: p.owner,
+            creator: p.owner || p.creator,
             balances: {
               [$address]: 10000,
             },
@@ -176,7 +176,7 @@
       submitting = true;
 
       page.content = easymde.value();
-      page.owner = $address;
+      page.creator = $address;
 
       // allowStamps is set
       if (page.allowStamps) {
