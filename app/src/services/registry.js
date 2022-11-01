@@ -12,7 +12,7 @@ import propOr from 'ramda/src/propOr'
 const { WarpFactory, defaultCacheOptions, LoggerFactory } = window.warp
 
 const arweave = Arweave.init({
-  host: import.meta.env.PROD ? window.location.host : 'arweave.dev',
+  host: 'arweave.net',
   port: 443,
   protocol: 'https'
 })
@@ -69,7 +69,7 @@ export async function register({ name, owner, transactionId }) {
   const res = await registry.writeInteraction({
     function: 'buyRecord',
     name,
-    contractTransactionId: ant
+    contractTransactionId: ant.contractTxId
   })
 
 
