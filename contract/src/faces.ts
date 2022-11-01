@@ -1,5 +1,6 @@
 export interface StateInterface {
   ticker: string;
+  creator: string;
   balances: {
     [addr: string]: number;
   };
@@ -9,15 +10,16 @@ export interface StateInterface {
   pairs: Array<any>;
   usedTransfers: Array<any>;
   foreignCalls: Array<any>;
-  claimable: [
-    {
-      from: string;
-      to: string;
-      qty: number;
-      txID: string;
-    }
-  ];
+  canEvolve?: Boolean;
+  evolve?: string;
+  claimable: {
+    from: string;
+    to: string;
+    qty: number;
+    txID: string;
+  }[];
   claims: string[];
+  settings: (string | boolean)[][];
 }
 
 export interface BalanceInterface {
@@ -41,11 +43,13 @@ export interface InputInterface {
   | "createOrder"
   | "halt"
   | "allow"
-  | "claim";
+  | "claim"
+  | "evolve";
   target?: string;
   qty?: number;
   contract?: string;
   txID?: string;
+  value?: string;
 }
 
 export interface ForeignCallInterface {

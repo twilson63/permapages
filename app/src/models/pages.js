@@ -10,7 +10,8 @@ const schema = z.object({
   id: z.string().optional(),
   code: z.string().optional(),
   type: z.literal('page').default('page'),
-  owner: z.string(),
+  owner: z.string().optional(),
+  creator: z.string().optional(),
   contentType: z.literal('text/html').default('text/html'),
   subdomain: z.string().max(20).optional(),
   title: z.string().max(150),
@@ -61,7 +62,7 @@ export const txToPage = (tx) => {
     id: tx.id,
     owner: tx.owner.address,
     type: getTag('Type')(tx.tags) || 'page',
-    title: getTag('Page-Title')(tx.tags) || '',
+    title: getTag('Page-Title')(tx.tags) || getTag('Title')(tx.tags) || '',
     status: getTag('Status')(tx.tags),
     webpage: getTag('Webpage')(tx.tags),
     timestamp
