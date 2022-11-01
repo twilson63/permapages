@@ -62,7 +62,7 @@ export const txToPage = (tx) => {
     id: tx.id,
     owner: tx.owner.address,
     type: getTag('Type')(tx.tags) || 'page',
-    title: getTag('Page-Title')(tx.tags) || '',
+    title: getTag('Page-Title')(tx.tags) || getTag('Title')(tx.tags) || '',
     status: getTag('Status')(tx.tags),
     webpage: getTag('Webpage')(tx.tags),
     timestamp
