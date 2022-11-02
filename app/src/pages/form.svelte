@@ -28,6 +28,7 @@
   import toLower from "ramda/src/toLower";
   import find from "ramda/src/find";
   import propEq from "ramda/src/propEq";
+  import trim from "ramda/src/trim";
 
   let advanced = false;
   var easymde = null;
@@ -40,6 +41,7 @@
   let errorDialog = false;
   let errorMessage = "";
   let widgetDialog = false;
+  let topics = "";
 
   let updateSubdomain = false;
 
@@ -116,6 +118,7 @@
     pages({ load: loadPage, loadState })
       .get(meta().query.fork)
       .then(async (p) => {
+        topics = p.topics.join(", ");
         page.title = p.title;
         if (p.code) {
           page.code = p.code;
@@ -247,6 +250,8 @@
 
         page.html = profileWidget + "\n" + page.html;
       }
+
+      page.topics = topics.split(",").map((t) => trim(t));
 
       const result = await pages({
         register,
@@ -562,16 +567,15 @@
         <small>(max: 150 characters)</small>
       </div>
       <div class="form-control">
-        <label for="status" class="label">Status</label>
-        <textarea
-          class="textarea textarea-bordered"
-          id="status"
-          name="status"
-          maxlength="150"
-          bind:value={page.status}
-          placeholder="Enter a status message about this update. ie (First Publish, adding new widget, etc)"
+        <label for="topics" class="label">Topics</label>
+        <input
+          class="input input-bordered"
+          id="topics"
+          name="topics"
+          bind:value={topics}
+          placeholder="Create a list of topics separated by commas."
         />
-        <small>(OPTIONAL, max: 150 characters)</small>
+        <small>(Create a list of topics separated by commas.)</small>
       </div>
       {#if ant}
         <div class="form-control">

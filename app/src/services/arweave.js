@@ -186,6 +186,11 @@ export const postWebpage = async (data) => {
     settings: [["isTradeable", true]]
   }
 
+  const topics = data.topics.map(t => ({
+    name: `topic:${t}`,
+    value: t
+  }))
+
   // create data-entry
   const de = {
     data: data.html,
@@ -200,7 +205,7 @@ export const postWebpage = async (data) => {
       { name: 'Description', value: data.description },
       { name: 'Page-Code', value: data.code },
       { name: 'Type', value: 'page' }
-    ]
+    ].concat(topics)
   }
 
   // dispatch to bundlr

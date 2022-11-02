@@ -25,7 +25,7 @@
                   style="
             background-image: url({icon_repo}/facebook-icon.png);
           "
-                  class="w-[94px] h-[94px] m-5 rounded-xl bg-cover bg-no-repeat"
+                  class="w-[64px] h-[64px] m-5 rounded-xl bg-cover bg-no-repeat"
                 />
               </a>
             </li>
@@ -41,7 +41,7 @@
                   style="
             background-image: url({icon_repo}/linkedin-icon.png);
           "
-                  class="w-[94px] h-[94px] m-5 rounded-xl bg-cover bg-no-repeat"
+                  class="w-[64px] h-[64px] m-5 rounded-xl bg-cover bg-no-repeat"
                 />
               </a>
             </li>
@@ -57,7 +57,7 @@
                   style="
             background-image: url({icon_repo}/github-icon.png);
           "
-                  class="w-[94px] h-[94px] m-5 rounded-xl bg-cover bg-no-repeat"
+                  class="w-[64px] h-[64px] m-5 rounded-xl bg-cover bg-no-repeat"
                 />
               </a>
             </li>
@@ -73,7 +73,7 @@
                   style="
             background-image: url({icon_repo}/discord-icon.png);
           "
-                  class="w-[94px] h-[94px] m-5 rounded-xl bg-cover bg-no-repeat"
+                  class="w-[64px] h-[64px] m-5 rounded-xl bg-cover bg-no-repeat"
                 />
               </a>
             </li>
@@ -89,7 +89,7 @@
                   style="
             background-image: url({icon_repo}/twitch-icon.png);
           "
-                  class="w-[94px] h-[94px] m-5 rounded-xl bg-cover bg-no-repeat"
+                  class="w-[64px] h-[64px] m-5 rounded-xl bg-cover bg-no-repeat"
                 />
               </a>
             </li>
@@ -105,7 +105,7 @@
                   style="
             background-image: url({icon_repo}/instagram-icon.png);
           "
-                  class="w-[94px] h-[94px] m-5 rounded-xl bg-cover bg-no-repeat"
+                  class="w-[64px] h-[64px] m-5 rounded-xl bg-cover bg-no-repeat"
                 />
               </a>
             </li>
@@ -121,7 +121,7 @@
                   style="
             background-image: url({icon_repo}/youtube-icon.png);
           "
-                  class="w-[94px] h-[94px] m-5 rounded-xl bg-cover bg-no-repeat"
+                  class="w-[64px] h-[64px] m-5 rounded-xl bg-cover bg-no-repeat"
                 />
               </a>
             </li>
@@ -137,7 +137,7 @@
                   style="
             background-image: url({icon_repo}/twitter-icon.png);
           "
-                  class="w-[94px] h-[94px] m-5 rounded-xl bg-cover bg-no-repeat"
+                  class="w-[64px] h-[64px] m-5 rounded-xl bg-cover bg-no-repeat"
                 />
               </a>
             </li>
