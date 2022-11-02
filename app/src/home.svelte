@@ -1,73 +1,52 @@
 <script>
+  import ConnectModal from "./dialogs/connect.svelte";
+  import WalletHelp from "./dialogs/help-wallet.svelte";
   import { address } from "./store.js";
-  let version = __APP_VERSION__.split(".")[2];
+  import { router } from "tinro";
+
+  let connectDlg = false;
+  let walletHelp = false;
 </script>
 
-<div class="hero min-h-screen bg-base-200 items-start">
-  <div class="w-full">
-    <div class="badge badge-secondary ml-16 mt-4 float-left">
-      BETA {version}
-    </div>
+<main class="min-h-screen bg-[#364045] flex flex-col">
+  <!--
+  <div class="flex justify-end p-4">
+    <a href="/pages" class="inline-block text-right text-white hover:underline"
+      >Explore Pages</a
+    >
   </div>
-  <div class="hero-content text-center">
-    <div class="w-full">
-      <figure class="flex items-center justify-center">
-        <img
-          class="h-[200px] rounded-lg"
-          src="permapages_logo.svg"
-          alt="logo"
-        />
-      </figure>
+-->
+  <div class="w-full flex flex-col items-center justify-center">
+    <img src="magic-hand.png" alt="magic-hand" width="130px" />
+    <h1
+      class="text-8xl text-transparent font-bold bg-clip-text bg-gradient-to-r from-[#FF00E5] to-[#7B55EC]"
+    >
+      compose
+    </h1>
+    <p class="text-[#F7F7F7] font-semibold mt-4 tracking-widest">
+      your creative portal to the permaweb
+    </p>
 
-      <h1 class="mt-8 text-5xl text-left">
-        <span class="uppercase text-primary">Welcome to Permapages!</span>
-      </h1>
-      <div class="flex space-x-16">
-        <div class="flex mt-8 space-x-2 flex-col justify-start text-left w-1/2">
-          <p class="text-xl">
-            Permapages is a Web3 app that allows users to create and manage
-            their own permanent web3 profile and other permaweb pages. When
-            connecting to the application with your wallet, you can create your
-            Web3 profile by uploading an avatar and entering some social link
-            information. Then you can use the editor to create content and add
-            permapage widgets to make your profile fun and unique.
-          </p>
-        </div>
-        <div class="mt-16 space-x-4">
-          <div class="mb-16 mx-8">
-            <div class="text-2xl text-primary">
-              Connect your wallet to claim your page on the permaweb
-            </div>
-          </div>
-          <div class="flex justify-center space-x-4">
-            {#if $address}
-              <a href="/pages" class="btn btn-primary rounded w-[200px]"
-                >Pages</a
-              >
-            {:else}
-              <a href="/connect" class="btn btn-primary rounded w-[200px]"
-                >Connect Wallet</a
-              >
-            {/if}
-            <a
-              target="_blank"
-              href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE"
-              class="btn btn-outline rounded w-[200px] btn-primary"
-              >Learn More</a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
+    <button
+      on:click={() => {
+        if ($address) {
+          router.goto("/dashboard");
+        } else {
+          connectDlg = true;
+        }
+      }}
+      class="text-[#F7F7F7] border-4 rounded-full p-2 px-10 font-semibold mt-12 hover:bg-[#F7F7F7] hover:text-black"
+      >{$address ? "dashboard" : "connect"}</button
+    >
+    <a href="/learn" class="text-[#F7F7F7] inline-block mt-5 hover:underline"
+      >learn more</a
+    >
   </div>
-  <div class="hidden md:block absolute bottom-8 left-8">
-    <a href="/about">
-      <img
-        src={window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "ar-dark.png"
-          : "ar-light.png"}
-        alt="permanent"
-      />
-    </a>
+
+  <div class="mt-auto">
+    <img src="wave img.png" alt="wave" />
   </div>
-</div>
+</main>
+
+<ConnectModal bind:open={connectDlg} on:help={() => (walletHelp = true)} />
+<WalletHelp bind:open={walletHelp} />

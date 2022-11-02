@@ -1,8 +1,8 @@
 <script>
-  import PagesHead from "../components/pages-head.svelte";
-  import NavBar from "../components/navbar.svelte";
-  import ActionCards from "../components/pages-cards.svelte";
-  import Copyright from "../widgets/copyright.svelte";
+  import PagesHead from "./components/pages-head.svelte";
+  import NavBar from "./components/navbar.svelte";
+  import ActionCards from "./components/pages-cards.svelte";
+  import Copyright from "./widgets/copyright.svelte";
 </script>
 
 <NavBar />

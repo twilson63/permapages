@@ -13,7 +13,7 @@
     title: "Make a Blog Post",
     subtitle: "author your first permanent piece",
     icon: [Write],
-    link: "write",
+    link: "/pages",
   };
 
   let boxslist = [
@@ -21,19 +21,19 @@
       title: "Create your Profile",
       subtitle: "your space on web3",
       icon: [User],
-      link: "user",
+      link: "/account",
     },
     {
       title: "Post Image(s)",
       subtitle: "upload your images in a gallery view and more",
       icon: [Gallery],
-      link: "images",
+      link: "https://img.arweave.dev",
     },
     {
       title: "Upload Multimedia",
       subtitle: "get your media files on the Permaweb",
       icon: [Video, Music],
-      link: "multimedia",
+      link: "https://pst.arweave.dev",
     },
     {
       title: "Create an NFT",
@@ -45,10 +45,10 @@
       title: "Free Space",
       subtitle: "make a fully custom page with html & more",
       icon: [Code],
-      link: "code",
+      link: "/pages/new",
     },
   ];
-
+  /*
   let postdata = [
     {
       id: 1,
@@ -66,6 +66,8 @@
       lastupdate: "2 weeks ago",
     },
   ];
+  */
+  let postdata = [];
 </script>
 
 <div class="w-full mt-10 flex flex-wrap justify-between gap-4">

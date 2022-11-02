@@ -3,13 +3,13 @@
   import { address } from "./store.js";
   import Announcer from "./components/announcer.svelte";
   import Transition from "./components/transition.svelte";
-  import Home from "./home4.svelte";
+  import Home from "./home.svelte";
   import Connect from "./connect.svelte";
   import Account from "./account.svelte";
   import AccountForm from "./accounts/form.svelte";
   import Notfound from "./404.svelte";
   import About from "./about.svelte";
-  import Pages from "./pages/index2.svelte";
+  import Pages from "./pages/index.svelte";
   import Posts from "./pages/posts.svelte";
   import ViewPost from "./pages/posts.svelte";
   import Compose from "./pages/compose.svelte";
@@ -23,6 +23,7 @@
   import WidgetsSupport from "./widgets/support.svelte";
   import WidgetsBuild from "./widgets/build.svelte";
   import WidgetsHome from "./widgets/index.svelte";
+  import Dashboard from "./dashboard.svelte";
 
   import not from "ramda/src/not";
   import isEmpty from "ramda/src/isEmpty";
@@ -43,6 +44,9 @@
     path="/learn"
     redirect="/notes/Xx8lQw1q9xOUn1mB7CMagKHgv8XUy9NxsrQLtfqZItY"
   />
+  <Route path="/dashboard">
+    <Dashboard />
+  </Route>
   <Route path="/connect">
     {#if not(isEmpty($address))}
       <Home />
@@ -121,7 +125,7 @@
       <ReaderPreview />
     </Route>
     <Route path="/history">
-      <PostHistory/>
+      <PostHistory />
     </Route>
   </Route>
   <Route path="/widgets">
