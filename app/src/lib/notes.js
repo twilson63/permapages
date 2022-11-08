@@ -6,6 +6,7 @@ import { toHtml } from 'hast-util-to-html'
 const { ReaderT, Async } = crocks
 const { of, ask, lift } = ReaderT(Async)
 
+const CONTRACT_SOURCE = __ATOMIC_ASSET_SRC__
 /**
  * Notes SDK
  * 
@@ -41,10 +42,12 @@ const validateNote = (note) => {
  */
 export const create = (note) => of(note)
   .chain(note =>
-    ask(({ warp }) =>
+    ask(({ warp, arweaveWallet }) =>
       Async.of(note)
         .chain(validateNote)
         .map(generateHtml)
+        .chain(dispatch(arweaveWallet))
+        .chain(post(warp))
     )
   ).chain(lift)
 
@@ -89,4 +92,25 @@ function generateHtml(note) {
   note.html = toHtml(html)
   return note
 
+}
+
+function dispatch(arweave, arweaveWallet) {
+  const createTx = Async.fromPromise(arweave.createTransaction.bind(arweave))
+  const runDispatch = Async.fromPromise(arweaveWallet.dispatch.bind(arweaveWallet))
+  return function (note) {
+    return createTx({ data: note.html })
+      .map(tx => {
+        tx.addTag('Content-Type', 'text/html')
+        tx.addTag('App-Name', 'SmartWeaveContract')
+        tx.addTag('App-Version', '0.3.0')
+        tx.addTag('Contract-Src', CONTRACT_SOURCE)
+        tx.addTag('Init-State', JSON.stringify(note))
+        tx.addTag('Title', note.title)
+        tx.addTag('Description', note.description)
+        tx.addTag('Type', note.type)
+        return tx
+      })
+      .chain(tx => runDispatch(tx).map(_ => tx.id))
+      .map(id => assoc('id', id, note))
+  }
 }
