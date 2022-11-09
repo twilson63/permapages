@@ -10,8 +10,8 @@
   import Notfound from "./404.svelte";
   import About from "./about.svelte";
   import Pages from "./pages/index.svelte";
-  import Posts from "./pages/posts.svelte";
-  import ViewPost from "./pages/posts.svelte";
+  import Posts from "./posts/index.svelte";
+  import ViewPost from "./posts/index.svelte";
   import Compose from "./pages/compose.svelte";
   import PageLink from "./pages/link.svelte";
   import PageForm from "./pages/form.svelte";
@@ -117,7 +117,7 @@
   <Route path="/preview">
     <Preview />
   </Route>
-  <Route path="/post/*">
+  <Route path="/posts/*">
     <Route path="/author-preview">
       <AuthorPreview />
     </Route>
@@ -126,6 +126,9 @@
     </Route>
     <Route path="/history">
       <PostHistory />
+    </Route>
+    <Route fallback>
+      <Posts />
     </Route>
   </Route>
   <Route path="/widgets">

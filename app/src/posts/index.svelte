@@ -67,7 +67,7 @@
 <main class="container mx-auto min-h-screen">
   <PagesHead>
     <a
-      href="/#/pages"
+      href="/dashboard"
       class="btn rounded-full bg-[#F9F9F9] min-h-[2.5rem] h-[2.5rem] px-8 hover:bg-gray-200 border-none"
     >
       <img src="polygon-icon.svg" alt="polygon-icon" />
