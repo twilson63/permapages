@@ -6,7 +6,7 @@
 </script>
 
 <a
-  href={"/#" + "/" + link}
+  href={link}
   class="group gradient-box p-[1px] hover:bg-gradient-to-r hover:from-[#FF00E5] hover:to-[#7B55EC] hover:drop-shadow-md "
 >
   <div

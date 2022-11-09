@@ -16,6 +16,7 @@ const schema = z.object({
   subdomain: z.string().max(20).optional(),
   title: z.string().max(150),
   description: z.string().max(150),
+  topics: z.array(z.string()).optional(),
   status: z.string().max(150).optional(),
   protocol: z.string().default('PermaPages-v0.3'),
   content: z.string(),

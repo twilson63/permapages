@@ -19,6 +19,9 @@
   <nav class="flex-none">
     <ul class="hidden md:inline-flex gap-2 items-center menu menu-horizontal">
       <li>
+        <a href="/dashboard">Dashboard</a>
+      </li>
+      <li>
         <a href="/pages">Pages</a>
       </li>
       <li>
