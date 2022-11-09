@@ -19,6 +19,7 @@
     "esbuild": "^0.15.5",
     "eslint": "^8.14.0",
     "esm": "^3.2.25",
+    "node-fetch": "^3.2.10",
     "postcss": "^8.4.12",
     "replace-in-file": "^6.3.5",
     "svelte": "^3.44.0",

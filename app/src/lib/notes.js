@@ -2,11 +2,11 @@ import crocks from 'crocks'
 import { z } from 'zod'
 import { h } from 'hastscript'
 import { toHtml } from 'hast-util-to-html'
+import { assoc, join, keys, over, lensProp } from 'ramda'
 
 const { ReaderT, Async } = crocks
 const { of, ask, lift } = ReaderT(Async)
 
-const CONTRACT_SOURCE = __ATOMIC_ASSET_SRC__
 /**
  * Notes SDK
  * 
@@ -22,12 +22,14 @@ const CONTRACT_SOURCE = __ATOMIC_ASSET_SRC__
  */
 const Note = z.object({
   id: z.string().optional(),
+  type: z.string().default('post'),
   title: z.string(),
+  code: z.string(),
   description: z.string(),
   topics: z.array(z.string()),
   content: z.string(),
   timestamp: z.number(),
-  owners: z.array(z.string()),
+  balances: z.record(z.string().min(43).max(43), z.number()),
   html: z.string().optional()
 })
 
@@ -42,31 +44,26 @@ const validateNote = (note) => {
  */
 export const create = (note) => of(note)
   .chain(note =>
-    ask(({ warp, arweaveWallet }) =>
+    ask((env) =>
       Async.of(note)
+        .map(over(lensProp('code'), () => randomUUID()))
         .chain(validateNote)
         .map(generateHtml)
-        .chain(dispatch(arweaveWallet))
-        .chain(post(warp))
+        .chain(dispatch(env))
+        .chain(post(env))
     )
   ).chain(lift)
 
-//.chain(validateNote)
+export const get = (id) => of(id)
+  .chain(id => ask(env => Async.of(id)
+    .chain(getNote(env))
+    .chain(validateNote)
 
+  )).chain(lift)
 
-// generate contract state
-// generate html data
-// dispatch to bundlr
-// post to sequencer
-
-
-
-export function get(id) {
-  // read note from contract
-  // return note
-}
 
 export function update(note) {
+  // write interaction to contract
 
 }
 
@@ -77,11 +74,26 @@ export function hx(id) {
 
 /** -------------- Below the fold -------------------------- */
 
+/**
+ * @returns {function}
+ */
+function getNote({ warp }) {
+  /**
+   * @returns {Async}
+   */
+  return function (id) {
+    const readState = Async.fromPromise(warp.contract(id).readState)
+    return readState()
+  }
+}
+
 function generateHtml(note) {
   const html = h('html',
     h('head',
       h('title', note.title),
-      h('meta', { name: 'description', content: note.description })
+      h('meta', { name: 'description', content: note.description }),
+      h('meta', { name: 'code', content: note.code }),
+      h('meta', { name: 'authors', content: join(',', keys(node.balances)) })
     ),
     h('body',
       h('h1', note.title),
@@ -94,7 +106,7 @@ function generateHtml(note) {
 
 }
 
-function dispatch(arweave, arweaveWallet) {
+function dispatch({ arweave, arweaveWallet, CONTRACT_SOURCE }) {
   const createTx = Async.fromPromise(arweave.createTransaction.bind(arweave))
   const runDispatch = Async.fromPromise(arweaveWallet.dispatch.bind(arweaveWallet))
   return function (note) {
@@ -112,5 +124,40 @@ function dispatch(arweave, arweaveWallet) {
       })
       .chain(tx => runDispatch(tx).map(_ => tx.id))
       .map(id => assoc('id', id, note))
+  }
+}
+
+function post({ arweave, fetch, CONTRACT_SOURCE, CONTRACT_GATEWAY }) {
+  const createTx = Async.fromPromise(arweave.createTransaction.bind(arweave))
+  const signTx = Async.fromPromise(arweave.transactions.sign.bind(arweave.transactions))
+
+  const deployContract = tx => Async.fromPromise(fetch)(CONTRACT_GATEWAY, {
+    method: 'POST',
+    body: JSON.stringify({ contractTx: tx }),
+    headers: {
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    }
+  })
+
+  return function (note) {
+    return createTx({ data: note.html })
+      .map(tx => {
+        tx.addTag('Content-Type', 'text/html')
+        tx.addTag('App-Name', 'SmartWeaveContract')
+        tx.addTag('App-Version', '0.3.0')
+        tx.addTag('Contract-Src', CONTRACT_SOURCE)
+        tx.addTag('Init-State', JSON.stringify(note))
+        tx.addTag('Title', note.title)
+        tx.addTag('Description', note.description)
+        tx.addTag('Type', note.type)
+        return tx
+      })
+      .chain(signTx)
+      .map(assoc('id', note.id))
+      .chain(deployContract)
+
+
   }
 }
