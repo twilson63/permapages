@@ -65,6 +65,7 @@
 
 <NavBar />
 <main class="container mx-auto min-h-screen">
+  <!--
   <PagesHead>
     <a
       href="/dashboard"
@@ -74,6 +75,7 @@
       <span class="text-[#696969] ml-4">Back</span>
     </a>
   </PagesHead>
+  -->
 
   <PagesPosts {posts} />
   <PagesDrafts {drafts} />
