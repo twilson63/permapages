@@ -64,12 +64,18 @@ export const get = (id) => of(id)
 
 export function update(note) {
   // write interaction to contract
+  of(note)
+    .chain(note => ask(env => Async.of(note)
+      .chain(validateNote)
+      .chain(postUpdate(env))
+      // check if true then readState?
+    ))
 
 }
 
 export function hx(id) {
   // get history from note
-
+  // get the log of the note.
 }
 
 /** -------------- Below the fold -------------------------- */
@@ -159,5 +165,17 @@ function post({ arweave, fetch, CONTRACT_SOURCE, CONTRACT_GATEWAY }) {
       .chain(deployContract)
 
 
+  }
+}
+
+function postUpdate({ warp }) {
+  return function (note) {
+    const c = warp.contract(note.id).setEvaluationOptions({ internalWrites: true })
+    const write = Async.fromPromise(c.writeInteraction.bind(c))
+    return write({
+      function: 'update',
+      note,
+      timestamp: Date.now()
+    })
   }
 }
