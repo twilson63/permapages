@@ -584,10 +584,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@verto/flex@^0.1.14":
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/@verto/flex/-/flex-0.1.14.tgz#8a8047bf1023e1ed606cf58b75f7da11b5da9204"
-  integrity sha512-UAcqcZVK7kGoR8t+Om8gz0bAA1BoGGyX7dreyEcQhi656loIfbBGjK+GNLEju4Xc+n1CLB5PnK7FRdIO5ci8Mg==
+"@verto/flex@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@verto/flex/-/flex-0.1.15.tgz#c3206dd1fd2a300aac5f1a15b5d27442dc106154"
+  integrity sha512-UXexIS1Mx2iZhcau+3u2zZQM+CruW7FuN6uUC7IBx2iRsunXq4KBvADH+x9R1Y2FUIOuDKxJsA6JWKdpjhpGYA==
   dependencies:
     arweave "^1.11.4"
     smartweave "^0.4.49"

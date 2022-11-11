@@ -17,7 +17,7 @@
     "uvu": "^0.5.6"
   },
   "dependencies": {
-    "@verto/flex": "^0.1.14",
+    "@verto/flex": "^0.1.15",
     "arweave": "^1.11.4",
     "warp-contracts": "^1.2.13",
     "zod": "^3.19.1"
@@ -25,6 +25,6 @@
   "scripts": {
     "build": "node build.cjs",
     "deploy": "node deploy.cjs",
-    "test": "uvu test"
+    "test": "uvu -r tsm test"
   }
 }

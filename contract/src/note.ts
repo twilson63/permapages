@@ -1,6 +1,9 @@
 import { AddPair, CancelOrder, CreateOrder, Halt } from "@verto/flex";
 import { z } from 'zod'
 
+import { append, pick } from 'ramda'
+
+
 const State = z.object({
   id: z.string().optional(),
   pairs: z.array(
@@ -53,6 +56,12 @@ const State = z.object({
 
 type State = z.infer<typeof State>
 
+const Note = z.object({
+  title: z.string(),
+  description: z.string(),
+  topics: z.array(z.string()),
+  content: z.string(),
+})
 
 const Action = z.object({
   caller: z.string(),
@@ -60,6 +69,8 @@ const Action = z.object({
     function: z.string(), // transfer, createOrder, cancelOrder, addPair, 
     target: z.string().optional(),
     qty: z.number().optional(),
+    data: z.any().optional(),
+    timestamp: z.number().optional()
   })
 })
 
@@ -71,8 +82,90 @@ export async function handle(state: State, action: Action): Promise<{ state: Sta
   const caller = action.caller;
 
   // update
+  if (input.function === "update") {
+    // only owners can update contract
+    ContractAssert(balances[caller] > 0, 'Must be owner to update')
+    // validate input data
+    ContractAssert(Note.safeParse(input.data).success, 'Data is required to update!')
+    // validate input timestamp
+    ContractAssert(input.timestamp, 'Timestamp is required!')
+
+    state.log = append(pick(['title', 'description', 'topics', 'content', 'updated', 'updatedBy']), state.log)
+
+    state = Object.assign({},
+      state,
+      pick(['title', 'description', 'topics', 'content'], input.data),
+      { updated: input.timestamp, updatedBy: caller }
+    )
+
+    return { state }
+  }
+
   // transfer
+  if (input.function === "transfer") {
+    const target = input.target;
+    const quantity = input.qty;
+
+    if (!balances[caller]) {
+      balances[caller] = 0
+    }
+
+    if (!Number.isInteger(quantity) || quantity === undefined) {
+      throw new ContractError(
+        "Invalid value for quantity. Must be an integer."
+      );
+    }
+    if (!target) {
+      throw new ContractError("No target specified.");
+    }
+    if (quantity <= 0 || caller === target) {
+      throw new ContractError("Invalid token transfer.");
+    }
+    if (!(caller in balances)) {
+      throw new ContractError("Caller doesn't own any balance.");
+    }
+    if (balances[caller] < quantity) {
+      throw new ContractError(
+        "Caller balance not high enough to send " + quantity + " token(s)."
+      );
+    }
+
+    balances[caller] -= quantity;
+    if (target in balances) {
+      balances[target] += quantity;
+    } else {
+      balances[target] = quantity;
+    }
+
+    return { state };
+  }
+
   // balance
+  if (input.function === "balance") {
+    let target;
+    if (!input.target) {
+      target = caller;
+    } else {
+      target = input.target;
+    }
+    const ticker = state.ticker;
+
+    if (typeof target !== "string") {
+      throw new ContractError("Must specify target to get balance for.");
+    }
+    if (typeof balances[target] !== "number") {
+      throw new ContractError("Cannot get balance; target does not exist.");
+    }
+
+    return {
+      result: {
+        target,
+        ticker,
+        balance: balances[target],
+      },
+    };
+  }
+
   // evolve
   if (input.function === 'evolve') {
     if (state.canEvolve) {
