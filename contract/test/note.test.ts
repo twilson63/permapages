@@ -19,6 +19,7 @@ const state = {
   canEvolve: true,
   title: 'My Awesome Post',
   description: 'A awesome description',
+  topics: [],
   content: 'Enter Content here',
   updated: Date.now(),
   updatedBy: 'K92n-x2kHiRIBmS0yRGz5ii3OEXFw58__742Qu0DTgA',
@@ -56,6 +57,7 @@ test('test evolve', async () => {
 })
 
 test('update success', async () => {
+
   const result = await handle(state, {
     caller: 'K92n-x2kHiRIBmS0yRGz5ii3OEXFw58__742Qu0DTgA',
     input: {
@@ -86,7 +88,7 @@ test('update failure not an owner', async () => {
     })
 
   } catch (e) {
-    console.log(e.message)
+    //console.log(e.message)
     assert.equal(e.message, 'Must be owner to update')
   }
 
@@ -106,7 +108,7 @@ test('update failure bad data', async () => {
     })
 
   } catch (e) {
-    console.log(e.message)
+    //console.log(e.message)
     assert.equal(e.message, 'Data is required to update!')
   }
 

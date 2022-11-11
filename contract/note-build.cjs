@@ -4,7 +4,7 @@ const replace = require("replace-in-file");
 build({
   entryPoints: ["./src/note.ts"],
   outdir: "./dist",
-  minify: false,
+  minify: true,
   bundle: true,
 })
   .catch(() => process.exit(1))

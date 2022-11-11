@@ -1,7 +1,8 @@
 import { AddPair, CancelOrder, CreateOrder, Halt } from "@verto/flex";
 import { z } from 'zod'
 
-import { append, pick } from 'ramda'
+// import append from 'ramda/src/append'
+// import pick from 'ramda/src/pick'
 
 
 const State = z.object({
@@ -70,7 +71,10 @@ const Action = z.object({
     target: z.string().optional(),
     qty: z.number().optional(),
     data: z.any().optional(),
-    timestamp: z.number().optional()
+    timestamp: z.number().optional(),
+    pair: z.union([z.string(), z.array(z.string())]).optional(),
+    price: z.number().optional(),
+    transaction: z.string().min(43).max(43).optional()
   })
 })
 
@@ -81,6 +85,9 @@ export async function handle(state: State, action: Action): Promise<{ state: Sta
   const input = action.input;
   const caller = action.caller;
 
+  ContractAssert(State.safeParse(state).success, 'Error: state is not valid! ' + JSON.stringify(State.safeParse(state).error))
+  ContractAssert(Action.safeParse(action).success, 'Error: action is not valid!')
+
   // update
   if (input.function === "update") {
     // only owners can update contract
@@ -90,13 +97,17 @@ export async function handle(state: State, action: Action): Promise<{ state: Sta
     // validate input timestamp
     ContractAssert(input.timestamp, 'Timestamp is required!')
 
-    state.log = append(pick(['title', 'description', 'topics', 'content', 'updated', 'updatedBy']), state.log)
+    const archive = Object.assign({}, Note.parse(state), { updated: state.updated, updatedBy: state.updatedBy })
+    const note = Note.parse(input.data)
+    state.log = [...state.log, archive]
 
     state = Object.assign({},
       state,
-      pick(['title', 'description', 'topics', 'content'], input.data),
+      note,
       { updated: input.timestamp, updatedBy: caller }
     )
+
+    ContractAssert(State.safeParse(state).success, 'State is not valid, cannot update!')
 
     return { state }
   }
