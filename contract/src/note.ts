@@ -1,10 +1,6 @@
 import { AddPair, CancelOrder, CreateOrder, Halt } from "@verto/flex";
 import { z } from 'zod'
 
-// import append from 'ramda/src/append'
-// import pick from 'ramda/src/pick'
-
-
 const State = z.object({
   id: z.string().optional(),
   pairs: z.array(
@@ -74,27 +70,33 @@ const Action = z.object({
     timestamp: z.number().optional(),
     pair: z.union([z.string(), z.array(z.string())]).optional(),
     price: z.number().optional(),
-    transaction: z.string().min(43).max(43).optional()
+    transaction: z.string().min(43).max(43).optional(),
+    value: z.string().optional()
   })
 })
 
 type Action = z.infer<typeof Action>
 
-export async function handle(state: State, action: Action): Promise<{ state: State } | { result: any }> {
+export async function handle(state: State, action: Action): Promise<{ state: State } | { result: any } | undefined> {
   const balances = state.balances;
   const input = action.input;
   const caller = action.caller;
 
-  ContractAssert(State.safeParse(state).success, 'Error: state is not valid! ' + JSON.stringify(State.safeParse(state).error))
+  // @ts-ignore 
+  ContractAssert(State.safeParse(state).success, 'Error: state is not valid! ')
+  // @ts-ignore 
   ContractAssert(Action.safeParse(action).success, 'Error: action is not valid!')
 
   // update
   if (input.function === "update") {
     // only owners can update contract
+    // @ts-ignore 
     ContractAssert(balances[caller] > 0, 'Must be owner to update')
     // validate input data
+    // @ts-ignore 
     ContractAssert(Note.safeParse(input.data).success, 'Data is required to update!')
     // validate input timestamp
+    // @ts-ignore 
     ContractAssert(input.timestamp, 'Timestamp is required!')
 
     const archive = Object.assign({}, Note.parse(state), { updated: state.updated, updatedBy: state.updatedBy })
@@ -106,7 +108,7 @@ export async function handle(state: State, action: Action): Promise<{ state: Sta
       note,
       { updated: input.timestamp, updatedBy: caller }
     )
-
+    // @ts-ignore 
     ContractAssert(State.safeParse(state).success, 'State is not valid, cannot update!')
 
     return { state }
@@ -122,20 +124,25 @@ export async function handle(state: State, action: Action): Promise<{ state: Sta
     }
 
     if (!Number.isInteger(quantity) || quantity === undefined) {
+      // @ts-ignore 
       throw new ContractError(
         "Invalid value for quantity. Must be an integer."
       );
     }
     if (!target) {
+      // @ts-ignore 
       throw new ContractError("No target specified.");
     }
     if (quantity <= 0 || caller === target) {
+      // @ts-ignore 
       throw new ContractError("Invalid token transfer.");
     }
     if (!(caller in balances)) {
+      // @ts-ignore 
       throw new ContractError("Caller doesn't own any balance.");
     }
     if (balances[caller] < quantity) {
+      // @ts-ignore 
       throw new ContractError(
         "Caller balance not high enough to send " + quantity + " token(s)."
       );
@@ -162,9 +169,11 @@ export async function handle(state: State, action: Action): Promise<{ state: Sta
     const ticker = state.ticker;
 
     if (typeof target !== "string") {
+      // @ts-ignore 
       throw new ContractError("Must specify target to get balance for.");
     }
     if (typeof balances[target] !== "number") {
+      // @ts-ignore 
       throw new ContractError("Cannot get balance; target does not exist.");
     }
 
