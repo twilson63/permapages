@@ -84,6 +84,25 @@ export function profiles({ gql, post, load }) {
   }
 }
 
+export function notes({ gql }) {
+
+  function publish(note) {
+    // validate
+    // build html post
+    // deploy contract and post
+    return {
+      title: '',
+      description: '',
+      content: '',
+      topics: []
+    }
+  }
+
+  return {
+    publish
+  }
+}
+
 export function pages({ register, post, gql, postWebpage, load, loadState }) {
   const deployPage = post ? Async.fromPromise(post) : () => Async.of(null)
   const registerPage = register ? Async.fromPromise(register) : () => Async.of(null)

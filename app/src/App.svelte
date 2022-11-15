@@ -12,7 +12,7 @@
   import Pages from "./pages/index.svelte";
   import Posts from "./posts/index.svelte";
   import ViewPost from "./posts/index.svelte";
-  import Compose from "./pages/compose.svelte";
+  import Compose from "./notes/form.svelte";
   import PageLink from "./pages/link.svelte";
   import PageForm from "./pages/form.svelte";
   import Arns from "./arns/index.svelte";
