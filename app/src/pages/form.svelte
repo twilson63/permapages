@@ -118,7 +118,7 @@
     pages({ load: loadPage, loadState })
       .get(meta().query.fork)
       .then(async (p) => {
-        topics = p.topics.join(", ");
+        topics = p.topics ? p.topics.join(", ") : "";
         page.title = p.title;
         if (p.code) {
           page.code = p.code;
