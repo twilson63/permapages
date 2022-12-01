@@ -18,7 +18,7 @@
 -->
   <div class="w-full flex flex-col items-center justify-center">
     <h1
-      class="mt-16 text-8xl text-transparent font-bold bg-clip-text bg-gradient-to-r from-[#FF00E5] to-[#7B55EC]"
+      class="mt-64 text-8xl text-transparent font-bold bg-clip-text bg-gradient-to-r from-[#FF00E5] to-[#7B55EC]"
     >
       compose
     </h1>
