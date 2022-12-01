@@ -17,9 +17,8 @@
   </div>
 -->
   <div class="w-full flex flex-col items-center justify-center">
-    <img src="magic-hand.png" alt="magic-hand" width="130px" />
     <h1
-      class="text-8xl text-transparent font-bold bg-clip-text bg-gradient-to-r from-[#FF00E5] to-[#7B55EC]"
+      class="mt-16 text-8xl text-transparent font-bold bg-clip-text bg-gradient-to-r from-[#FF00E5] to-[#7B55EC]"
     >
       compose
     </h1>
@@ -38,13 +37,13 @@
       class="text-[#F7F7F7] border-4 rounded-full p-2 px-10 font-semibold mt-12 hover:bg-[#F7F7F7] hover:text-black"
       >{$address ? "dashboard" : "connect"}</button
     >
-    <a href="/learn" class="text-[#F7F7F7] inline-block mt-5 hover:underline"
+    <a href="/about" class="text-[#F7F7F7] inline-block mt-5 hover:underline"
       >learn more</a
     >
   </div>
 
   <div class="mt-auto">
-    <img src="wave img.png" alt="wave" />
+    <img src="wave.svg" alt="wave" />
   </div>
 </main>
 
