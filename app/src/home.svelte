@@ -42,8 +42,8 @@
     >
   </div>
 
-  <div class="mt-auto">
-    <img src="wave.svg" alt="wave" />
+  <div class="mt-auto w-full">
+    <img class="w-full" src="wave.svg" alt="wave" />
   </div>
 </main>
 
