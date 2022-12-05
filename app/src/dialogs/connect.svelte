@@ -22,7 +22,7 @@
       const addr = await arweaveWallet.getActiveAddress();
       $address = addr;
       open = false;
-      router.goto("/account");
+      router.goto("/dashboard");
     } catch (e) {
       console.log(e);
     }
@@ -40,7 +40,7 @@
       const addr = await arweaveWallet.getActiveAddress();
       $address = addr;
       open = false;
-      router.goto("/account");
+      router.goto("/dashboard");
     } catch (e) {
       console.log(e);
     }

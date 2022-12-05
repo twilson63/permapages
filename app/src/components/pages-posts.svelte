@@ -32,8 +32,9 @@
     <div
       class="w-[95%] mx-auto flex flex-row items-center mt-2 justify-between border-b-[1px] py-2"
     >
+      <!--
       <img src={post.thumbnail} alt={post.title} width="120px" class="block" />
-
+      -->
       <div class="ml-4 mr-auto">
         <h3 class="text-lg font-bold w-[200px] truncate text-ellipsis">
           {post.title}
@@ -73,7 +74,9 @@
 
       <div class="flex flex-col items-center mx-auto">
         <h3 class="text-lg font-bold text-[#7D7D7D]">View</h3>
-        <a href="/#/post/author-preview"><img src="eye.svg" alt="eye" width="20px" /></a>
+        <a href="/#/post/author-preview"
+          ><img src="eye.svg" alt="eye" width="20px" /></a
+        >
       </div>
 
       <div class="flex flex-col items-center ml-auto">

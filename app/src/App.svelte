@@ -10,7 +10,7 @@
   import Notfound from "./404.svelte";
   import About from "./about.svelte";
   import Pages from "./pages/index.svelte";
-  import Posts from "./pages/posts.svelte";
+  import Posts from "./posts/index.svelte";
   import ViewPost from "./pages/posts.svelte";
   import Compose from "./pages/compose.svelte";
   import PageLink from "./pages/link.svelte";
@@ -47,13 +47,6 @@
   <Route path="/dashboard">
     <Dashboard />
   </Route>
-  <Route path="/connect">
-    {#if not(isEmpty($address))}
-      <Home />
-    {:else}
-      <Connect />
-    {/if}
-  </Route>
   <Route path="/arns/*">
     {#if not(isEmpty($address))}
       <Route path="/claim">
@@ -69,15 +62,12 @@
         <Arns />
       </Route>
     {:else}
-      <Connect />
+      <Home />
     {/if}
   </Route>
 
   <Route path="/pages/*">
     {#if not(isEmpty($address))}
-      <Route path="/posts">
-        <Posts />
-      </Route>
       <Route path="/compose">
         <Compose />
       </Route>
@@ -94,21 +84,21 @@
         <Pages />
       </Route>
     {:else}
-      <Connect />
+      <Home />
     {/if}
   </Route>
   <Route path="/account/edit">
     {#if not(isEmpty($address))}
       <AccountForm />
     {:else}
-      <Connect />
+      <Home />
     {/if}
   </Route>
   <Route path="/account">
     {#if not(isEmpty($address))}
       <Account />
     {:else}
-      <Connect />
+      <Home />
     {/if}
   </Route>
   <Route path="/about">
@@ -117,16 +107,23 @@
   <Route path="/preview">
     <Preview />
   </Route>
-  <Route path="/post/*">
-    <Route path="/author-preview">
-      <AuthorPreview />
-    </Route>
-    <Route path="/reader-preview">
-      <ReaderPreview />
-    </Route>
-    <Route path="/history">
-      <PostHistory />
-    </Route>
+  <Route path="/posts/*">
+    {#if not(isEmpty($address))}
+      <Route path="/author-preview">
+        <AuthorPreview />
+      </Route>
+      <Route path="/reader-preview">
+        <ReaderPreview />
+      </Route>
+      <Route path="/history">
+        <PostHistory />
+      </Route>
+      <Route fallback>
+        <Posts />
+      </Route>
+    {:else}
+      <Home />
+    {/if}
   </Route>
   <Route path="/widgets">
     <WidgetsHome />

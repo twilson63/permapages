@@ -1,5 +1,5 @@
 <script>
-  let blockchain = "eth"; //selected blockchain value
+  let blockchain = "matic"; //selected blockchain value
   let blockchains = [
     {
       name: "Ethereum",
@@ -15,11 +15,6 @@
       name: "Polygon",
       value: "matic",
       icon: "polygon-logo.png",
-    },
-    {
-      name: "Tezos",
-      value: "tezos",
-      icon: "tezos-logo.png",
     },
   ];
 </script>
@@ -59,7 +54,6 @@
     {/each}
   </div>
 </div>
-
 
 <style>
   input[type="radio"]:checked + label {

@@ -28,3 +28,5 @@ arnsCache.subscribe(v => {
     localStorage.setItem(`arnsCache-${_addr}`, JSON.stringify(v))
   }
 })
+
+export const balances = writable({})

@@ -5,8 +5,40 @@ import Async from 'crocks/Async/index.js'
 import {
   compose, pluck, reverse, sortBy, groupBy, prop, map, path, head,
   isEmpty, identity, propEq, assoc, has,
-  values, reduce, find, keys
+  values, reduce, find, keys, divide, __, nth
 } from 'ramda'
+
+export function loadBalances(addr) {
+  const getTokenBalance = (contract) => fetch(`https://cache.permapages.app/${contract}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(['path', ['balances', addr]])
+  }).then(res => res.ok ? res.json() : Promise.reject(res)).then(prop('result'))
+
+  const format = (y) => (x) => compose(
+    n => n.toFixed(4),
+    divide(__, y)
+  )(x)
+
+  return Promise.all([
+    // get AR Balance
+    fetch(`https://arweave.net/wallet/${addr}/balance`).then(res => res.text()).then(Number).then(format(1e12)).catch(() => "NA"),
+    // get bAR Balance
+    getTokenBalance('VFr3Bk-uM-motpNNkkFg4lNW1BMmSfzqsVO551Ho4hA').then(format(1e6)).catch(() => "NA"),
+    // get STAMP Balance
+    getTokenBalance('FMRHYgSijiUNBrFy-XqyNNXenHsCV0ThR4lGAPO4chA').then(format(1e12)).catch(() => "NA"),
+    // get ArNS Balance
+    getTokenBalance('bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U')
+      //.then(format(1e12))
+      .then(String)
+      .catch(() => "NA")
+  ]).then(balances => ({
+    ar: nth(0, balances),
+    bar: nth(1, balances),
+    stamp: nth(2, balances),
+    arns: nth(3, balances)
+  }))
+}
 
 export function widgets({ gql }) {
   async function list() {
