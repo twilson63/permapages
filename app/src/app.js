@@ -1,12 +1,18 @@
 import * as pageModel from './models/pages.js'
 import * as profileModel from './models/profiles.js'
 import Async from 'crocks/Async/index.js'
+import createPosts from './domains/posts.js'
 
 import {
   compose, pluck, reverse, sortBy, groupBy, prop, map, path, head,
   isEmpty, identity, propEq, assoc, has,
   values, reduce, find, keys, divide, __, nth
 } from 'ramda'
+
+
+export function posts(env) {
+  return createPosts(env)
+}
 
 export function loadBalances(addr) {
   const getTokenBalance = (contract) => fetch(`https://cache.permapages.app/${contract}`, {

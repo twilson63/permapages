@@ -8,7 +8,9 @@
   import Music from "../svg/music-svg.svelte";
   import Nft from "../svg/nft-svg.svelte";
   import PagesPostCard from "./pages-post-card.svelte";
-
+  import { address } from "../store.js";
+  import { posts } from "../app.js";
+  import { gql } from "../services/gql.js";
   let firstbox = {
     title: "Make a Blog Post",
     subtitle: "author your first permanent piece",
@@ -67,20 +69,26 @@
     },
   ];
   */
-  let postdata = [];
+  async function postData() {
+    const results = await posts({ gql }).list($address).toPromise();
+    console.log(results);
+    return results;
+  }
 </script>
 
 <div class="w-full mt-10 flex flex-wrap justify-between gap-4">
-  {#if postdata.length > 0}
-    <PagesPostCard posts={postdata} />
-  {:else}
-    <GradientBox
-      title={firstbox.title}
-      subtitle={firstbox.subtitle}
-      link={firstbox.link}
-      icons={firstbox.icon}
-    />
-  {/if}
+  {#await postData() then postdata}
+    {#if postdata.length > 0}
+      <PagesPostCard posts={postdata} />
+    {:else}
+      <GradientBox
+        title={firstbox.title}
+        subtitle={firstbox.subtitle}
+        link={firstbox.link}
+        icons={firstbox.icon}
+      />
+    {/if}
+  {/await}
 
   {#each boxslist as box}
     <GradientBox

@@ -165,13 +165,14 @@ export const postWebpage = async (data) => {
     join('-'),
     split(' ')
   )
+
   const initState = data.state || {
     ticker: 'PAGE-' + slugify(data.title),
     name: 'Permapage',
     title: data.title,
-    creator: data.owner,
+    creator: data.creator,
     balances: {
-      [data.owner]: 10000
+      [data.creator]: 10000
     },
     contentType: 'text/html',
     createdAt: Date.now(),
