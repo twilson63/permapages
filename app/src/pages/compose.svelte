@@ -63,9 +63,9 @@
   };
 
   async function submit() {
-    const { create } = posts({ publish });
+    const { create } = posts({ publish, md });
     post.content = easymde.value();
-    post.html = md.render(post.content);
+    post.profile = $account.profile;
 
     const result = await create(post).toPromise();
     console.log(result);
