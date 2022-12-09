@@ -15,7 +15,7 @@
     title: "Make a Blog Post",
     subtitle: "author your first permanent piece",
     icon: [Write],
-    link: "/posts",
+    link: "/posts/new",
   };
 
   let boxslist = [

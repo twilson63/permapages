@@ -118,6 +118,9 @@
       <Route path="/history">
         <PostHistory />
       </Route>
+      <Route path="/new">
+        <Compose />
+      </Route>
       <Route fallback>
         <Posts />
       </Route>

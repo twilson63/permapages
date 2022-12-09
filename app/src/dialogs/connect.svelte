@@ -4,10 +4,18 @@
   import { ArweaveWebWallet } from "arweave-wallet-connector";
   import { router } from "tinro";
 
-  import { address } from "../store.js";
+  import { gql, postProfileTx, loadProfile } from "../services/arweave.js";
+  import { address, account } from "../store.js";
+  import { profiles } from "../app.js";
 
   export let open;
   const dispatch = createEventDispatcher();
+
+  const profileMgr = profiles({
+    gql,
+    post: postProfileTx,
+    load: loadProfile,
+  });
 
   async function arconnect() {
     if (!window.arweaveWallet) {
@@ -21,6 +29,10 @@
       );
       const addr = await arweaveWallet.getActiveAddress();
       $address = addr;
+
+      const result = await profileMgr.get($address);
+      $account = { id: $address, profile: result };
+
       open = false;
       router.goto("/dashboard");
     } catch (e) {
@@ -39,6 +51,11 @@
 
       const addr = await arweaveWallet.getActiveAddress();
       $address = addr;
+
+      const result = await profileMgr.get($address);
+      $account = { id: $address, profile: result };
+      console.log($account);
+
       open = false;
       router.goto("/dashboard");
     } catch (e) {

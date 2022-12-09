@@ -18,7 +18,7 @@
   </div>
 
   <a
-    href="/#/pages/compose"
+    href="/posts/new"
     class="btn flex flex-row items-center gap-2 w-[220px] justify-center p-2 rounded-full
         drop-shadow-lg bg-[#A785F1] border-none normal-case block ml-auto min-h-[2.5rem] h-[2.5rem]"
   >
