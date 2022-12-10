@@ -1,9 +1,17 @@
 import './tailwind.css'
 import App from './App.svelte'
-import { address } from './store.js'
-import { connectApp } from "./services/arweave.js";
+
+import { gql, postProfileTx, loadProfile } from "./services/arweave.js";
+import { address, account } from "./store.js";
+import { profiles } from "./app.js";
 
 window.addEventListener("arweaveWalletLoaded", async () => {
+  const profileMgr = profiles({
+    gql,
+    post: postProfileTx,
+    load: loadProfile,
+  });
+
   if (localStorage.getItem("address") !== "") {
     if (arweaveWallet) {
       try {
@@ -20,7 +28,11 @@ window.addEventListener("arweaveWalletLoaded", async () => {
           window.dispatchEvent(walletConnected)
         }, 500)
 
-        address.set(await arweaveWallet.getActiveAddress());
+        const addr = await arweaveWallet.getActiveAddress()
+        address.set(addr);
+
+        const result = await profileMgr.get(addr);
+        account.set({ id: addr, profile: result });
 
       } catch (e) {
         console.log(e)

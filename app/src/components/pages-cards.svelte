@@ -50,25 +50,7 @@
       link: "/pages/new",
     },
   ];
-  /*
-  let postdata = [
-    {
-      id: 1,
-      title: "Arweave Grow Crew #7",
-      lastupdate: "3 days ago",
-    },
-    {
-      id: 2,
-      title: "Why the Permaweb matters",
-      lastupdate: "1 week ago",
-    },
-    {
-      id: 3,
-      title: "Arweave Grow Crew #5",
-      lastupdate: "2 weeks ago",
-    },
-  ];
-  */
+
   async function postData() {
     const results = await posts({ gql }).list($address).toPromise();
     console.log(results);
