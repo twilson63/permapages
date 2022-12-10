@@ -9,8 +9,9 @@
   import Nft from "../svg/nft-svg.svelte";
   import PagesPostCard from "./pages-post-card.svelte";
   import { address } from "../store.js";
-  import { posts } from "../app.js";
-  import { gql } from "../services/gql.js";
+
+  import { posts } from "../api.js";
+
   let firstbox = {
     title: "Make a Blog Post",
     subtitle: "author your first permanent piece",
@@ -52,9 +53,7 @@
   ];
 
   async function postData() {
-    const results = await posts({ gql }).list($address).toPromise();
-    console.log(results);
-    return results;
+    return await posts.list($address);
   }
 </script>
 

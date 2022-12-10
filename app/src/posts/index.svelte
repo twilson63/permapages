@@ -4,45 +4,8 @@
   import PagesPosts from "../components/pages-posts.svelte";
   import PagesDrafts from "../components/pages-drafts.svelte";
   import Copyright from "../widgets/copyright.svelte";
-
-  let posts = [
-    {
-      postid: 1,
-      thumbnail: "http://via.placeholder.com/120x60",
-      title: "Arweave Grow Crew #7",
-      date: "3 Days ago",
-      stamps: 23,
-      status: "Drafts",
-      transactionsid: "dfh8ddjKd9-dbvDe3eg_2gtp6ofPwQl7",
-    },
-    {
-      postid: 2,
-      thumbnail: "http://via.placeholder.com/120x60",
-      title: "Why the Permaweb matters",
-      date: "1 Week ago",
-      stamps: 23,
-      status: "Drafts",
-      transactionsid: "dfh8ddjKd9-dbvDe3eg_2gtp6ofPwQl7",
-    },
-    {
-      postid: 3,
-      thumbnail: "http://via.placeholder.com/120x60",
-      title: "Arweave Grow Crew #6",
-      date: "2 Weeks ago",
-      stamps: 23,
-      status: "Published",
-      transactionsid: "dfh8ddjKd9-dbvDe3eg_2gtp6ofPwQl7",
-    },
-    {
-      postid: 4,
-      thumbnail: "http://via.placeholder.com/120x60",
-      title: "Uploading and creating your...",
-      date: "1 Month ago",
-      stamps: 23,
-      status: "Published",
-      transactionsid: "dfh8ddjKd9-dbvDe3eg_2gtp6ofPwQl7",
-    },
-  ];
+  import { posts } from "../api.js";
+  import { address } from "../store.js";
 
   let drafts = [
     {
@@ -61,6 +24,12 @@
       status: "Draft",
     },
   ];
+
+  async function postData() {
+    const result = await posts.list($address);
+    console.log(result);
+    return result;
+  }
 </script>
 
 <NavBar />
@@ -74,8 +43,9 @@
       <span class="text-[#696969] ml-4">Back</span>
     </a>
   </PagesHead>
-
-  <PagesPosts {posts} />
+  {#await postData() then posts}
+    <PagesPosts {posts} />
+  {/await}
   <!--
   <PagesDrafts {drafts} />
   -->

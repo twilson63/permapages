@@ -11,6 +11,8 @@
   import { onMount } from "svelte";
   import Copyright from "../widgets/copyright.svelte";
 
+  export let id = "";
+
   var easymde = null;
   let error = null;
   let confirm = false;
@@ -48,6 +50,10 @@
       previewRender: (txt) => md.render(txt),
       //previewClass: "prose md:prose-lg lg:prose-xl m-8 md:mx-24",
     });
+    console.log("id", id);
+    if (id) {
+      // Need to load blog-post article
+    }
     // if (!meta().query.fork) {
     //   easymde.value = "";
     //   page.content = "";

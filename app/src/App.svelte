@@ -121,6 +121,9 @@
       <Route path="/new">
         <Compose />
       </Route>
+      <Route path="/:id/edit" let:meta>
+        <Compose id={meta.params.id} />
+      </Route>
       <Route fallback>
         <Posts />
       </Route>

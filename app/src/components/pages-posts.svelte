@@ -1,9 +1,16 @@
 <script>
+  import { formatDistance } from "date-fns";
   import WriteOther from "../svg/write-other-svg.svelte";
   export let posts;
 
   const copyTrx = (id) => {
     navigator.clipboard.writeText(id);
+  };
+
+  const tweetUrl = (p) => {
+    return `https://twitter.com/intent/tweet?text=${encodeURI(
+      `👀 "${p.title}" at arweave.net/${p.transaction}`
+    )}&hashtags=permaweb&via=permapages`;
   };
 </script>
 
@@ -40,7 +47,9 @@
           {post.title}
         </h3>
         <p class="text-sm text-gray-500 w-[200px] truncate text-ellipsis">
-          Last Update: {post.date}
+          Last Update: {formatDistance(post.published, Date.now(), {
+            addSuffix: true,
+          })}
         </p>
       </div>
 
@@ -56,11 +65,11 @@
         <h3 class="text-lg font-bold text-[#7D7D7D]">Transaction ID</h3>
         <p class="text-sm text-gray-500 flex items-center gap-2">
           <span class="w-[200px] truncate text-ellipsis"
-            >{post.transactionsid}</span
+            >{post.transaction}</span
           >
           <button
             class="cursor-pointer btn bg-transparent hover:bg-transparent border-none p-0 m-0 min-h-[20px] h-[20px]"
-            on:click={() => copyTrx(post.transactionsid)}
+            on:click={() => copyTrx(post.transaction)}
           >
             <img src="copy.svg" alt="copy" width="16px" />
           </button>
@@ -69,19 +78,23 @@
 
       <div class="flex flex-col items-center mx-auto">
         <h3 class="text-lg font-bold text-[#7D7D7D]">Share</h3>
-        <a href="/#/#"><img src="share.svg" alt="share" width="20px" /></a>
+        <a target="_blank" href={tweetUrl(post)}
+          ><img src="share.svg" alt="share" width="20px" /></a
+        >
       </div>
 
       <div class="flex flex-col items-center mx-auto">
         <h3 class="text-lg font-bold text-[#7D7D7D]">View</h3>
-        <a href="/#/post/author-preview"
+        <a href="https://arweave.net/{post.transaction}"
           ><img src="eye.svg" alt="eye" width="20px" /></a
         >
       </div>
 
       <div class="flex flex-col items-center ml-auto">
         <h3 class="text-lg font-bold text-[#7D7D7D]">Edit</h3>
-        <a href="/#/#"><img src="write.svg" alt="write" width="20px" /></a>
+        <a href="/posts/{post.id}/edit"
+          ><img src="write.svg" alt="write" width="20px" /></a
+        >
       </div>
     </div>
   {/each}

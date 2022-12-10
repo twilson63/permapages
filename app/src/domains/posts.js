@@ -119,7 +119,8 @@ function toPostItem(node) {
     title: getTag('Title'),
     description: getTag('Description'),
     transaction: node.id,
-    published: getTag('Published') || Date.now()
+    published: getTag('Published') || Date.now(),
+    stamps: 0
   }
 }
 
