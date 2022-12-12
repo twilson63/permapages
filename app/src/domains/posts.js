@@ -90,6 +90,7 @@ export default function ({ gql, query, publish, md, getData }) {
       .chain(Async.fromPromise(publish))
 
   }
+
   function list(addr) {
     return Async.of(addr)
       .map(buildQuery)

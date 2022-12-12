@@ -38,6 +38,7 @@ export const publish = (asset) => {
     ]))
     .then(([_, asset]) => asset)
     .then(post)
+    .then(x => (console.log('asset', x), x))
 }
 
 async function dispatch({ data, tags }) {
@@ -70,7 +71,7 @@ async function post({ data, tags, id }) {
       'Content-Type': 'application/json',
       Accept: 'application/json'
     }
-  })
-  console.log(await res.text())
-  return { id }
+  }).then(res => res.ok ? res.json() : Promise.reject(res))
+
+  return { id, ...res }
 }

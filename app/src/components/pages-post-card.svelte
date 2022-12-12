@@ -2,6 +2,7 @@
   import WriteOther from "../svg/write-other-svg.svelte";
   import EyeSvg from "../svg/eye-svg.svelte";
   import { format } from "date-fns";
+  import { take } from "ramda";
 
   export let posts;
 </script>
@@ -25,7 +26,7 @@
       class="divide-y divide-white divide-y-2 w-full flex flex-col gap-3 mt-8"
       aria-label="list"
     >
-      {#each posts as post}
+      {#each take(5, posts) as post}
         <li class="text-[#7D7D7D] flex flex-row items-center justify-between">
           <a
             href="https://arweave.net/{post.transaction}"

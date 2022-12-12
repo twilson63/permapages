@@ -50,8 +50,17 @@
     post.content = easymde.value();
     post.profile = $account.profile;
 
-    await posts.create(post).toPromise();
+    await posts.create(post);
     router.goto("/posts");
+
+    // .then((r) => {
+    //   console.log("finished", r);
+    //   router.goto("/posts");
+    // })
+    // .catch((e) => {
+    //   console.log(e);
+    //   ;
+    // });
   }
 </script>
 
