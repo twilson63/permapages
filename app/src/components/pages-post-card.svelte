@@ -46,7 +46,7 @@
             </a>
 
             <a
-              href="/posts/remix?id={post.id}"
+              href="/posts/{post.id}/edit"
               class="hover:underline inline-block write-svg"
             >
               <WriteOther col="#7d7d7d" />

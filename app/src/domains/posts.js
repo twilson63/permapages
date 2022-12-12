@@ -1,15 +1,49 @@
 import { Async } from 'crocks'
-import { assoc, lens, over, identity, compose, prop, find, propEq, map, pluck, __ } from 'ramda'
+import { assoc, lens, over, identity, compose, prop, filter, find, propEq, map, pluck, __, head, uniqBy } from 'ramda'
 
 const APP_WALLET = 'K92n-x2kHiRIBmS0yRGz5ii3OEXFw58__742Qu0DTgA'
 const SRC = 'x0ojRwrcHBmZP20Y4SY0mgusMRx-IYTjg5W8c3UFoNs'
 
 const lensHtml = lens(identity, assoc('html'))
 
-export default function ({ gql, query, publish, md }) {
+export default function ({ gql, query, publish, md, getData }) {
+  function get(id) {
+    return Async.of(id)
+      .map(buildFindByIdQuery)
+      .chain(Async.fromPromise(gql))
+      .chain(edges => {
+        const source = compose(
+          find(n => find(t => t.name === 'Type', n.tags).value === 'post-source'),
+          pluck('node')
+        )(edges)
+
+        const asset = compose(
+          head,
+          filter(n => find(t => t.name === 'Type', n.tags).value === 'blog-post' && find(t => t.name === 'Uploader', n.tags) === undefined),
+          pluck('node')
+        )(edges)
+
+        return Async.all([
+          Async.fromPromise(getData)(source.id),
+          Async.fromPromise(getData)(asset.id)
+        ])
+          .map(
+            ([s, a]) => ({
+              ...toPostItem(asset),
+              content: s.data,
+              html: a.data
+            })
+          )
+          .chain(post =>
+            Async.fromPromise(query)(post.transaction, ['prop', 'balances'])
+              .map(assoc('balances', __, post))
+
+          )
+      })
+  }
   function create(post) {
     return Async.of(post)
-      .map(p => assoc('id', crypto.randomUUID(), p))
+      .map(p => p.id ? p : assoc('id', crypto.randomUUID(), p))
       .map(over(lensHtml, generateHtml(md)))
       // validate post
       .map(post => {
@@ -48,7 +82,7 @@ export default function ({ gql, query, publish, md }) {
               { name: 'Title', value: post.title },
               { name: 'Description', value: post.description },
               { name: 'Type', value: 'post-source' },
-              { name: 'Asset-Id', value: post.assetId }
+              { name: 'Asset-Id', value: post.id },
             ]
           }
         }
@@ -62,6 +96,7 @@ export default function ({ gql, query, publish, md }) {
       .chain(Async.fromPromise(gql))
       .map(pluck('node'))
       .map(map(toPostItem))
+      .map(uniqBy(prop('id')))
     // .chain(nodes =>
     //   Async.fromPromise(query)(STAMP_CONTRACT, ['compose',
     //     ['mapObjIndexed', ['length']],
@@ -82,14 +117,40 @@ export default function ({ gql, query, publish, md }) {
   }
   return {
     list,
-    create
+    create,
+    get
+  }
+}
+
+function buildFindByIdQuery(id) {
+  return {
+    query: `query ($ids: [String!]!, $cursor: String) {
+      transactions(first: 1, after: $cursor, tags: { name: "Asset-Id", values: $ids }) {
+        pageInfo {
+          hasNextPage
+        }
+        edges {
+          cursor
+          node {
+            id
+            tags {
+              name
+              value
+            }
+          }
+        }
+      }
+    }`,
+    variables: {
+      ids: [id]
+    }
   }
 }
 
 function buildQuery(addr) {
   return {
     query: `query ($owners: [String!], $cursor: String) {
-      transactions(first: 100 after: $cursor, owners: $owners, tags: { name: "Type", values: ["blog-post"] }) {
+      transactions(first: 100, after: $cursor, owners: $owners, tags: { name: "Type", values: ["blog-post"] }) {
         pageInfo {
           hasNextPage
         }
@@ -119,7 +180,7 @@ function toPostItem(node) {
     title: getTag('Title'),
     description: getTag('Description'),
     transaction: node.id,
-    published: getTag('Published') || Date.now(),
+    published: Date.now(),
     stamps: 0
   }
 }

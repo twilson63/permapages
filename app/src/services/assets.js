@@ -8,6 +8,10 @@ const arweave = Arweave.init({
   port: 443,
   protocol: 'https'
 })
+
+export const getData = (id) => arweave.api.get(id)
+//.then(res => res.ok ? res.data : Promise.reject(res))
+
 /**
  * @typedef {object} Tag
  * @property {string} name

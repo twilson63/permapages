@@ -1,15 +1,12 @@
 <script>
-  import { meta } from "tinro";
+  import { router } from "tinro";
   import Navbar from "../components/navbar.svelte";
   import Modal from "../components/modal.svelte";
   import { account, address } from "../store.js";
-  import { publish } from "../services/assets.js";
-  import { posts } from "../app.js";
-  import markdownIt from "markdown-it";
-  import container from "markdown-it-container";
-  import attrs from "markdown-it-attrs";
+
   import { onMount } from "svelte";
   import Copyright from "../widgets/copyright.svelte";
+  import { posts } from "../api.js";
 
   export let id = "";
 
@@ -17,24 +14,13 @@
   let error = null;
   let confirm = false;
 
-  // create extenstion to support :::info
-  const md = markdownIt({ html: true, linkify: true });
-
-  md.use(container, "info", {
-    validate: function (params) {
-      return params.trim().match(/^(info|success|warning|error)+$/);
-    },
-    render: function (tokens, idx) {
-      var m = tokens[idx].info.trim().match(/^(.*)+$/);
-      if (tokens[idx].nesting === 1) {
-        return `<div class="my-2 py-2 alert alert-${m[1]} block prose-p:block dark:prose-strong:text-black prose-code:rounded-full prose-code:bg-black prose-code:px-[8px] prose-code:py-[4px] prose-code:text-white prose-code:p-0 prose-code:m-0 prose-code:mt-[3px]">`;
-      } else {
-        return "</div>";
-      }
-    },
-  });
-
-  md.use(attrs);
+  let post = {
+    title: "",
+    description: "",
+    content: "",
+    topic: "",
+    owner: $address,
+  };
 
   onMount(async () => {
     easymde = new window.EasyMDE({
@@ -53,28 +39,19 @@
     console.log("id", id);
     if (id) {
       // Need to load blog-post article
+      //console.log(await posts.get(id));
+      post = await posts.get(id);
+      easymde.value(post.content);
     }
-    // if (!meta().query.fork) {
-    //   easymde.value = "";
-    //   page.content = "";
-    // }
   });
 
-  let post = {
-    title: "",
-    description: "",
-    content: "",
-    topic: "",
-    owner: $address,
-  };
-
   async function submit() {
-    const { create } = posts({ publish, md });
+    //const { create } = posts({ publish, md });
     post.content = easymde.value();
     post.profile = $account.profile;
 
-    const result = await create(post).toPromise();
-    console.log(result);
+    await posts.create(post).toPromise();
+    router.goto("/posts");
   }
 </script>
 
@@ -84,7 +61,7 @@
     <div class="hero-content flex-col w-full">
       <div class="flex items-start w-full">
         <a
-          href="/#/pages/posts"
+          href="/posts"
           class="btn rounded-full bg-[#F9F9F9] min-h-[2.5rem] h-[2.5rem] px-8 hover:bg-gray-200 border-none"
         >
           <img src="polygon-icon.svg" alt="polygon-icon" />
@@ -148,6 +125,7 @@
             id="title"
             bind:value={post.title}
             placeholder="Enter Title of your post (max: 50 characters)"
+            required
           />
         </div>
 
@@ -162,6 +140,7 @@
             id="description"
             bind:value={post.description}
             placeholder="Enter a 150 character description of your post"
+            required
           />
         </div>
 
@@ -185,8 +164,8 @@
             type="text"
             class="input input-bordered w-full"
             id="topic"
-            bind:value={post.topic}
-            placeholder="(optional) Enter a topic of your post."
+            bind:value={post.topics}
+            placeholder="(optional) Enter a set of topics as keywords about your posts - separated by commas"
           />
         </div>
 
