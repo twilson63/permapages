@@ -19,7 +19,7 @@
     title: "",
     description: "",
     content: "",
-    topic: "",
+    topics: "",
     owner: $address,
   };
 
@@ -47,22 +47,16 @@
   });
 
   async function submit() {
-    //const { create } = posts({ publish, md });
-    post.content = easymde.value();
-    post.profile = $account.profile;
+    try {
+      post.content = easymde.value();
+      post.profile = $account.profile;
 
-    await posts.create(post);
-    easymde.value("");
-    router.goto("/posts");
-
-    // .then((r) => {
-    //   console.log("finished", r);
-    //   router.goto("/posts");
-    // })
-    // .catch((e) => {
-    //   console.log(e);
-    //   ;
-    // });
+      await posts.create(post);
+      easymde.value("");
+      router.goto("/posts");
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   function doBack() {
