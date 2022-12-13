@@ -1,5 +1,5 @@
 import { Async } from 'crocks'
-import { assoc, lens, over, identity, compose, prop, filter, find, propEq, map, pluck, __, head, uniqBy } from 'ramda'
+import { assoc, lens, lensProp, trim, split, over, identity, compose, prop, filter, find, propEq, map, pluck, __, head, uniqBy, join } from 'ramda'
 
 const APP_WALLET = 'K92n-x2kHiRIBmS0yRGz5ii3OEXFw58__742Qu0DTgA'
 const SRC = 'x0ojRwrcHBmZP20Y4SY0mgusMRx-IYTjg5W8c3UFoNs'
@@ -41,12 +41,19 @@ export default function ({ gql, query, publish, md, getData }) {
           )
       })
   }
+
+  function preview(post) {
+    return generateHtml(md)(post)
+  }
+
   function create(post) {
     return Async.of(post)
       .map(p => p.id ? p : assoc('id', crypto.randomUUID(), p))
       .map(over(lensHtml, generateHtml(md)))
+      .map(over(lensProp('topics'), compose(map(trim), split(','))))
       // validate post
       .map(post => {
+        const topicTags = map(v => ({ name: `Topic:${v}`, value: v }), post.topics)
         return {
           asset: {
             data: post.html,
@@ -71,7 +78,8 @@ export default function ({ gql, query, publish, md, getData }) {
                   ticker: "BLOG-POST",
                   settings: [['isTradeable', true]]
                 })
-              }
+              },
+              ...topicTags
             ]
           },
           source: {
@@ -83,6 +91,7 @@ export default function ({ gql, query, publish, md, getData }) {
               { name: 'Description', value: post.description },
               { name: 'Type', value: 'post-source' },
               { name: 'Asset-Id', value: post.id },
+              ...topicTags
             ]
           }
         }
@@ -119,7 +128,8 @@ export default function ({ gql, query, publish, md, getData }) {
   return {
     list,
     create,
-    get
+    get,
+    preview
   }
 }
 
@@ -175,14 +185,17 @@ function buildQuery(addr) {
 
 function toPostItem(node) {
   const getTag = compose(prop('value'), n => find(propEq('name', n), node.tags))
+  const published = getTag('Published') ? Number(getTag('Published')) : Date.now()
+  const topics = join(', ', pluck('value', filter(t => /^Topic:/.test(t.name), node.tags)))
   return {
     id: getTag('Asset-Id'),
     type: getTag('Type'),
     title: getTag('Title'),
     description: getTag('Description'),
     transaction: node.id,
-    published: Date.now(),
-    stamps: 0
+    published,
+    stamps: 0,
+    topics
   }
 }
 
@@ -210,7 +223,7 @@ function generateHtml(md) {
   </head>
   <body>
     <main class="min-h-screen">
-      <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-24">
+      <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-auto">
         <h1>${post.title}</h1>
         <p>${post.description}</p>
         

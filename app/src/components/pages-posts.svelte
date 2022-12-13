@@ -43,10 +43,10 @@
       <img src={post.thumbnail} alt={post.title} width="120px" class="block" />
       -->
       <div class="ml-4 mr-auto">
-        <h3 class="text-lg font-bold w-[200px] truncate text-ellipsis">
+        <h3 class="text-lg font-bold w-[350px] truncate text-ellipsis">
           {post.title}
         </h3>
-        <p class="text-sm text-gray-500 w-[200px] truncate text-ellipsis">
+        <p class="text-sm text-gray-500 w-[350px] truncate text-ellipsis">
           Last Update: {formatDistance(post.published, Date.now(), {
             addSuffix: true,
           })}

@@ -7,6 +7,7 @@
   import { onMount } from "svelte";
   import Copyright from "../widgets/copyright.svelte";
   import { posts } from "../api.js";
+  import { md } from "../services/md.js";
 
   export let id = "";
 
@@ -51,6 +52,7 @@
     post.profile = $account.profile;
 
     await posts.create(post);
+    easymde.value("");
     router.goto("/posts");
 
     // .then((r) => {
@@ -62,6 +64,11 @@
     //   ;
     // });
   }
+
+  function doBack() {
+    easymde.value("");
+    router.goto("/posts");
+  }
 </script>
 
 <Navbar />
@@ -69,20 +76,14 @@
   <section class="hero bg-base-100 min-h-screen items-start">
     <div class="hero-content flex-col w-full">
       <div class="flex items-start w-full">
-        <a
-          href="/posts"
+        <button
+          on:click={doBack}
           class="btn rounded-full bg-[#F9F9F9] min-h-[2.5rem] h-[2.5rem] px-8 hover:bg-gray-200 border-none"
         >
           <img src="polygon-icon.svg" alt="polygon-icon" />
           <span class="text-[#696969] ml-4">Back</span>
-        </a>
+        </button>
       </div>
-
-      {#if error}
-        <div class="alert alert-error">
-          {error}
-        </div>
-      {/if}
 
       <div class="w-full flex flex-row items-center justify-between mt-10">
         {#if $account && $account.profile}
