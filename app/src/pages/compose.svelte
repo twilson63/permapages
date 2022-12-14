@@ -63,6 +63,10 @@
     easymde.value("");
     router.goto("/posts");
   }
+
+  function toggleFullscreen() {
+    easymde.toggleFullScreen();
+  }
 </script>
 
 <Navbar />
@@ -102,8 +106,12 @@
         {/if}
 
         <div class="w-1/4 flex flex-row items-center justify-end">
-          <p class="text-[#7D7D7D]">Edit in full screen mode</p>
+          <label for="fullscreen" class="text-[#7D7D7D]"
+            >Edit in full screen mode</label
+          >
           <button
+            id="fullscreen"
+            on:click={toggleFullscreen}
             class="ml-4 btn m-0 bg-transparent hover:bg-transparent border-none"
           >
             <img src="full-screen.svg" alt="full-screen" />
