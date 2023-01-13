@@ -1,17 +1,13 @@
 <script>
+  import { router } from "tinro";
+  import ConnectModal from "./dialogs/connect.svelte";
+  import WalletHelp from "./dialogs/help-wallet.svelte";
   import { address } from "./store.js";
   let version = __APP_VERSION__.split(".")[2];
-  let scrollY;
-  window.transactionId = "QIvEeaJiwUBs3sZZGR_6O3fd6I5y-0FgRuPf2liPTns";
 
-  window.addEventListener("DOMContentLoaded", () => {
-    setTimeout(() => {
-      window.dispatchEvent(new Event("pageTransactionIdLoaded"));
-    }, 500);
-  });
+  let connectDlg = false;
+  let walletHelp = false;
 </script>
-
-<svelte:window bind:scrollY />
 
 <svelte:head>
   <title>PermaPages</title>
@@ -194,11 +190,17 @@
             </p>
             <div class="margin-top margin-medium">
               <div class="button-row">
-                {#if $address}
-                  <a href="/account" class="button w-button">Profile</a>
-                {:else}
-                  <a href="/connect" class="button w-button">Connect Wallet</a>
-                {/if}
+                <button
+                  on:click={() => {
+                    if ($address) {
+                      router.goto("/dashboard");
+                    } else {
+                      connectDlg = true;
+                    }
+                  }}
+                  class="button w-button"
+                  >{$address ? "dashboard" : "connect"}</button
+                >
 
                 <a
                   target="_blank"
@@ -782,5 +784,7 @@
     class="image-2"
   /></a
 >
+<ConnectModal bind:open={connectDlg} on:help={() => (walletHelp = true)} />
+<WalletHelp bind:open={walletHelp} />
 
 <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->

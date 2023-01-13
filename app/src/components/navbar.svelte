@@ -7,7 +7,7 @@
     <a
       href="/"
       class="normal-case txt-gradient  
-    font-extrabold text-2xl inline-block tracking-wide">Compose</a
+    font-extrabold text-2xl inline-block tracking-wide">PermaPages</a
     >
     <div
       class="badge text-xs ml-2 bg-[#F3F5FB] border-none text-black font-semibold"
