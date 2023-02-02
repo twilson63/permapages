@@ -36,6 +36,9 @@
       open = false;
       router.goto("/dashboard");
     } catch (e) {
+      document
+        .querySelector(".arconnect_connect_overlay_extension_temporary")
+        .remove();
       console.log(e);
     }
   }

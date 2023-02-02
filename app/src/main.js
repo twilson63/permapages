@@ -35,6 +35,7 @@ window.addEventListener("arweaveWalletLoaded", async () => {
         account.set({ id: addr, profile: result });
 
       } catch (e) {
+        document.querySelector('.arconnect_connect_overlay_extension_temporary').remove()
         console.log(e)
       }
     } else {
