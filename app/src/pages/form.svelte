@@ -207,8 +207,9 @@
         page.widgets = [
           ...page.widgets.filter((w) => w.elementId !== "passport"),
           {
-            source: "https://stamp-widget.arweave.dev",
-            //source: "https://arweave.net/nt0ZBe7bwmURvREmE1QxRke2CsLhkKK_q-wyeWJrDl0",
+            //source: "https://stamp-widget.arweave.dev",
+            source:
+              "https://arweave.net/Zy_yxaSn08FKy-i1FgeaQ0vvMxeHSiIMyXs2Z91i08E",
             elementId: "passport",
             name: "passport",
             description: "Permapage Passport Widget",

@@ -30,6 +30,8 @@
     "vitest": "^0.12.3"
   },
   "dependencies": {
+    "@permaweb/pages-js": "https://lib_pages.g8way.io",
+    "@permaweb/stampjs": "https://js_stamps.g8way.io",
     "ardb": "^1.1.10",
     "arweave": "^1.10.23",
     "arweave-account": "^1.2.5",
