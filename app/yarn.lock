@@ -97,8 +97,8 @@
     unified "^10.1.2"
 
 "@permaweb/stampjs@https://js_stamps.g8way.io":
-  version "0.0.1"
-  resolved "https://js_stamps.g8way.io#d840603d57193f592439b86f70db4e816527802a"
+  version "0.0.3"
+  resolved "https://js_stamps.g8way.io#c16fdeca85df21a300d9872693ac47cda0120639"
 
 "@rollup/pluginutils@^4.2.0":
   version "4.2.0"

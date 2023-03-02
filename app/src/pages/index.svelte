@@ -17,6 +17,7 @@
 
   async function listPages() {
     const results = await list(account);
+
     const pending = ($pageCache || []).filter((n) =>
       find(propEq("id", n.id), results) ? false : true
     );
@@ -27,10 +28,12 @@
     // }, []);
 
     // rollup by slugs
-    return [...pending, ...results].reduce(
+    const xs = [...pending, ...results].reduce(
       (acc, v) => (find(propEq("title", v.title), acc) ? acc : [...acc, v]),
       []
     );
+    console.log("xs", xs);
+    return xs;
   }
 
   const pageList = listPages();

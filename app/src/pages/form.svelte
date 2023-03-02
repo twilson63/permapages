@@ -2,6 +2,7 @@
   import { router, meta } from "tinro";
   import Navbar from "../components/navbar.svelte";
   import Modal from "../components/modal.svelte";
+  import postVanilla from "../services/vanilla.js";
   import {
     postPageTx,
     postWebpage,
@@ -154,6 +155,8 @@
         page.widgets = p.widgets || [];
         page.includeFooter = p.includeFooter || true;
         page.allowStamps = p.allowStamps || true;
+        page.noContract = p.noContract || false;
+        page.noBundlr = p.noBundlr || false;
         page.state = mergeAll(
           {
             ticker: "PAGE-" + slugify(p.title),
@@ -274,13 +277,21 @@
 
       page.topics = topics.split(",").map((t) => trim(t));
 
-      const result = await pages({
-        register,
-        post: postPageTx,
-        postWebpage,
-      }).create(page, (m) => {
-        step = m.step;
-      });
+      // if noBundlr and noContract then handle
+      let result;
+      if (page.noBundlr && page.noContract) {
+        result = await pages({
+          postVanilla,
+        }).createVanilla(page, (m) => (step = m.step));
+      } else {
+        result = await pages({
+          register,
+          post: postPageTx,
+          postWebpage,
+        }).create(page, (m) => {
+          step = m.step;
+        });
+      }
 
       $pageCache = [result, ...$pageCache];
 
@@ -381,8 +392,8 @@
 
 <Navbar />
 <main>
-  <section class="hero bg-base-100 min-h-screen items-start">
-    <div class="hero-content flex-col">
+  <section class="hero bg-base-100 min-h-screen items-start w-full">
+    <div class="hero-content flex-col w-full">
       {#if error}
         <div class="alert alert-error">
           {error}
@@ -478,6 +489,35 @@
               />
             </label>
           </div>
+
+          <div class="mt-4 form-control">
+            <label for="contract" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Disable Contract</span>
+                <br />
+                <span class="text-sm">Deploy without contract</span>
+              </div>
+              <input
+                type="checkbox"
+                class="toggle toggle-secondary"
+                bind:checked={page.noContract}
+              />
+            </label>
+          </div>
+          <div class="mt-4 form-control">
+            <label for="dispatch-l1" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Dispatch L1</span>
+                <br />
+                <span class="text-sm">Dispatch Page to Layer 1</span>
+              </div>
+              <input
+                type="checkbox"
+                class="toggle toggle-secondary"
+                bind:checked={page.noBundlr}
+              />
+            </label>
+          </div>
           <div class="mt-4 form-control">
             <label for="footer" class="label cursor-pointer">
               <div>
@@ -522,16 +562,6 @@
           {/if}
         {/if}
 
-        <div class="mt-4 alert alert-info flex flex-col space-y-8 py-8">
-          <div class="text-xl font-bold">Want a subdomain? Check out ArNS</div>
-          <p>
-            When you publish a page, it will be posted on the permaweb, once
-            published you can attach a registered subdomain using ArNS
-            https://[subdomain].arweave.dev. Want to learn more about ArNS
-          </p>
-          <a class="link" href="https://ar.io/arns">Click here to learn more.</a
-          >
-        </div>
         <div class="mt-8 flex justify-end space-x-2">
           <!--
           <button type="button" class="btn btn-secondary" on:click={preview}

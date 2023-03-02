@@ -29,6 +29,8 @@ const schema = z.object({
   theme: z.string().default('default'),
   includeFooter: z.boolean().optional(),
   allowStamps: z.boolean().optional(),
+  noContract: z.boolean().optional(),
+  noBundlr: z.boolean().optional(),
   widgets: z.array(
     z.object({
       source: z.string(),
