@@ -1,5 +1,4 @@
 <script>
-  import isEmpty from "ramda/src/isEmpty";
   export let profile;
   //export let icon_repo = "https://social-icons.arweave.dev";
   export let icon_repo =
@@ -94,7 +93,7 @@
               </a>
             </li>
           {/if}
-          {#if !isEmpty(profile.links.instagram)}
+          {#if profile.links.instagram}
             <li>
               <a
                 href="https://instagram.com/{profile.links.instagram}"
