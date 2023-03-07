@@ -359,9 +359,9 @@
               <button on:click={addUndername} class="btn btn-outline"
                 >Add Undername</button
               >
-              {#if balance === "Not Found"}
+              <!-- {#if balance === "Not Found"}
                 <a class="btn" href="/arns/claim"> Claim Tokens </a>
-              {/if}
+              {/if} -->
             </div>
           </div>
           <div class="overflow-x-auto">

@@ -15,7 +15,7 @@ window.addEventListener("arweaveWalletLoaded", async () => {
   if (localStorage.getItem("address") !== "") {
     if (arweaveWallet) {
       try {
-        await arweaveWallet.disconnect()
+        //await arweaveWallet.disconnect()
         await arweaveWallet.connect(
           ["ACCESS_ADDRESS", "SIGN_TRANSACTION", "DISPATCH"],
           {
