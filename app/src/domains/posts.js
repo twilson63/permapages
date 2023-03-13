@@ -223,6 +223,7 @@ function generateHtml(md) {
     <script src="https://unpkg.com/highlightjs-svelte@1.0.6/dist/svelte.min.js"></script>
     <script type="module">hljs.highlightAll();</script>
     <script defer type="module" src="https://stamp-widget.arweave.dev"></script>
+    
   </head>
   <body>
     <main class="min-h-screen flex space-x-8">
@@ -231,28 +232,31 @@ function generateHtml(md) {
         <h1>${post.title}</h1>
         <p>${post.description}</p>
         
-        <div class="w-1/2 flex flex-row items-center">
-          <img
-            class="mask mask-circle h-[48px] w-[48px]"
-            src=${post.profile.avatar}
-            alt=${post.profile.name}
-          />
-          <div class="ml-4">
-            <h3 class="flex flex-row items-center text-lg font-bold">
-              <span>${post.profile.name}</span>
-            </h3>
+        <div class="flex items-between">
+        <div class="w-1/2 flex flex-col">
+          <div class="flex flex-row items-center">
+            <img
+              class="mask mask-circle h-[48px] w-[48px] m-0 p-0"
+              src=${post.profile.avatar}
+              alt=${post.profile.name}
+            />
+            <div class="ml-4">
+              <h3 class="flex flex-row items-center text-lg font-bold">
+                <span>${post.profile.name}</span>
+              </h3>
+            </div>
           </div>
+          <div class="text-xs">Published: ${new Intl.DateTimeFormat('en-US').format(Date.now())}</div>
         </div>
-        <p>Published: ${new Intl.DateTimeFormat('en-US').format(Date.now())}
-
-        ${md.render(post.content)}
-      </div>
-      </div>
-      <div class="flex-none mx-auto">
+        <div class="flex-none mx-auto">
           <div class="flex flex-col max-w-[300px] justify-end space-y-8">
             <div id="passport"></div>
           </div>
-        </div
+        </div>
+        </div>
+        ${md.render(post.content)}
+      </div>
+      </div>
     </main>
   </body>
 </html>

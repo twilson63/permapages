@@ -210,9 +210,7 @@
         page.widgets = [
           ...page.widgets.filter((w) => w.elementId !== "passport"),
           {
-            //source: "https://stamp-widget.arweave.dev",
-            source:
-              "https://arweave.net/Zy_yxaSn08FKy-i1FgeaQ0vvMxeHSiIMyXs2Z91i08E",
+            source: "https://stamp-widget.arweave.dev",
             elementId: "passport",
             name: "passport",
             description: "Permapage Passport Widget",
@@ -235,10 +233,16 @@
 
       // handle widgets
       if (page.widgets) {
-        widgetMarkup = page.widgets.reduce(
-          (a, w) => a + `<div id="${w.name}"></div>`,
-          ""
-        );
+        widgetMarkup = page.widgets.reduce((a, w) => {
+          if (w.name === "passport") {
+            return (
+              a +
+              `<div id="${w.name}" class="w-full grid items-center mt-16 mr-16"></div>`
+            );
+          } else {
+            return a + `<div id="${w.name}"></div>`;
+          }
+        }, "");
       }
 
       let altText = "";
