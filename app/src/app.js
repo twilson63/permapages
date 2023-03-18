@@ -2,6 +2,7 @@ import * as pageModel from './models/pages.js'
 import * as profileModel from './models/profiles.js'
 import Async from 'crocks/Async/index.js'
 import createPosts from './domains/posts.js'
+import { parse, htmlify } from './services/atomic.js'
 
 import {
   compose, pluck, reverse, sortBy, groupBy, prop, map, path, head,
@@ -168,30 +169,10 @@ export function pages({ register, post, gql, postWebpage, load, loadState, postV
   //const void = () => null
 
   async function create(page, notify) {
-    // 1. generate web page
-    // 2. generate source
-    // 3. generate meta.json
-    // 4. create path.manifest
-    // 5. mint contract
     return Async.of(page)
       .map(page => has('code', page) ? page : assoc('code', crypto.randomUUID(), page))
       .chain(pageModel.validate)
-      .map(x => (console.log(x), x))
-      .chain(page =>
-        Async.of(page).map(({ title, creator, code, description, widgets, html, theme, includeFooter, state, topics }) => ({
-          title,
-          description,
-          html: htmlTemplate(title, creator, code, description, widgets, html, theme, includeFooter, topics),
-          state,
-          creator,
-          code,
-          topics
-        })).chain(Async.fromPromise(postWebpage))
-          .map((id) => ({ ...page, webpage: id }))
-      )
-      .map(_ => (notify({ step: 1, message: 'generating page' }), _))
-      .chain(page => deployPage(page).map(({ id }) => ({ ...page, id })))
-      .map(_ => (notify({ step: 2, message: 'deploying page' }), _))
+      .chain(Async.fromPromise(postWebpage))
       .toPromise()
   }
 
@@ -203,21 +184,23 @@ export function pages({ register, post, gql, postWebpage, load, loadState, postV
     return Async.of(account)
       .map(buildPermaPageQuery)
       .chain(Async.fromPromise(gql))
-
       .map(pluckNodes)
-
       .map(formatPages)
+      .map(x => (console.log('xpages ', x), x))
       .toPromise()
   }
 
   async function get(id) {
     return Async.of(id)
       .chain(Async.fromPromise(load))
-      .chain(page => Async.fromPromise(loadState)(page.webpage)
+      .chain(page => Async.fromPromise(loadState)(page.webpage || id)
+        .map(x => (console.log('state', x), x))
         .map(state => assoc('state', state, page))
+
       )
       // validate page 
       .chain(pageModel.validate)
+
       .toPromise()
   }
 
@@ -356,7 +339,7 @@ function htmlTemplate(title, creator, code, description, widgets, body, theme = 
     
     <script src="https://cdn.tailwindcss.com/3.1.3?plugins=typography"></script> 
     <script src="https://unpkg.com/arweave@1.11.4/bundles/web.bundle.min.js"></script>
-    <script src="https://unpkg.com/warp-contracts@1.1.3/bundles/web.bundle.min.js"></script>
+    <!-- <script src="https://unpkg.com/warp-contracts@1.1.3/bundles/web.bundle.min.js"></script> -->
     <!-- custom build of highlight js -->
     <script src="https://arweave.net/_d-GsX52lw7Sdg8hgKKWf_lLohaQ8f4zIYmXxHWMgQc"></script>
     <script src="https://unpkg.com/highlightjs-svelte@1.0.6/dist/svelte.min.js"></script>
@@ -434,7 +417,7 @@ function buildPermaPageQuery(owner) {
   return `
   query {
     transactions(first: 100, owners: ["${owner}"], 
-      tags:{name:"Protocol", values:["PermaPages-v0.3"]}) {
+      tags:{name:"Protocol", values:["PermaPages-v0.3", "PermaPages-v0.4"]}) {
       edges {
         node {
           id

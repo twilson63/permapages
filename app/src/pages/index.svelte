@@ -28,11 +28,12 @@
     // }, []);
 
     // rollup by slugs
-    const xs = [...pending, ...results].reduce(
+    //const xs = [...pending, ...results].reduce(
+    const xs = results.reduce(
       (acc, v) => (find(propEq("title", v.title), acc) ? acc : [...acc, v]),
       []
     );
-    console.log("xs", xs);
+
     return xs;
   }
 

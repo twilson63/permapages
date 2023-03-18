@@ -1,5 +1,6 @@
 import Arweave from 'arweave'
 import Account from 'arweave-account'
+import { parse, htmlify } from './atomic'
 
 import always from 'ramda/src/always'
 import assoc from 'ramda/src/assoc'
@@ -16,6 +17,7 @@ import toLower from 'ramda/src/toLower'
 import { ArweaveWebWallet } from "arweave-wallet-connector";
 import { readContract, selectWeightedPstHolder } from 'smartweave'
 import { Async } from 'crocks'
+import { WarpFactory, LoggerFactory } from 'https://unpkg.com/warp-contracts@1.2.52/bundles/web.bundle.min.js'
 
 // PST for permanotes
 //const PERMANOTE_PST = 'cwElAMnBqu2fp-TUsV9lBIZJi-DRZ5tQJgJqxhFjqNY'
@@ -41,10 +43,10 @@ export const arweave = Arweave.init({
 })
 
 // global warp
-const { WarpFactory, LoggerFactory } = window.warp
+//const { WarpFactory, LoggerFactory } = window.warp
 LoggerFactory.INST.logLevel("error");
 const warp = WarpFactory.forMainnet()
-
+const options = { allowBigInt: true, internalWrites: true, unsafeClient: 'allow' }
 let wallet = null
 
 //--- Helper functions
@@ -111,6 +113,9 @@ export const handle = async (handle) => await arweaveAccount.get(handle)
 
 export const loadPage = async (id) => {
   const { data } = await arweave.api.get(id)
+  if (typeof data === 'string') {
+    return parse(data)
+  }
   return data
 }
 
@@ -122,9 +127,10 @@ export const loadProfile = async (id) => {
 export const loadState = async (id) => {
   try {
     const contract = warp.contract(id)
-    const { state } = await contract.readState()
+    const state = await contract.setEvaluationOptions(options).readState().then(path(['cachedValue', 'state']))
     return state
   } catch (e) {
+    console.log('state error', e)
     return {}
   }
 }
@@ -156,8 +162,8 @@ export const load = async (id) => {
   return data
 }
 
-export const postWebpage = async (data) => {
-
+export const postWebpage = async (page) => {
+  const html = htmlify(page)
   const dispatch = Async.fromPromise(window.arweaveWallet.dispatch.bind(window.arweaveWallet))
 
   const slugify = compose(
@@ -166,59 +172,49 @@ export const postWebpage = async (data) => {
     split(' ')
   )
 
-  const initState = data.state || {
-    ticker: 'PAGE-' + slugify(data.title),
+  const initState = page.state || {
+    ticker: 'PAGE-' + slugify(page.title),
     name: 'Permapage',
-    title: data.title,
-    creator: data.creator,
+    title: page.title,
+    creator: page.creator,
     balances: {
-      [data.creator]: 10000
+      [page.creator]: 10000
     },
     contentType: 'text/html',
     createdAt: Date.now(),
-    invocations: [],
-    emergencyHaltWallet: data.owner,
+    emergencyHaltWallet: page.owner,
     halted: false,
     pairs: [],
-    usedTransfers: [],
-    foreignCalls: [],
-    claims: [],
-    claimable: [],
     settings: [["isTradeable", true]]
   }
 
-  const topics = data.topics.map(t => ({
+  const topics = page.topics.map(t => ({
     name: `topic:${t}`,
     value: t
   }))
 
   // create data-entry
   const de = {
-    data: data.html,
+    data: html,
     tags: [
       { name: APP_NAME, value: 'SmartWeaveContract' },
       { name: APP_VERSION, value: '0.3.0' },
-      { name: SDK, value: 'RedStone' },
       { name: CONTENT_TYPE, value: 'text/html' },
       { name: CONTRACT_SRC, value: DATAFI_PAGE_SRC },
       { name: INIT_STATE, value: JSON.stringify(initState) },
-      { name: 'Title', value: data.title },
-      { name: 'Description', value: data.description },
-      { name: 'Page-Code', value: data.code },
-      { name: 'Type', value: 'page' }
+      { name: 'Title', value: page.title },
+      { name: 'Description', value: page.description },
+      { name: 'Type', value: 'page' },
+      { name: 'Protocol', value: page.protocol },
+      { name: 'Timestamp', value: new Date().toISOString() }
     ].concat(topics)
   }
 
   // dispatch to bundlr
   return createDataEntry(de.data).map(addTags(de.tags)).chain(dispatch)
-    // post to Warp 
-    .chain(result => createDataEntry(de.data)
-      .map(addTags(de.tags))
-      .chain(sign)
-      .map(assoc('id', result.id))
-      .chain(post)
-    )
-    .map(prop('contractId'))
+    // register on warp
+    .chain(result => Async.fromPromise(warp.register.bind(warp))(result.id, 'node2'))
+    .map(prop('contractTxId'))
     .toPromise()
 
 

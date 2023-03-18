@@ -116,6 +116,7 @@
       previewClass: "bg-base-200 p-4 prose prose-lg",
       spellChecker: false,
       nativeSpellcheck: false,
+      indentWithTabs: false,
       //inputStyle: "contenteditable",
       //forceSync: true,
       previewRender: (txt) => md.render(txt),

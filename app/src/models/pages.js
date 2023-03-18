@@ -18,7 +18,7 @@ const schema = z.object({
   description: z.string().max(150),
   topics: z.array(z.string()).optional(),
   status: z.string().max(150).optional(),
-  protocol: z.string().default('PermaPages-v0.3'),
+  protocol: z.string().default('PermaPages-v0.4'),
   content: z.string(),
   html: z.string(),
   profile: z.boolean().default(false),
@@ -68,6 +68,7 @@ export const txToPage = (tx) => {
     title: getTag('Page-Title')(tx.tags) || getTag('Title')(tx.tags) || '',
     status: getTag('Status')(tx.tags),
     webpage: getTag('Webpage')(tx.tags),
+    protocol: getTag('Protocol')(tx.tags),
     timestamp
   }
   return page

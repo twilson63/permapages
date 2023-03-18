@@ -1,7 +1,7 @@
 {
   "name": "permapages",
   "private": true,
-  "version": "0.1.25",
+  "version": "0.1.26",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -41,6 +41,7 @@
     "date-fns": "^2.28.0",
     "dompurify": "^2.3.8",
     "highlight.js": "^11.5.1",
+    "linkedom": "^0.14.25",
     "markdown-it": "^13.0.1",
     "markdown-it-attrs": "^4.1.4",
     "markdown-it-container": "^3.0.0",
