@@ -7,24 +7,6 @@
   import { posts } from "../api.js";
   import { address } from "../store.js";
 
-  let drafts = [
-    {
-      postid: 1,
-      title: "untitled",
-      status: "Draft",
-    },
-    {
-      postid: 2,
-      title: "Concepts for product-led growth",
-      status: "Draft",
-    },
-    {
-      postid: 3,
-      title: "Making a new Atomic NFT",
-      status: "Draft",
-    },
-  ];
-
   async function postData() {
     const result = await posts.list($address);
     console.log(result);

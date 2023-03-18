@@ -169,14 +169,9 @@
             },
             contentType: "text/html",
             createdAt: Date.now(),
-            invocations: [],
             halted: false,
             pairs: [],
-            usedTransfers: [],
-            foreignCalls: [],
             emergencyHaltWallet: $address,
-            claims: [],
-            claimable: [],
             settings: [["isTradeable", true]],
           },
           p.state
@@ -290,15 +285,13 @@
         }).createVanilla(page, (m) => (step = m.step));
       } else {
         result = await pages({
-          register,
-          post: postPageTx,
           postWebpage,
         }).create(page, (m) => {
           step = m.step;
         });
       }
 
-      $pageCache = [result, ...$pageCache];
+      //$pageCache = [result, ...$pageCache];
 
       if (updateSubdomain) {
         const updateResult = await updateSubDomain({

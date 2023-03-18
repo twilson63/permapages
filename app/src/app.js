@@ -2,7 +2,6 @@ import * as pageModel from './models/pages.js'
 import * as profileModel from './models/profiles.js'
 import Async from 'crocks/Async/index.js'
 import createPosts from './domains/posts.js'
-import { parse, htmlify } from './services/atomic.js'
 
 import {
   compose, pluck, reverse, sortBy, groupBy, prop, map, path, head,
@@ -124,53 +123,20 @@ export function profiles({ gql, post, load }) {
 }
 
 export function pages({ register, post, gql, postWebpage, load, loadState, postVanilla }) {
-  const deployPage = post ? Async.fromPromise(post) : () => Async.of(null)
   const registerPage = register ? Async.fromPromise(register) : () => Async.of(null)
 
 
   async function createVanilla(page, notify) {
     return Async.of(page)
-      .map(page => has('code', page) ? page : assoc('code', crypto.randomUUID(), page))
       .chain(pageModel.validate)
-      .map(x => (console.log(x), x))
-      .chain(page => {
-        const html = htmlTemplate(page.title, page.creator, page.code, page.description, page.widgets, page.html, page.theme, page.includeFooter, page.topics)
-        const htmlTags = [
-          { name: 'Content-Type', value: 'text/html' },
-          { name: 'Title', value: page.title },
-          { name: 'Description', value: page.description },
-          { name: 'Page-Code', value: page.code },
-          { name: 'Type', value: 'page' }
-        ]
-        const src = JSON.stringify(page)
-        const srcTags = [
-
-          { name: 'Content-Type', value: 'application/json' },
-          { name: 'App-Name', value: 'PermaPages' },
-          { name: 'Protocol', value: page.protocol },
-          { name: 'Page-Title', value: page.title },
-          { name: 'Page-Code', value: page.code },
-          { name: 'Status', value: page.status },
-          { name: 'Timestamp', value: new Date().toISOString() },
-        ]
-        return Async.fromPromise(postVanilla)(html, htmlTags, src, srcTags)
-          .map(({ id, webpage }) => ({
-            id,
-            webpage,
-            owner: page.creator,
-            status: page.status,
-            timestamp: new Date().toISOString(),
-            title: page.title,
-            type: page.type,
-          }))
-      }).toPromise()
+      .chain(Async.fromPromise(postVanilla))
+      .toPromise()
   }
 
   //const void = () => null
 
   async function create(page, notify) {
     return Async.of(page)
-      .map(page => has('code', page) ? page : assoc('code', crypto.randomUUID(), page))
       .chain(pageModel.validate)
       .chain(Async.fromPromise(postWebpage))
       .toPromise()
@@ -186,7 +152,6 @@ export function pages({ register, post, gql, postWebpage, load, loadState, postV
       .chain(Async.fromPromise(gql))
       .map(pluckNodes)
       .map(formatPages)
-      .map(x => (console.log('xpages ', x), x))
       .toPromise()
   }
 
@@ -194,13 +159,10 @@ export function pages({ register, post, gql, postWebpage, load, loadState, postV
     return Async.of(id)
       .chain(Async.fromPromise(load))
       .chain(page => Async.fromPromise(loadState)(page.webpage || id)
-        .map(x => (console.log('state', x), x))
         .map(state => assoc('state', state, page))
-
       )
       // validate page 
       .chain(pageModel.validate)
-
       .toPromise()
   }
 

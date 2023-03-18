@@ -50,7 +50,6 @@ export default function ({ gql, query, publish, md, getData }) {
   function create(post) {
     return Async.of(post)
       .map(p => p.id ? p : assoc('id', crypto.randomUUID(), p))
-      .map(x => (console.log(x), x))
       .map(over(lensHtml, generateHtml(md)))
       .map(over(lensProp('topics'), compose(map(trim), split(','))))
       // validate post
