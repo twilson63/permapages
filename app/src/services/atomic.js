@@ -47,7 +47,7 @@ export function htmlify(page, head) {
 
 function createHtml(page) {
   return `<!doctype html>
-<html>
+<html data-theme="${page.theme}">
   <head>
     <meta charset="utf-8" />
     <title>${page.title}</title>

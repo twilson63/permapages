@@ -1,5 +1,6 @@
+import { parseHTML } from 'linkedom/worker'
 import { Async } from 'crocks'
-import { assoc, lens, lensProp, trim, split, over, identity, compose, prop, filter, find, propEq, map, pluck, __, head, uniqBy, join } from 'ramda'
+import { assoc, lens, lensProp, trim, split, over, identity, compose, prop, filter, find, path, propEq, map, pluck, __, head, uniqBy, join, omit } from 'ramda'
 
 const APP_WALLET = 'K92n-x2kHiRIBmS0yRGz5ii3OEXFw58__742Qu0DTgA'
 const SRC = 'x0ojRwrcHBmZP20Y4SY0mgusMRx-IYTjg5W8c3UFoNs'
@@ -13,33 +14,43 @@ export default function ({ gql, query, publish, md, getData }) {
       .map(buildFindByIdQuery)
       .chain(Async.fromPromise(gql))
       .chain(edges => {
-        const source = compose(
-          find(n => find(t => t.name === 'Type', n.tags).value === 'post-source'),
-          pluck('node')
-        )(edges)
-
         const asset = compose(
           head,
           filter(n => find(t => t.name === 'Type', n.tags).value === 'blog-post' && find(t => t.name === 'Uploader', n.tags) === undefined),
           pluck('node')
         )(edges)
+        if (asset.tags.find(propEq('name', 'Protocol-Name'))?.value === 'Permapage-Post-v4') {
+          return Async.fromPromise(getData)(asset.id)
+            .map(
+              (a) => ({
+                ...toPostItem(asset),
+                content: loadContent(a.data), // need to parse html and de-serialize source
+                html: a.data
+              })
+            )
+            .chain(post =>
+              Async.fromPromise(query)(post.transaction, ['prop', 'balances'])
+                .map(assoc('balances', __, post))
 
-        return Async.all([
-          Async.fromPromise(getData)(source.id),
-          Async.fromPromise(getData)(asset.id)
-        ])
-          .map(
-            ([s, a]) => ({
+            )
+        } else {
+          return Async.of(asset.tags.find(propEq('name', 'Asset-Id'))?.value)
+            .map(id => ({ query: buildSourceQuery(), variables: { ids: [id] } }))
+            .chain(Async.fromPromise(gql))
+            .map(path(['0', 'node', 'id']))
+            .chain(Async.fromPromise(getData))
+            .map(a => ({
               ...toPostItem(asset),
-              content: s.data,
-              html: a.data
-            })
-          )
-          .chain(post =>
-            Async.fromPromise(query)(post.transaction, ['prop', 'balances'])
-              .map(assoc('balances', __, post))
+              content: a.data
+            }))
+            .chain(post =>
+              Async.fromPromise(query)(post.transaction, ['prop', 'balances'])
+                .map(assoc('balances', __, post))
 
-          )
+            )
+
+        }
+
       })
   }
 
@@ -49,10 +60,9 @@ export default function ({ gql, query, publish, md, getData }) {
 
   function create(post) {
     return Async.of(post)
-      .map(p => p.id ? p : assoc('id', crypto.randomUUID(), p))
+      .map(p => p.assetId ? p : assoc('assetId', crypto.randomUUID(), p))
       .map(over(lensHtml, generateHtml(md)))
       .map(over(lensProp('topics'), compose(map(trim), split(','))))
-      // validate post
       .map(post => {
         const topicTags = map(v => ({ name: `Topic:${v}`, value: v }), post.topics)
         return {
@@ -65,10 +75,10 @@ export default function ({ gql, query, publish, md, getData }) {
               { name: 'Description', value: post.description },
               { name: 'Type', value: 'blog-post' },
               { name: 'Published', value: Date.now() },
-              { name: 'Asset-Id', value: post.id },
+              { name: 'Protocol-Name', value: 'Permapage-Post-v4' },
+              { name: 'Asset-Id', value: post.assetId },
               { name: 'App-Version', value: '0.3.0' },
               { name: 'Contract-Src', value: SRC },
-              { name: 'Page-Code', value: post.id },
               {
                 name: 'Init-State', value: JSON.stringify({
                   balances: {
@@ -76,31 +86,17 @@ export default function ({ gql, query, publish, md, getData }) {
                     [APP_WALLET]: 1000
                   },
                   pairs: [],
-                  name: "Post-" + post.id,
+                  name: "Post-" + post.assetId,
                   ticker: "BLOG-POST",
                   settings: [['isTradeable', true]]
                 })
               },
               ...topicTags
             ]
-          },
-          source: {
-            data: post.content,
-            tags: [
-              { name: 'Content-Type', value: 'text/markdown' },
-              { name: 'App-Name', value: 'Permapages' },
-              { name: 'Title', value: post.title },
-              { name: 'Description', value: post.description },
-              { name: 'Type', value: 'post-source' },
-              { name: 'Asset-Id', value: post.id },
-              { name: 'Page-Code', value: post.id },
-              ...topicTags
-            ]
           }
         }
       })
       .chain(Async.fromPromise(publish))
-
   }
 
   function list(addr) {
@@ -109,7 +105,7 @@ export default function ({ gql, query, publish, md, getData }) {
       .chain(Async.fromPromise(gql))
       .map(pluck('node'))
       .map(map(toPostItem))
-      .map(uniqBy(prop('id')))
+      .map(uniqBy(prop('assetId')))
       .chain(nodes =>
         Async.fromPromise(query)(STAMP_CONTRACT, ['compose',
           ['mapObjIndexed', ['length']],
@@ -132,11 +128,11 @@ export default function ({ gql, query, publish, md, getData }) {
     preview
   }
 }
-
+//tags: { name: "Asset-Id", values: $ids }
 function buildFindByIdQuery(id) {
   return {
-    query: `query ($ids: [String!]!, $cursor: String) {
-      transactions(first: 1, after: $cursor, tags: { name: "Asset-Id", values: $ids }) {
+    query: `query ($ids: [ID!]!, $cursor: String) {
+      transactions(first: 1, after: $cursor, ids: $ids) {
         pageInfo {
           hasNextPage
         }
@@ -161,7 +157,12 @@ function buildFindByIdQuery(id) {
 function buildQuery(addr) {
   return {
     query: `query ($owners: [String!], $cursor: String) {
-      transactions(first: 100, after: $cursor, owners: $owners, tags: { name: "Type", values: ["blog-post"] }) {
+      transactions(first: 100, 
+        after: $cursor, 
+        owners: $owners, 
+        tags: [
+          { name: "Type", values: ["blog-post"] }
+        ]) {
         pageInfo {
           hasNextPage
         }
@@ -187,12 +188,16 @@ function toPostItem(node) {
   const getTag = compose(prop('value'), n => find(propEq('name', n), node.tags))
   const published = getTag('Published') ? Number(getTag('Published')) : Date.now()
   const topics = join(', ', pluck('value', filter(t => /^Topic:/.test(t.name), node.tags)))
+  const protocol = getTag('Protocol-Name') || 'PermaPages-Post-v0.3'
+
   return {
-    id: getTag('Asset-Id'),
+    id: node.id,
     type: getTag('Type'),
     title: getTag('Title'),
     description: getTag('Description'),
+    protocol: protocol,
     transaction: node.id,
+    assetId: getTag('Asset-Id'),
     published,
     stamps: 0,
     topics
@@ -210,6 +215,7 @@ function generateHtml(md) {
     <meta name="author" content="${post.profile.owner}">
     <meta name="code" content="${post.id}">
     <meta name="about" content="Webpage generated by https://pages.arweave.dev">
+    <meta name="source" content="${btoa(JSON.stringify(omit(['profile'], post)))}">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.15.4/dist/full.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/github-dark.min.css">
     
@@ -231,7 +237,7 @@ function generateHtml(md) {
         <h1>${post.title}</h1>
         <p>${post.description}</p>
         
-        <div class="flex items-between">
+        <div class="flex items-between justify-start">
         <div class="w-1/2 flex flex-col">
           <div class="flex flex-row items-center">
             <img
@@ -261,4 +267,29 @@ function generateHtml(md) {
 </html>
   
   `
+}
+
+function loadContent(html) {
+  const { document } = parseHTML(html)
+  const source = document.head.querySelector('meta[name="source"]').getAttribute('content')
+  const post = JSON.parse(atob(source))
+  return post.content
+}
+
+function buildSourceQuery() {
+  return `query ($ids: [String!]!) {
+  transactions(first: 1, tags: [
+    {name: "Asset-Id", values: $ids },
+    {name: "Type", values: ["post-source"]}
+  ]) {
+    pageInfo {
+      hasNextPage
+    }
+    edges {
+      node {
+        id
+      }
+    }
+  }
+  }`
 }

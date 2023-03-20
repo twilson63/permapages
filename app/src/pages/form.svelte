@@ -152,7 +152,7 @@
         page.profile = p.profile;
         page.ethwallet = p.ethwallet;
         page.webpage = p.webpage;
-        page.theme = p.theme;
+        page.theme = p.theme || "light";
         page.widgets = p.widgets || [];
         page.includeFooter = p.includeFooter || true;
         page.allowStamps = p.allowStamps || true;
