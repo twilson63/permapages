@@ -116,6 +116,7 @@
       previewClass: "bg-base-200 p-4 prose prose-lg",
       spellChecker: false,
       nativeSpellcheck: false,
+      indentWithTabs: false,
       //inputStyle: "contenteditable",
       //forceSync: true,
       previewRender: (txt) => md.render(txt),
@@ -151,7 +152,7 @@
         page.profile = p.profile;
         page.ethwallet = p.ethwallet;
         page.webpage = p.webpage;
-        page.theme = p.theme;
+        page.theme = p.theme || "light";
         page.widgets = p.widgets || [];
         page.includeFooter = p.includeFooter || true;
         page.allowStamps = p.allowStamps || true;
@@ -168,14 +169,9 @@
             },
             contentType: "text/html",
             createdAt: Date.now(),
-            invocations: [],
             halted: false,
             pairs: [],
-            usedTransfers: [],
-            foreignCalls: [],
             emergencyHaltWallet: $address,
-            claims: [],
-            claimable: [],
             settings: [["isTradeable", true]],
           },
           p.state
@@ -289,15 +285,13 @@
         }).createVanilla(page, (m) => (step = m.step));
       } else {
         result = await pages({
-          register,
-          post: postPageTx,
           postWebpage,
         }).create(page, (m) => {
           step = m.step;
         });
       }
 
-      $pageCache = [result, ...$pageCache];
+      //$pageCache = [result, ...$pageCache];
 
       if (updateSubdomain) {
         const updateResult = await updateSubDomain({

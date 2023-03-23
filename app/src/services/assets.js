@@ -1,5 +1,6 @@
 import Arweave from 'arweave'
 import { map } from 'ramda'
+import { WarpFactory, LoggerFactory } from 'https://unpkg.com/warp-contracts@1.2.52/bundles/web.bundle.min.js'
 
 //const URL = 'https://gateway.redstone.finance/gateway/contracts/deploy'
 const URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
@@ -8,6 +9,9 @@ const arweave = Arweave.init({
   port: 443,
   protocol: 'https'
 })
+
+LoggerFactory.INST.logLevel('error')
+const warp = WarpFactory.forMainnet()
 
 export const getData = (id) => arweave.api.get(id)
 //.then(res => res.ok ? res.data : Promise.reject(res))
@@ -32,20 +36,18 @@ export const getData = (id) => arweave.api.get(id)
  */
 export const publish = (asset) => {
   return Promise.resolve(asset)
-    .then(asset => Promise.all([
-      dispatch(asset.source),
-      dispatch(asset.asset)
-    ]))
-    .then(([_, asset]) => asset)
-    .then(post)
-    .then(x => (console.log('asset', x), x))
+    .then(asset => dispatch(asset.asset))
+    .then(result => warp.register(result.id, 'node2'))
+  //.then(([_, asset]) => asset)
+  //.then(post)
+  //.then(x => (console.log('asset', x), x))
 }
 
 async function dispatch({ data, tags }) {
   if (!arweaveWallet) {
     return Promise.reject('No wallet found')
   }
-  console.log({ data, tags })
+
   const tx = await arweave.createTransaction({ data })
   map(t => tx.addTag(t.name, t.value), tags)
 

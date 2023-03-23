@@ -1,5 +1,6 @@
 <script>
   import { router } from "tinro";
+  import { pick } from "ramda";
   import Navbar from "../components/navbar.svelte";
   import Modal from "../components/modal.svelte";
   import { account, address } from "../store.js";
@@ -32,16 +33,19 @@
       previewClass: "bg-base-200 p-4 prose prose-lg",
       spellChecker: false,
       nativeSpellcheck: false,
+      indentWithTabs: false,
       //inputStyle: "contenteditable",
       //forceSync: true,
       previewRender: (txt) => md.render(txt),
       //previewClass: "prose md:prose-lg lg:prose-xl m-8 md:mx-24",
     });
-    console.log("id", id);
+
     if (id) {
       // Need to load blog-post article
       //console.log(await posts.get(id));
       post = await posts.get(id);
+      console.log("post", post);
+
       easymde.value(post.content);
     }
   });

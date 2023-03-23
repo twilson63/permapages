@@ -20,12 +20,12 @@
       <tr>
         <td>{title.length > 30 ? take(30, title) + "..." : title}</td>
         <td>{status ? take(20, status) : "no status"}...</td>
-        <td>{webpage}</td>
+        <td>{webpage || id}</td>
 
         <td>
           <a
             target="_blank"
-            href="https://arweave.net/{webpage}"
+            href="https://arweave.net/{webpage || id}"
             class="link uppercase">Link</a
           >
           <a href="/pages/new?fork={id}" class="link uppercase">Edit</a>

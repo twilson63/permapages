@@ -123,75 +123,22 @@ export function profiles({ gql, post, load }) {
 }
 
 export function pages({ register, post, gql, postWebpage, load, loadState, postVanilla }) {
-  const deployPage = post ? Async.fromPromise(post) : () => Async.of(null)
   const registerPage = register ? Async.fromPromise(register) : () => Async.of(null)
 
 
   async function createVanilla(page, notify) {
     return Async.of(page)
-      .map(page => has('code', page) ? page : assoc('code', crypto.randomUUID(), page))
       .chain(pageModel.validate)
-      .map(x => (console.log(x), x))
-      .chain(page => {
-        const html = htmlTemplate(page.title, page.creator, page.code, page.description, page.widgets, page.html, page.theme, page.includeFooter, page.topics)
-        const htmlTags = [
-          { name: 'Content-Type', value: 'text/html' },
-          { name: 'Title', value: page.title },
-          { name: 'Description', value: page.description },
-          { name: 'Page-Code', value: page.code },
-          { name: 'Type', value: 'page' }
-        ]
-        const src = JSON.stringify(page)
-        const srcTags = [
-
-          { name: 'Content-Type', value: 'application/json' },
-          { name: 'App-Name', value: 'PermaPages' },
-          { name: 'Protocol', value: page.protocol },
-          { name: 'Page-Title', value: page.title },
-          { name: 'Page-Code', value: page.code },
-          { name: 'Status', value: page.status },
-          { name: 'Timestamp', value: new Date().toISOString() },
-        ]
-        return Async.fromPromise(postVanilla)(html, htmlTags, src, srcTags)
-          .map(({ id, webpage }) => ({
-            id,
-            webpage,
-            owner: page.creator,
-            status: page.status,
-            timestamp: new Date().toISOString(),
-            title: page.title,
-            type: page.type,
-          }))
-      }).toPromise()
+      .chain(Async.fromPromise(postVanilla))
+      .toPromise()
   }
 
   //const void = () => null
 
   async function create(page, notify) {
-    // 1. generate web page
-    // 2. generate source
-    // 3. generate meta.json
-    // 4. create path.manifest
-    // 5. mint contract
     return Async.of(page)
-      .map(page => has('code', page) ? page : assoc('code', crypto.randomUUID(), page))
       .chain(pageModel.validate)
-      .map(x => (console.log(x), x))
-      .chain(page =>
-        Async.of(page).map(({ title, creator, code, description, widgets, html, theme, includeFooter, state, topics }) => ({
-          title,
-          description,
-          html: htmlTemplate(title, creator, code, description, widgets, html, theme, includeFooter, topics),
-          state,
-          creator,
-          code,
-          topics
-        })).chain(Async.fromPromise(postWebpage))
-          .map((id) => ({ ...page, webpage: id }))
-      )
-      .map(_ => (notify({ step: 1, message: 'generating page' }), _))
-      .chain(page => deployPage(page).map(({ id }) => ({ ...page, id })))
-      .map(_ => (notify({ step: 2, message: 'deploying page' }), _))
+      .chain(Async.fromPromise(postWebpage))
       .toPromise()
   }
 
@@ -203,9 +150,7 @@ export function pages({ register, post, gql, postWebpage, load, loadState, postV
     return Async.of(account)
       .map(buildPermaPageQuery)
       .chain(Async.fromPromise(gql))
-
       .map(pluckNodes)
-
       .map(formatPages)
       .toPromise()
   }
@@ -213,7 +158,7 @@ export function pages({ register, post, gql, postWebpage, load, loadState, postV
   async function get(id) {
     return Async.of(id)
       .chain(Async.fromPromise(load))
-      .chain(page => Async.fromPromise(loadState)(page.webpage)
+      .chain(page => Async.fromPromise(loadState)(page.webpage || id)
         .map(state => assoc('state', state, page))
       )
       // validate page 
@@ -356,7 +301,7 @@ function htmlTemplate(title, creator, code, description, widgets, body, theme = 
     
     <script src="https://cdn.tailwindcss.com/3.1.3?plugins=typography"></script> 
     <script src="https://unpkg.com/arweave@1.11.4/bundles/web.bundle.min.js"></script>
-    <script src="https://unpkg.com/warp-contracts@1.1.3/bundles/web.bundle.min.js"></script>
+    <!-- <script src="https://unpkg.com/warp-contracts@1.1.3/bundles/web.bundle.min.js"></script> -->
     <!-- custom build of highlight js -->
     <script src="https://arweave.net/_d-GsX52lw7Sdg8hgKKWf_lLohaQ8f4zIYmXxHWMgQc"></script>
     <script src="https://unpkg.com/highlightjs-svelte@1.0.6/dist/svelte.min.js"></script>
@@ -434,7 +379,7 @@ function buildPermaPageQuery(owner) {
   return `
   query {
     transactions(first: 100, owners: ["${owner}"], 
-      tags:{name:"Protocol", values:["PermaPages-v0.3"]}) {
+      tags:{name:"Protocol", values:["PermaPages-v0.3", "PermaPages-v0.4"]}) {
       edges {
         node {
           id

@@ -18,9 +18,9 @@
   async function listPages() {
     const results = await list(account);
 
-    const pending = ($pageCache || []).filter((n) =>
-      find(propEq("id", n.id), results) ? false : true
-    );
+    // const pending = ($pageCache || []).filter((n) =>
+    //   find(propEq("id", n.id), results) ? false : true
+    // );
 
     // clean cache if in results
     // $cache = ($cache || []).reduce((acc, v) => {
@@ -28,11 +28,12 @@
     // }, []);
 
     // rollup by slugs
-    const xs = [...pending, ...results].reduce(
+    //const xs = [...pending, ...results].reduce(
+    const xs = results.reduce(
       (acc, v) => (find(propEq("title", v.title), acc) ? acc : [...acc, v]),
       []
     );
-    console.log("xs", xs);
+
     return xs;
   }
 
