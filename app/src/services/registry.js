@@ -1,21 +1,13 @@
 import Arweave from 'arweave'
+import getHost from './get-host'
 
-import map from 'ramda/src/map'
-import pluck from 'ramda/src/pluck'
-import head from 'ramda/src/head'
-import filter from 'ramda/src/filter'
-import compose from 'ramda/src/compose'
-import toPairs from 'ramda/src/toPairs'
-import equals from 'ramda/src/equals'
-import propOr from 'ramda/src/propOr'
+import { map, pluck, head, filter, compose, toPairs, equals, propOr } from 'ramda'
 
 const { WarpFactory, defaultCacheOptions, LoggerFactory } = window.warp
 
-const arweave = Arweave.init({
-  host: 'arweave.net',
-  port: 443,
-  protocol: 'https'
-})
+let options = {}
+options = { host: getHost(), port: 443, protocol: 'https' }
+const arweave = Arweave.init(options)
 
 LoggerFactory.INST.logLevel("error");
 const warp = WarpFactory.custom(arweave, defaultCacheOptions, 'mainnet').useArweaveGateway().build()
@@ -69,7 +61,9 @@ export async function register({ name, owner, transactionId }) {
   const res = await registry.writeInteraction({
     function: 'buyRecord',
     name,
-    contractTransactionId: ant.contractTxId
+    contractTxId: ant.contractTxId,
+    tierNumber: 1,
+    years: 1
   })
 
 
@@ -88,7 +82,7 @@ export async function getBalance(owner) {
   const registry = warp.pst(REGISTRY)
 
   const { result } = await registry.viewState({
-    function: 'balance',
+    function: 'getBalance',
     target: owner
   })
 
@@ -107,6 +101,7 @@ export async function getFees(subdomain = '') {
 export async function listANTs(owner) {
   const registry = warp.pst(REGISTRY)
   const regState = await registry.currentState()
+
   //owner = 'j-Jvcg4_ZJ3BSANoJi-ixLWfxe3-nguaxNyg0lYy8P0'
   const query = {
     query: `
@@ -134,7 +129,7 @@ query {
 
 }
 
-const valueEquals = v => ([key, value]) => equals(value, v)
+const valueEquals = v => ([key, value]) => equals(value.contractTxId, v)
 const getSubdomain = (contract, records) => compose(
   head,
   propOr([null], 0),
@@ -148,10 +143,10 @@ export async function getANT(ANT) {
     const registry = warp.pst(REGISTRY)
     const ant = warp.pst(ANT)
     const regState = await registry.currentState()
-    //console.log('getANT')
+
     subdomain = getSubdomain(ANT, regState.records)
     const antState = await ant.currentState()
-    //console.log(antState)
+
     return { ...antState, id: ANT, subdomain }
   } catch (e) {
     return { id: ANT, subdomain }

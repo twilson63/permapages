@@ -1,4 +1,5 @@
 <script>
+  import modalAction from "../actions/modal-action";
   import { createEventDispatcher } from "svelte";
 
   export let id = "1234";

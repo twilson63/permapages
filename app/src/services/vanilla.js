@@ -1,5 +1,6 @@
 import Arweave from 'arweave'
 import { htmlify } from './atomic'
+import getHost from './get-host'
 
 const DATAFI_PAGE_SRC = __ATOMIC_ASSET_SRC__
 
@@ -7,7 +8,10 @@ const [APP_NAME, APP_VERSION, CONTRACT_SRC, INIT_STATE] =
   ['App-Name', 'App-Version', 'Contract-Src', 'Init-State']
 
 
-const arweave = Arweave.init({ host: 'arweave.net', port: 443, protocol: 'https' })
+let options = {}
+
+options = { host: getHost(), port: 443, protocol: 'https' }
+const arweave = Arweave.init(options)
 // deploy permapage old school
 export default async function (page) {
   const topics = page.topics.map(t => ({

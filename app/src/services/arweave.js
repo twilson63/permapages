@@ -13,6 +13,7 @@ import compose from 'ramda/src/compose'
 import join from 'ramda/src/join'
 import split from 'ramda/src/split'
 import toLower from 'ramda/src/toLower'
+import getHost from './get-host'
 
 import { ArweaveWebWallet } from "arweave-wallet-connector";
 import { readContract, selectWeightedPstHolder } from 'smartweave'
@@ -36,11 +37,10 @@ const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] =
 const FEE = '.004'
 const arweaveAccount = new Account()
 
-export const arweave = Arweave.init({
-  host: 'arweave.net',
-  port: 443,
-  protocol: 'https'
-})
+let _options = {}
+
+_options = { host: getHost(), port: 443, protocol: 'https' }
+export const arweave = Arweave.init(_options)
 
 // global warp
 //const { WarpFactory, LoggerFactory } = window.warp

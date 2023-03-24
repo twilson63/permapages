@@ -1,14 +1,15 @@
 import Arweave from 'arweave'
 import { map } from 'ramda'
 import { WarpFactory, LoggerFactory } from 'https://unpkg.com/warp-contracts@1.2.52/bundles/web.bundle.min.js'
+import getHost from './get-host'
 
 //const URL = 'https://gateway.redstone.finance/gateway/contracts/deploy'
 const URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
-const arweave = Arweave.init({
-  host: 'arweave.net',
-  port: 443,
-  protocol: 'https'
-})
+
+let options = {}
+
+options = { host: getHost(), port: 443, protocol: 'https' }
+const arweave = Arweave.init(options)
 
 LoggerFactory.INST.logLevel('error')
 const warp = WarpFactory.forMainnet()

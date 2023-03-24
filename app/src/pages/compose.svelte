@@ -57,6 +57,11 @@
 
       await posts.create(post);
       easymde.value("");
+      // await new Promise((r) => setTimeout(r, 500));
+      // alert(
+      //   "Successfully Posted article, it may take a few moments to show in your list."
+      // );
+
       router.goto("/posts");
     } catch (e) {
       console.log(e);
