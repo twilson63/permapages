@@ -290,8 +290,19 @@
           step = m.step;
         });
       }
-
-      //$pageCache = [result, ...$pageCache];
+      console.log("result", result);
+      $pageCache = [
+        {
+          id: result,
+          title: page.title,
+          type: page.type,
+          owner: page.creator,
+          status: null,
+          timestamp: Date.now(),
+          protocol: page.protocol,
+        },
+        ...$pageCache,
+      ];
 
       if (updateSubdomain) {
         const updateResult = await updateSubDomain({
