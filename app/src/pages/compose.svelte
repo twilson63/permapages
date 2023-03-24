@@ -57,7 +57,9 @@
 
       await posts.create(post);
       easymde.value("");
-
+      alert(
+        "successfully created post! It may take a few minutes to show in your blog list.  "
+      );
       router.goto("/posts");
     } catch (e) {
       console.log(e);
