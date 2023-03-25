@@ -240,24 +240,22 @@ function generateHtml(md) {
         
         <div class="flex items-between justify-start">
         <div class="w-1/2 flex flex-col">
-          <div class="flex flex-row items-center">
+          <div class="flex flex-row items-start">
             <img
               class="mask mask-circle h-[48px] w-[48px] m-0 p-0"
               src=${post.profile.avatar}
               alt=${post.profile.name}
             />
-            <div class="ml-4">
-              <h3 class="flex flex-row items-center text-lg font-bold">
+            <div class="ml-4 my-0 py-0">
+              <h3 class="text-lg font-bold">
                 <span>${post.profile.name}</span>
               </h3>
             </div>
           </div>
           <div class="text-xs">Published: ${new Intl.DateTimeFormat('en-US').format(Date.now())}</div>
         </div>
-        <div class="flex-none mx-auto">
-          <div class="flex flex-col max-w-[300px] justify-end space-y-8">
-            <div id="passport"></div>
-          </div>
+        <div class="flex-none mx-auto flex items-center mt-8">
+          <div id="passport"></div>
         </div>
         </div>
         ${md.render(post.content)}
