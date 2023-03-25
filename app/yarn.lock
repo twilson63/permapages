@@ -96,9 +96,13 @@
     remark-rehype "^10.1.0"
     unified "^10.1.2"
 
-"@permaweb/stampjs@https://js_stamps.g8way.io":
-  version "0.0.3"
-  resolved "https://js_stamps.g8way.io#c16fdeca85df21a300d9872693ac47cda0120639"
+"@permaweb/stampjs@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@permaweb/stampjs/-/stampjs-0.0.15.tgz#e809028e981cf9102b0286353ad3f3e53e6f4aab"
+  integrity sha512-1W/gSgEGRjHnGHsHDTnVPVPqYMr0MMYLew+LFTh3bTi/FIUKmFyuvUdI8kMPca0zfpqSzTDcaKHayvpMBcsI0w==
+  dependencies:
+    fpjson-lang "^0.1.3"
+    ramda "^0.28.0"
 
 "@rollup/pluginutils@^4.2.0":
   version "4.2.0"
@@ -1751,6 +1755,13 @@ form-data@^4.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
+fpjson-lang@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/fpjson-lang/-/fpjson-lang-0.1.3.tgz#850a3bac1da2b4488118000acf4aab1bb06109e6"
+  integrity sha512-GBLFEQmeoTdFLp1yfDhierzozniCClzeuu+Y9Xny+JIf1gOGM8n/gqZqn0sneKikt71K6qxFVZDrpfkPTA53nA==
+  dependencies:
+    ramda "^0.28.0"
+
 fraction.js@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.2.0.tgz#448e5109a313a3527f5a3ab2119ec4cf0e0e2950"
@@ -2284,6 +2295,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+
+js-base64@^3.7.5:
+  version "3.7.5"
+  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-3.7.5.tgz#21e24cf6b886f76d6f5f165bfcd69cc55b9e3fca"
+  integrity sha512-3MEt5DTINKqfScXKfJFrRbxkrnk2AxPWGBL/ycjz4dK8iqiSJ06UxD8jh8xuh6p10TX4t2+7FsBYVxxQbMg+qA==
 
 js-tokens@^4.0.0:
   version "4.0.0"

@@ -1,8 +1,7 @@
 import { path } from 'ramda'
-const URL = 'https://arweave.net'
+import getHost from './get-host'
 
-
-const run = ({ query, variables }) => fetch(`${URL}/graphql`, {
+const run = ({ query, variables }) => fetch(`${getHost()}/graphql`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'

@@ -1,7 +1,7 @@
 {
   "name": "permapages",
   "private": true,
-  "version": "0.1.31",
+  "version": "0.1.33",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@permaweb/pages-js": "https://lib_pages.g8way.io",
-    "@permaweb/stampjs": "https://js_stamps.g8way.io",
+    "@permaweb/stampjs": "^0.0.15",
     "ardb": "^1.1.10",
     "arweave": "^1.10.23",
     "arweave-account": "^1.2.5",
@@ -41,6 +41,7 @@
     "date-fns": "^2.28.0",
     "dompurify": "^2.3.8",
     "highlight.js": "^11.5.1",
+    "js-base64": "^3.7.5",
     "linkedom": "^0.14.25",
     "markdown-it": "^13.0.1",
     "markdown-it-attrs": "^4.1.4",
