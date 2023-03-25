@@ -55,12 +55,12 @@
       post.content = easymde.value();
       post.profile = $account.profile;
 
-      await posts.create(post);
+      const result = await posts.create(post);
       easymde.value("");
-      alert(
-        "successfully created post! It may take a few minutes to show in your blog list.  "
-      );
-      router.goto("/posts");
+
+      console.log(result);
+      //router.goto("/posts");
+      window.location.href = "https://arweave.net/" + result.contractTxId;
     } catch (e) {
       console.log(e);
     }
