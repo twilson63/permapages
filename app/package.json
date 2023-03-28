@@ -33,7 +33,7 @@
     "@permaweb/pages-js": "https://lib_pages.g8way.io",
     "@permaweb/stampjs": "^0.0.15",
     "ardb": "^1.1.10",
-    "arweave": "^1.10.23",
+    "arweave": "^1.13.4",
     "arweave-account": "^1.2.5",
     "arweave-bundles": "^1.0.3",
     "arweave-wallet-connector": "^0.0.26",

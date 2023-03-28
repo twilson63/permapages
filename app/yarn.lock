@@ -1593,7 +1593,7 @@ arweave@^1.11.4:
     bignumber.js "^9.0.2"
     util "^0.12.4"
 
-arweave@^1.12.4:
+arweave@^1.12.4, arweave@^1.13.4:
   version "1.13.4"
   resolved "https://registry.yarnpkg.com/arweave/-/arweave-1.13.4.tgz#5aa6ba22f47b1cc83f1a13ccc6a52cb6abc73e38"
   integrity sha512-445kQ3wtCvubR/LyUZt3wsXHxcDwY9lOlVCpolIxZllLt6U9rLO/iK03ZZrq8t26Nt+aoB1qZerMdOz29KS8bA==
