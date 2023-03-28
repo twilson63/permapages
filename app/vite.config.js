@@ -26,7 +26,7 @@ export default defineConfig({
   define: {
     '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
     '__ATOMIC_ASSET_SRC__': '"x0ojRwrcHBmZP20Y4SY0mgusMRx-IYTjg5W8c3UFoNs"',
-    '__STAMP_CONTRACT__': '"FMRHYgSijiUNBrFy-XqyNNXenHsCV0ThR4lGAPO4chA"'
+    '__STAMP_CONTRACT__': '"61vg8n54MGSC9ZHfSVAtQp4WjNb20TaThu6bkQ86pPI"'
   },
   optimizeDeps: {
     exclude: ['tinro']

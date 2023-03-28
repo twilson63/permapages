@@ -2,6 +2,7 @@ import * as pageModel from './models/pages.js'
 import * as profileModel from './models/profiles.js'
 import Async from 'crocks/Async/index.js'
 import createPosts from './domains/posts.js'
+import getHost from './services/get-host.js'
 
 import {
   compose, pluck, reverse, sortBy, groupBy, prop, map, path, head,
@@ -15,11 +16,9 @@ export function posts(env) {
 }
 
 export function loadBalances(addr) {
-  const getTokenBalance = (contract) => fetch(`https://cache.permapages.app/${contract}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(['path', ['balances', addr]])
-  }).then(res => res.ok ? res.json() : Promise.reject(res)).then(prop('result'))
+  const getTokenBalance = (contract) => fetch(`https://cache-2.permaweb.tools/contract/?id=${contract}`)
+    .then(res => res.ok ? res.json() : Promise.reject(res))
+    .then(path(['state', 'balances', addr]))
 
   const format = (y) => (x) => compose(
     n => n.toFixed(4),
@@ -28,11 +27,11 @@ export function loadBalances(addr) {
 
   return Promise.all([
     // get AR Balance
-    fetch(`https://arweave.net/wallet/${addr}/balance`).then(res => res.text()).then(Number).then(format(1e12)).catch(() => "NA"),
+    fetch(`https://${getHost()}/wallet/${addr}/balance`).then(res => res.text()).then(Number).then(format(1e12)).catch(() => "NA"),
     // get bAR Balance
     getTokenBalance('VFr3Bk-uM-motpNNkkFg4lNW1BMmSfzqsVO551Ho4hA').then(format(1e6)).catch(() => "NA"),
     // get STAMP Balance
-    getTokenBalance('FMRHYgSijiUNBrFy-XqyNNXenHsCV0ThR4lGAPO4chA').then(format(1e12)).catch(() => "NA"),
+    getTokenBalance('61vg8n54MGSC9ZHfSVAtQp4WjNb20TaThu6bkQ86pPI').then(format(1e12)).catch(() => "NA"),
     // get ArNS Balance
     getTokenBalance('bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U')
       //.then(format(1e12))
@@ -301,7 +300,6 @@ function htmlTemplate(title, creator, code, description, widgets, body, theme = 
     
     <script src="https://cdn.tailwindcss.com/3.1.3?plugins=typography"></script> 
     <script src="https://unpkg.com/arweave@1.11.4/bundles/web.bundle.min.js"></script>
-    <!-- <script src="https://unpkg.com/warp-contracts@1.1.3/bundles/web.bundle.min.js"></script> -->
     <!-- custom build of highlight js -->
     <script src="https://arweave.net/_d-GsX52lw7Sdg8hgKKWf_lLohaQ8f4zIYmXxHWMgQc"></script>
     <script src="https://unpkg.com/highlightjs-svelte@1.0.6/dist/svelte.min.js"></script>

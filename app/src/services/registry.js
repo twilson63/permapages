@@ -1,17 +1,19 @@
 import Arweave from 'arweave'
+import { WarpFactory, defaultCacheOptions, LoggerFactory } from 'warp-contracts/web'
+
 import getHost from './get-host'
 
-import { map, pluck, head, filter, compose, toPairs, equals, propOr } from 'ramda'
+import { map, pluck, head, filter, compose, toPairs, equals, propOr, identity, path } from 'ramda'
 
-const { WarpFactory, defaultCacheOptions, LoggerFactory } = window.warp
 
 let options = {}
 options = { host: getHost(), port: 443, protocol: 'https' }
 const arweave = Arweave.init(options)
 
 LoggerFactory.INST.logLevel("error");
-const warp = WarpFactory.custom(arweave, defaultCacheOptions, 'mainnet').useArweaveGateway().build()
-
+//const warp = WarpFactory.custom(arweave, defaultCacheOptions, 'mainnet').useArweaveGateway().build()
+//const warp = WarpFactory.forMainnet({ arweave, useArweaveGw: true })
+const warp = WarpFactory.forMainnet()
 const REGISTRY = "bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"
 const ANT_SOURCE = "PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY"
 //const ANT_SOURCE = "JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg"
@@ -54,7 +56,7 @@ export async function register({ name, owner, transactionId }) {
       }
     }),
     srcTxId: ANT_SOURCE
-  })
+  }, true)
 
 
   // buy ArNS
@@ -64,7 +66,7 @@ export async function register({ name, owner, transactionId }) {
     contractTxId: ant.contractTxId,
     tierNumber: 1,
     years: 1
-  })
+  }, { disableBundling: true })
 
 
 
@@ -72,20 +74,20 @@ export async function register({ name, owner, transactionId }) {
 }
 
 export async function getARBalance(owner) {
-  const { data } = await arweave.api.get(`wallet/${owner}/balance`)
+  //const { data } = await arweave.api.get(`wallet/${owner}/balance`)
+  const data = await fetch(`https://${getHost()}/wallet/${owner}/balance`)
+    .then(res => res.text())
+
   return arweave.ar.winstonToAr(data)
   //return await arweave.wallets.getBalance(owner).then(x => arweave.ar.winstonToAr(x)).catch(e => 'N/A')
 
 }
 
 export async function getBalance(owner) {
-  const registry = warp.pst(REGISTRY)
+  const registry = await warp.contract(REGISTRY).syncState('https://cache-2.permaweb.tools/contract', { validity: true })
 
-  const { result } = await registry.viewState({
-    function: 'getBalance',
-    target: owner
-  })
-
+  const result = await registry.readState().then(path(['cachedValue', 'state', 'balances', owner]))
+    .catch(e => console.log(e.message))
   return result
 }
 
@@ -99,22 +101,25 @@ export async function getFees(subdomain = '') {
 }
 
 export async function listANTs(owner) {
-  const registry = warp.pst(REGISTRY)
-  const regState = await registry.currentState()
+  const regState = await warp.contract(REGISTRY)
+    .syncState('https://cache-2.permaweb.tools/contract', { validity: true })
+    .then(c => c.setEvaluationOptions({ allowBigInt: true }).readState())
+    //.setEvaluationOptions({ allowBigInt: true }).readState()
+    .then(path(['cachedValue', 'state']))
+    .catch(e => console.log('ERROR', e.message))
 
-  //owner = 'j-Jvcg4_ZJ3BSANoJi-ixLWfxe3-nguaxNyg0lYy8P0'
   const query = {
     query: `
-query {
-  transactions(first: 100, owners: ["${owner}"], tags: {name: "Contract-Src", values: [${regState.approvedANTSourceCodeTxs.map(s => `"${s}"`)}]}) {
-    edges {
-      node {
-        id
+  query {
+    transactions(first: 100, owners: ["${owner}"], tags: {name: "Contract-Src", values: [${regState.approvedANTSourceCodeTxs.map(s => `"${s}"`)}]}) {
+      edges {
+        node {
+          id
+        }
       }
     }
   }
-}
-    `
+      `
   }
 
   const result = await arweave.api.post('graphql', query)
@@ -125,8 +130,7 @@ query {
     map(getANT, ids)
   )
 
-  return Promise.resolve(ants.filter(rec => rec.subdomain !== null))
-
+  return Promise.resolve(ants.filter(rec => rec.subdomain !== 'not_defined'))
 }
 
 const valueEquals = v => ([key, value]) => equals(value.contractTxId, v)
@@ -140,29 +144,32 @@ const getSubdomain = (contract, records) => compose(
 export async function getANT(ANT) {
   let subdomain = 'not_defined'
   try {
-    const registry = warp.pst(REGISTRY)
-    const ant = warp.pst(ANT)
-    const regState = await registry.currentState()
+    //const registry = warp.contract(REGISTRY)
+    const ant = await warp.contract(ANT).syncState('https://cache-2.permaweb.tools/contract', { validity: true })
 
-    subdomain = getSubdomain(ANT, regState.records)
-    const antState = await ant.currentState()
+    //const regState = await registry.readState().then(path(['cachedValue', 'state']))
 
-    return { ...antState, id: ANT, subdomain }
+    //subdomain = getSubdomain(ANT, regState.records)
+    const antState = await ant.readState().then(path(['cachedValue', 'state']))
+
+    return { ...antState, id: ANT, subdomain: antState.name }
   } catch (e) {
     return { id: ANT, subdomain }
   }
 }
 
 export async function updateSubDomain({ ant, subdomain = '@', transactionId }) {
-  //console.log('ANT', ant)
-  const id = await warp.pst(ant).connect('use_wallet')
+  const w = WarpFactory.forMainnet()
+  const result = await w.contract(ant).connect('use_wallet')
     .writeInteraction({
       function: 'setRecord',
       subDomain: subdomain,
       transactionId
-    })
+    }, { disableBundling: true, strict: true })
 
-  return { ok: true, id, message: 'successfully updated subdomain' }
+  console.log('CHG ', result)
+
+  return { ok: true, id: result.originalTxId, message: 'successfully updated subdomain' }
 }
 
 export async function removeSubDomain({ ant, subdomain }) {

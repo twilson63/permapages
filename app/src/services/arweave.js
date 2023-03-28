@@ -18,7 +18,8 @@ import getHost from './get-host'
 import { ArweaveWebWallet } from "arweave-wallet-connector";
 import { readContract, selectWeightedPstHolder } from 'smartweave'
 import { Async } from 'crocks'
-import { WarpFactory, LoggerFactory } from 'https://unpkg.com/warp-contracts@1.2.52/bundles/web.bundle.min.js'
+//import { DeployPlugin } from 'warp-contracts-plugin-deploy'
+import { WarpFactory, LoggerFactory } from 'warp-contracts/web'
 
 // PST for permanotes
 //const PERMANOTE_PST = 'cwElAMnBqu2fp-TUsV9lBIZJi-DRZ5tQJgJqxhFjqNY'
@@ -45,7 +46,7 @@ export const arweave = Arweave.init(_options)
 // global warp
 //const { WarpFactory, LoggerFactory } = window.warp
 LoggerFactory.INST.logLevel("error");
-const warp = WarpFactory.forMainnet()
+const warp = WarpFactory.forMainnet() // .use(new DeployPlugin())
 const options = { allowBigInt: true, internalWrites: true, unsafeClient: 'allow' }
 let wallet = null
 

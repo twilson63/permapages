@@ -1,7 +1,7 @@
 import { path } from 'ramda'
 import getHost from './get-host'
 
-const run = ({ query, variables }) => fetch(`${getHost()}/graphql`, {
+const run = ({ query, variables }) => fetch(`https://${getHost()}/graphql`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
@@ -18,7 +18,7 @@ const run = ({ query, variables }) => fetch(`${getHost()}/graphql`, {
   @param {GQLInput} q
 */
 export const gql = async (q) => {
-  console.log('q', q)
+
   let hasNextPage = true;
   let edges = []
   let cursor = ""

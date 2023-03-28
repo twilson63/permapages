@@ -154,8 +154,8 @@
         page.webpage = p.webpage;
         page.theme = p.theme || "light";
         page.widgets = p.widgets || [];
-        page.includeFooter = p.includeFooter || true;
-        page.allowStamps = p.allowStamps || true;
+        page.includeFooter = p.includeFooter || false;
+        page.allowStamps = p.allowStamps || false;
         page.noContract = p.noContract || false;
         page.noBundlr = p.noBundlr || false;
         page.state = mergeAll(
@@ -290,7 +290,7 @@
           step = m.step;
         });
       }
-      console.log("result", result);
+
       $pageCache = [
         {
           id: result,

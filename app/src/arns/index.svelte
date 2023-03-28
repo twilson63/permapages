@@ -194,6 +194,7 @@
 
   async function handleChange(e) {
     changeDialog = false;
+
     submitDialog = true;
     if (!changeData.transactionId || changeData.transactionId === "") {
       errorMessage = `ERROR: ${
@@ -201,16 +202,19 @@
           ? "TransactionId is not set!"
           : "Permapage is not selected!"
       } `;
+      submitDialog = false;
       errorDialog = true;
       return;
     }
+
+    console.log("CHG .", changeData);
 
     const result = await updateSubDomain({
       ant: changeData.ANT,
       subdomain: changeData.subdomain,
       transactionId: changeData.transactionId,
-    });
-
+    }).catch((e) => console.log("CHG error", e));
+    console.log("CHG ", result);
     submitDialog = false;
     if (result.ok) {
       successData = {
@@ -285,8 +289,8 @@
       const [arns, _ar] = await Promise.all([
         getBalance($address),
         getARBalance($address),
-      ]);
-      balance = arns.balance;
+      ]).catch((e) => console.log(e));
+      balance = arns;
       ar = _ar;
     } catch (e) {
       balance = "Not Found";
@@ -442,7 +446,7 @@
         <option class="option" value="">Select Permapage</option>
         {#await listPermapages() then permapages}
           {#each permapages as p}
-            <option value={p.webpage}>{p.title}</option>
+            <option value={p.webpage || p.id}>{p.title}</option>
           {/each}
         {/await}
       </select>
@@ -573,7 +577,7 @@
           <option class="option" value="">Select Permapage</option>
           {#await listPermapages() then permapages}
             {#each permapages as p}
-              <option value={p.webpage}>{p.title}</option>
+              <option value={p.webpage || p.id}>{p.title}</option>
             {/each}
           {/await}
         </select>
@@ -700,7 +704,7 @@
           <option class="option" value="">Select Permapage</option>
           {#await listPermapages() then permapages}
             {#each permapages as p}
-              <option value={p.webpage}>{p.title}</option>
+              <option value={p.webpage || p.id}>{p.title}</option>
             {/each}
           {/await}
         </select>
