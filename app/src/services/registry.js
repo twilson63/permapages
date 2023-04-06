@@ -90,7 +90,7 @@ export async function getBalance(owner) {
 
   const result = await registry.readState().then(path(['cachedValue', 'state', 'balances', owner]))
     .catch(e => console.log(e.message))
-  return result
+  return result ?? 0
 }
 
 export async function getFees(subdomain = '') {
