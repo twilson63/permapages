@@ -56,6 +56,9 @@
     }
   </style>
   <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
+  <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
+  <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
+  <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
   <script type="text/javascript">
     !(function (o, c) {
       var n = c.documentElement,
@@ -281,9 +284,9 @@
                 </div>
                 <p>
                   Go to the <a
-                    href="https://pilot.ar.io/"
+                    href="https://ar.io/arns-pilot/"
                     target="_blank"
-                    class="link-3">pilot.ar.io</a
+                    class="link-3">ar.io/arns-pilot</a
                   >
                   (required to get your own custom subdomain).
                 </p>
@@ -369,20 +372,11 @@
             <div class="margin-bottom margin-small">
               <h2 class="text-color-white">👀 Make your own PermaPage</h2>
             </div>
-            <p class="text-size-medium-2 text-color-white">
-              The next 500 people to sign up will receive an atomic NFT for
-              helping test ArNS.
-            </p>
+
             <div class="margin-top margin-medium">
               <div class="button-row-2 is-button-row-center">
                 <a href="/pages" class="button-3 w-button"
                   ><strong>Create a page!</strong></a
-                >
-                <a
-                  href="https://pilot.ar.io/"
-                  target="_blank"
-                  class="button-secondary-4 is-alternate w-button"
-                  >Get the details</a
                 >
               </div>
             </div>
@@ -695,7 +689,7 @@
                       >
                       <a href="/pages" class="footer4_link">Pages</a>
                       <a
-                        href="https://pilot.ar.io/"
+                        href="https://ar.io/arns-pilot/"
                         target="_blank"
                         class="footer4_link">Get ArNS Tokens</a
                       >

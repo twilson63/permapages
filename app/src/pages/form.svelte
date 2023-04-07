@@ -233,7 +233,7 @@
           if (w.name === "passport") {
             return (
               a +
-              `<div id="${w.name}" class="w-full grid items-center mt-16 mr-16"></div>`
+              `<div id="${w.name}" class="w-full grid items-center mt-16 mx-32"></div>`
             );
           } else {
             return a + `<div id="${w.name}"></div>`;
@@ -247,9 +247,13 @@
           "dark:text-[#D3D7E0] dark:prose-headings:text-[#D3D7E0] dark:prose-headings:text-[#D3D7E0]";
       }
 
-      page.html = `<div class="flex flex-col md:flex-row space-x-4">  
+      page.html = `<div class="flex flex-col ${
+        page.widgets.length > 0 ? "md:flex-row" : ""
+      } space-x-4">  
         <div class="flex-1 md:min-h-screen">
-          <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-24 ${altText}">
+          <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-24 ${altText} ${
+        page.widgets.length > 0 ? "" : "max-w-full"
+      } ">
           ${md.render(page.content)}</div></div>
         <div class="flex-none">
           <div class="flex flex-col max-w-[300px] justify-end space-y-8">

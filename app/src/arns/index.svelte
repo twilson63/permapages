@@ -458,6 +458,8 @@
       <input
         class="input input-bordered"
         bind:value={changeData.transactionId}
+        minlength="43"
+        maxlength="43"
       />
     </div>
   {/if}
@@ -475,6 +477,8 @@
       type="text"
       class="input input-bordered"
       bind:value={transferData.target}
+      minlength="43"
+      maxlength="43"
     />
   </div>
 </Modal>
@@ -590,6 +594,8 @@
           class="input input-bordered"
           bind:value={registerData.transactionId}
           placeholder="Arweave Transaction Id"
+          minlength="43"
+          maxlength="43"
         />
       </div>
     {/if}
@@ -717,6 +723,8 @@
           class="input input-bordered"
           bind:value={undernameData.transactionId}
           placeholder="Arweave Transaction Id"
+          minlength="43"
+          maxlength="43"
         />
       </div>
     {/if}
