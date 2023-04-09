@@ -75,9 +75,7 @@ function createHtml(page) {
     ${page.widgets.reduce((a, w) => a + `<script defer type="module" src="${w.source}"></script>`, '')}
   </head>
   <body>
-    <main class="bg-base-100">
-      ${page.html}
-    </main>
+    ${page.html}
     ${page.includeFooter ? `
     <footer class="footer p-10 bg-base-300 text-base-content">
       <div>

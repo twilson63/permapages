@@ -233,10 +233,10 @@
           if (w.name === "passport") {
             return (
               a +
-              `<div id="${w.name}" class="w-full grid items-center mt-16 mx-32"></div>`
+              `<li><div id="${w.name}" class="w-full grid items-center mt-16 mx-auto"></div></li>`
             );
           } else {
-            return a + `<div id="${w.name}"></div>`;
+            return a + `<li><div id="${w.name}"></div></li>`;
           }
         }, "");
       }
@@ -246,22 +246,47 @@
         altText =
           "dark:text-[#D3D7E0] dark:prose-headings:text-[#D3D7E0] dark:prose-headings:text-[#D3D7E0]";
       }
-
-      page.html = `<div class="flex flex-col ${
-        page.widgets.length > 0 ? "md:flex-row" : ""
-      } space-x-4">  
-        <div class="flex-1 md:min-h-screen">
-          <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-24 ${altText} ${
-        page.widgets.length > 0 ? "" : "max-w-full"
-      } ">
-          ${md.render(page.content)}</div></div>
-        <div class="flex-none">
-          <div class="flex flex-col max-w-[300px] justify-end space-y-8">
-            ${widgetMarkup}
-          </div>
-        </div
+      page.html = `<div class="drawer drawer-end">
+<input id="drawer" type="checkbox" class="drawer-toggle" />
+<div class="drawer-content">
+  <div class="md:min-h-screen">
+  <div class="float-right">
+    <label for="drawer" class="btn btn-primary btn-outline drawer-button mr-4">INFO</label>
+  </div>
+  <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-24 ${altText} max-w-full">
+    ${md.render(page.content)}
+  </div>
+  </div>
+</div>
+<div class="drawer-side">
+  <label for="drawer" class="drawer-overlay"></label>
+  <ul class="menu p-4 w-80 bg-base-100 text-base-content">
+    <li>
+      <div class="float-right">
+        <label for="drawer" class="btn btn-block btn-outline drawer-button">CLOSE</label>
       </div>
-      `;
+      <h3 class="text-2xl">Widgets</h3>
+    </li>
+    ${widgetMarkup}
+  </ul>
+</div>
+</div>`;
+
+      // page.html = `<div class="flex flex-col ${
+      //   page.widgets.length > 0 ? "md:flex-row" : ""
+      // } space-x-4">
+      //   <div class="flex-1 md:min-h-screen">
+      //     <div class="prose md:prose-lg lg:prose-xl m-8 md:mx-24 ${altText} ${
+      //   page.widgets.length > 0 ? "" : "max-w-full"
+      // } ">
+      //     ${md.render(page.content)}</div></div>
+      //   <div class="flex-none">
+      //     <div class="flex flex-col max-w-[300px] justify-end space-y-8">
+      //       ${widgetMarkup}
+      //     </div>
+      //   </div
+      // </div>
+      // `;
 
       if (page.ethwallet) {
         const data = await opensea.code.preRender({ address: page.ethwallet });
