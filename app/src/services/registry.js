@@ -35,7 +35,9 @@ export async function register({ name, owner, transactionId }) {
     return { ok: false, message: `This name ${name} is already taken and is not available for purchase` }
   }
 
-  if (registryState.balances[owner] < registryState.fees[name.length]) {
+  const arnsBalance = registryState.balances[owner]
+
+  if (typeof arnsBalance === 'undefined' || arnsBalance < registryState.fees[name.length]) {
     return { ok: false, message: `Not enough ArNS Test Token to purchase this subdomain.` }
   }
 
@@ -88,7 +90,7 @@ export async function getBalance(owner) {
 
   const result = await registry.readState().then(path(['cachedValue', 'state', 'balances', owner]))
     .catch(e => console.log(e.message))
-  return result
+  return result ?? 0
 }
 
 export async function getFees(subdomain = '') {
