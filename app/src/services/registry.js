@@ -1,5 +1,6 @@
 import Arweave from 'arweave'
-import { WarpFactory, defaultCacheOptions, LoggerFactory } from 'warp-contracts/web'
+import { WarpFactory, defaultCacheOptions, LoggerFactory } from 'warp-contracts'
+import { DeployPlugin, InjectedArweaveSigner } from 'warp-contracts-plugin-deploy'
 
 import getHost from './get-host'
 
@@ -13,7 +14,8 @@ const arweave = Arweave.init(options)
 LoggerFactory.INST.logLevel("error");
 //const warp = WarpFactory.custom(arweave, defaultCacheOptions, 'mainnet').useArweaveGateway().build()
 //const warp = WarpFactory.forMainnet({ arweave, useArweaveGw: true })
-const warp = WarpFactory.forMainnet()
+//const warp = WarpFactory.forMainnet()
+const warp = WarpFactory.forMainnet(defaultCacheOptions, true).use(new DeployPlugin())
 const REGISTRY = "bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"
 const ANT_SOURCE = "PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY"
 //const ANT_SOURCE = "JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg"
@@ -41,9 +43,10 @@ export async function register({ name, owner, transactionId }) {
     return { ok: false, message: `Not enough ArNS Test Token to purchase this subdomain.` }
   }
 
+  //const userSigner = new InjectedArweaveSigner(window.arweaveWallet)
   // create ANT contract
   const ant = await warp.createContract.deployFromSourceTx({
-    wallet: 'use_wallet',
+    wallet: 'use_wallet', //userSigner, //'use_wallet',
     initState: JSON.stringify({
       ticker: `ANT-${name.toUpperCase()}`,
       name,

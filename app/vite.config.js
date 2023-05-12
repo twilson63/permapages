@@ -8,7 +8,7 @@ import fs from 'fs'
 const { dependencies } = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 
 const [schema, host] = process.env.GITPOD_WORKSPACE_URL ? process.env.GITPOD_WORKSPACE_URL.split('://') : [null, null]
-const publicUrl = `3000-${host}`
+const publicUrl = `5173-${host}`
 
 function renderChunks(deps) {
   let chunks = {};
@@ -33,7 +33,7 @@ export default defineConfig({
   },
   server: {
     hmr: {
-      clientPort: host ? 443 : 3000,
+      clientPort: host ? 443 : 5173,
       host: host
         ? publicUrl
         : "localhost",
