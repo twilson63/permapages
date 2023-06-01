@@ -539,7 +539,7 @@
           bind:value={registerData.subdomain}
           minlength="1"
           maxlength="20"
-          pattern="^(?:[a-zA-Z0-9])+[a-zA-Z0-9-]*(?:[a-zA-Z0-9])$"
+          pattern="^(?:[a-zA-Z0-9])*(?:[a-zA-Z0-9])$"
         />
         <span>.arweave.dev</span>
       </label>
