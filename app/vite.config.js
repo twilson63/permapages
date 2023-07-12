@@ -25,8 +25,8 @@ export default defineConfig({
   plugins: [svelte()],
   define: {
     '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
-    '__ATOMIC_ASSET_SRC__': '"x0ojRwrcHBmZP20Y4SY0mgusMRx-IYTjg5W8c3UFoNs"',
-    '__STAMP_CONTRACT__': '"61vg8n54MGSC9ZHfSVAtQp4WjNb20TaThu6bkQ86pPI"'
+    '__ATOMIC_ASSET_SRC__': '"ixh0RAgJzFGx4o_ul8jUdUeiO5RZ51fakgugmuh5v38"',
+    '__STAMP_CONTRACT__': '"TlqASNDLA1Uh8yFiH-BzR_1FDag4s735F3PoUFEv2Mo"'
   },
   optimizeDeps: {
     exclude: ['tinro']
