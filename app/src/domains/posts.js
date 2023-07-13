@@ -4,7 +4,7 @@ import { assoc, lens, lensProp, trim, split, over, identity, compose, prop, filt
 import { encode, decode } from 'js-base64';
 
 const APP_WALLET = 'K92n-x2kHiRIBmS0yRGz5ii3OEXFw58__742Qu0DTgA'
-const SRC = 'x0ojRwrcHBmZP20Y4SY0mgusMRx-IYTjg5W8c3UFoNs'
+const SRC = __ATOMIC_ASSET_SRC__
 const STAMP_CONTRACT = __STAMP_CONTRACT__
 
 const lensHtml = lens(identity, assoc('html'))
@@ -86,10 +86,10 @@ export default function ({ gql, query, publish, md, getData }) {
                     [post.owner]: 990000,
                     [APP_WALLET]: 1000
                   },
-                  pairs: [],
-                  name: "Post-" + post.assetId,
-                  ticker: "BLOG-POST",
-                  settings: [['isTradeable', true]]
+                  name: post.title,
+                  ticker: "POST",
+                  settings: [['isTradeable', true]],
+                  claimable: []
                 })
               },
               ...topicTags

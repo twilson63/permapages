@@ -160,18 +160,17 @@
         page.noBundlr = p.noBundlr || false;
         page.state = mergeAll(
           {
-            ticker: "PAGE-" + slugify(p.title),
-            name: "Permapage",
+            ticker: "PAGE",
+            name: p.title,
             title: p.title,
+            description: p.description,
             creator: p.owner || p.creator,
             balances: {
               [$address]: 10000,
             },
             contentType: "text/html",
             createdAt: Date.now(),
-            halted: false,
-            pairs: [],
-            emergencyHaltWallet: $address,
+            claimable: [],
             settings: [["isTradeable", true]],
           },
           p.state

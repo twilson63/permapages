@@ -174,9 +174,10 @@ export const postWebpage = async (page) => {
   )
 
   const initState = page.state || {
-    ticker: 'PAGE-' + slugify(page.title),
-    name: 'Permapage',
+    ticker: 'PERMAPAGE',
+    name: page.title,
     title: page.title,
+    description: page.description,
     creator: page.creator,
     balances: {
       [page.creator]: 10000
@@ -185,7 +186,7 @@ export const postWebpage = async (page) => {
     createdAt: Date.now(),
     emergencyHaltWallet: page.owner,
     halted: false,
-    pairs: [],
+    claimable: [],
     settings: [["isTradeable", true]]
   }
 
