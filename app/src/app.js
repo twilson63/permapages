@@ -16,7 +16,11 @@ export function posts(env) {
 }
 
 export function loadBalances(addr) {
-  const getTokenBalance = (contract) => fetch(`https://cache-2.permaweb.tools/contract/?id=${contract}`)
+  const getTokenBalance = (contract) => fetch(`https://dre-4.warp.cc/contract/?id=${contract}`)
+    .then(res => res.ok ? res.json() : Promise.reject(res))
+    .then(path(['state', 'balances', addr]))
+
+  const getTokenBalanceDRE5 = (contract) => fetch(`https://dre-5.warp.cc/contract/?id=${contract}`)
     .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(path(['state', 'balances', addr]))
 
@@ -29,11 +33,11 @@ export function loadBalances(addr) {
     // get AR Balance
     fetch(`https://${getHost()}/wallet/${addr}/balance`).then(res => res.text()).then(Number).then(format(1e12)).catch(() => "NA"),
     // get bAR Balance
-    getTokenBalance('VFr3Bk-uM-motpNNkkFg4lNW1BMmSfzqsVO551Ho4hA').then(format(1e6)).catch(() => "NA"),
+    getTokenBalanceDRE5(__U__).then(format(1e6)).catch(() => "NA"),
     // get STAMP Balance
-    getTokenBalance('61vg8n54MGSC9ZHfSVAtQp4WjNb20TaThu6bkQ86pPI').then(format(1e12)).catch(() => "NA"),
+    getTokenBalance(__STAMP_CONTRACT__).then(format(1e12)).catch(() => "NA"),
     // get ArNS Balance
-    getTokenBalance('bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U')
+    getTokenBalance(__ARNS_CONTRACT__)
       //.then(format(1e12))
       .then(String)
       .catch(() => "NA")

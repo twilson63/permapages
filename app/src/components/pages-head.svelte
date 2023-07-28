@@ -7,7 +7,7 @@
   <div class="flex flex-row mt-10">
     <div class="w-[48%]">
       <slot />
-      <PagesBlockchain />
+      <!-- <PagesBlockchain /> -->
     </div>
 
     <DashboardBalances />

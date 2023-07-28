@@ -735,13 +735,13 @@
     remark-rehype "^10.1.0"
     unified "^10.1.2"
 
-"@permaweb/stampjs@^0.0.15":
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/@permaweb/stampjs/-/stampjs-0.0.15.tgz#e809028e981cf9102b0286353ad3f3e53e6f4aab"
-  integrity sha512-1W/gSgEGRjHnGHsHDTnVPVPqYMr0MMYLew+LFTh3bTi/FIUKmFyuvUdI8kMPca0zfpqSzTDcaKHayvpMBcsI0w==
+"@permaweb/stampjs@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@permaweb/stampjs/-/stampjs-0.3.1.tgz#86fb4053b58b7d2b6b14d16d2b043caa4e1ef21b"
+  integrity sha512-vwkoW1UiUqBF+NMfz8kJMF1k0mJvSzJTunnJQpO93ZLIWt5NkwW7lI6JEUgBJEsJOU+bYPcpPr9/kRV2ZdoHmg==
   dependencies:
-    fpjson-lang "^0.1.3"
-    ramda "^0.28.0"
+    ar-gql "^1.2.1"
+    ramda "^0.29.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -1378,6 +1378,11 @@ aptos@^1.3.13:
     axios "0.27.2"
     form-data "4.0.0"
     tweetnacl "1.0.3"
+
+ar-gql@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/ar-gql/-/ar-gql-1.2.2.tgz#120174758dda6dde638d6df01b7536068cb85755"
+  integrity sha512-km54Oh3PsoMcsFrQ+3Eec89lDHcoxhoY5eo7asguo7rBt7HHYkbHZQRuH2R15BxYGy/DrmNj0Z1TtQJwypPgSw==
 
 arbundles@^0.6.19:
   version "0.6.22"
@@ -3377,13 +3382,6 @@ formidable@^1.1.1:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.2.6.tgz#d2a51d60162bbc9b4a055d8457a7c75315d1a168"
   integrity sha512-KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==
-
-fpjson-lang@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/fpjson-lang/-/fpjson-lang-0.1.3.tgz#850a3bac1da2b4488118000acf4aab1bb06109e6"
-  integrity sha512-GBLFEQmeoTdFLp1yfDhierzozniCClzeuu+Y9Xny+JIf1gOGM8n/gqZqn0sneKikt71K6qxFVZDrpfkPTA53nA==
-  dependencies:
-    ramda "^0.28.0"
 
 fraction.js@^4.2.0:
   version "4.2.0"
@@ -5744,6 +5742,11 @@ ramda@^0.28.0:
   version "0.28.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.28.0.tgz#acd785690100337e8b063cab3470019be427cc97"
   integrity sha512-9QnLuG/kPVgWvMQ4aODhsBUFKOUmnbUnsSXACv+NCQZcHbeb+v8Lodp8OVxtRULN1/xOyYLLaL6npE6dMq5QTA==
+
+ramda@^0.29.0:
+  version "0.29.0"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.29.0.tgz#fbbb67a740a754c8a4cbb41e2a6e0eb8507f55fb"
+  integrity sha512-BBea6L67bYLtdbOqfp8f58fPMqEwx0doL+pAi8TZyp2YWz8R9G8z9x75CZI8W+ftqhFHCpEX2cRnUUXK130iKA==
 
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   version "2.1.0"

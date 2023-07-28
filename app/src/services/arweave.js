@@ -26,10 +26,7 @@ import { WarpFactory, LoggerFactory } from 'warp-contracts'
 //const CONTRACT_SRC = '0hTokSQ7m3DQujuVisZ-RzcU6hOY3-Uz2ZIh4Aa0nKY'
 //const PAGE_SRC = 'OhGbHpgw-GIXhUaDZIzUjVm5rXWtd_2hrABWlB83rb8'
 const WARP_URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
-const PAGE_SRC = 'kSiq990WBHkz6uYO_1z7jylm3YbRrcpm7UfhYUb8Cg0'
-//const DATAFI_PAGE_SRC = 'M7Z1ag4OBmW7D4fkYyUUGKTneIeCFoURESBKXJGBFXo'
-//const DATAFI_PAGE_SRC = 'iSKCrc_-JoMmzk2Cqn2j2HAoYulmy_9Ni4rXiGSurfk'
-//const DATAFI_PAGE_SRC = 'BzNLxND_nJEMfcLWShyhU4i9BnzEWaATo6FYFsfsO0Q'
+
 const DATAFI_PAGE_SRC = __ATOMIC_ASSET_SRC__
 
 const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] =
@@ -208,7 +205,8 @@ export const postWebpage = async (page) => {
       { name: 'Description', value: page.description },
       { name: 'Type', value: 'page' },
       { name: 'Protocol', value: page.protocol },
-      { name: 'Timestamp', value: new Date().toISOString() }
+      { name: 'Timestamp', value: new Date().toISOString() },
+      { name: 'Indexed-By', value: 'ucm' }
     ].concat(topics)
   }
 

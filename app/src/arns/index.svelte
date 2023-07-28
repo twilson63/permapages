@@ -539,12 +539,12 @@
           bind:value={registerData.subdomain}
           minlength="1"
           maxlength="20"
-          pattern="^(?:[a-zA-Z0-9])*(?:[a-zA-Z0-9])$"
+          pattern="^(?:[a-zA-Z0-9-])*(?:[a-zA-Z0-9])$"
         />
         <span>.arweave.dev</span>
       </label>
       <small class="mt-2 text-secondary"
-        >Only Letters and Numbers and '_,-' maybe used to create subdomain - no
+        >Only Letters and Numbers and '-' maybe used to create subdomain - no
         '_,-' allowed as last character.</small
       >
     </div>

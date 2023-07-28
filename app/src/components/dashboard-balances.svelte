@@ -42,7 +42,7 @@
         <h4
           class="text-gray-400 text-lg font-semibold mt-4 flex flex-row items-center gap-1"
         >
-          <span>Burned AR</span>
+          <span>U Balance</span>
           <!--
           <button
             ><img src="info-icon.png" alt="info-icon" width="18px" /></button
@@ -50,7 +50,7 @@
           -->
         </h4>
         <p class="text-black text-xl mt-2 font-semibold tracking-wide">
-          $bAR {@html showBalance(balances.bar)}
+          $U {@html showBalance(balances.bar)}
         </p>
       </div>
 
@@ -91,13 +91,12 @@
       -->
     </div>
 
-    <div class="flex flex-row items-center gap-2 mt-8 ml-auto">
+    <!-- <div class="flex flex-row items-center gap-2 mt-8 ml-auto">
       <span class="text-lg font-semibold text-gray-400"
         >...{takeLast(6, $address)}</span
       >
-      <!--
-    <button><img src="arrow-down.svg" alt="drop-down" width="25px" /></button>
-    -->
-    </div>
+
+      <button><img src="arrow-down.svg" alt="drop-down" width="25px" /></button>
+    </div> -->
   </div>
 {/await}

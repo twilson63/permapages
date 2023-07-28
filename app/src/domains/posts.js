@@ -107,20 +107,20 @@ export default function ({ gql, query, publish, md, getData }) {
       .map(pluck('node'))
       .map(map(toPostItem))
       .map(uniqBy(prop('assetId')))
-      .chain(nodes =>
-        Async.fromPromise(query)(STAMP_CONTRACT, ['compose',
-          ['mapObjIndexed', ['length']],
-          ['groupBy', ['prop', 'asset']],
-          // would be nice to filter only the assets from nodes
-          //['filter', ['flip', ['includes']], pluck('id', nodes)],
-          ['values'],
-          ['prop', 'stamps']
-        ])
-          .map(counts => map(
-            n => assoc('stamps', counts[n.id] || 0, n),
-            nodes
-          ))
-      )
+    // .chain(nodes =>
+    //   Async.fromPromise(query)(STAMP_CONTRACT, ['compose',
+    //     ['mapObjIndexed', ['length']],
+    //     ['groupBy', ['prop', 'asset']],
+    //     // would be nice to filter only the assets from nodes
+    //     //['filter', ['flip', ['includes']], pluck('id', nodes)],
+    //     ['values'],
+    //     ['prop', 'stamps']
+    //   ])
+    //     .map(counts => map(
+    //       n => assoc('stamps', counts[n.id] || 0, n),
+    //       nodes
+    //     ))
+    // )
   }
   return {
     list,
