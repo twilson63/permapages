@@ -89,7 +89,7 @@ export async function getARBalance(owner) {
 }
 
 export async function getBalance(owner) {
-  const registry = await warp.contract(REGISTRY).syncState('https://cache-2.permaweb.tools/contract', { validity: true })
+  const registry = await warp.contract(REGISTRY).setEvaluationOptions({ allowBigInt: true })
 
   const result = await registry.readState().then(path(['cachedValue', 'state', 'balances', owner]))
     .catch(e => console.log(e.message))
@@ -107,9 +107,8 @@ export async function getFees(subdomain = '') {
 
 export async function listANTs(owner) {
   const regState = await warp.contract(REGISTRY)
-    .syncState('https://cache-2.permaweb.tools/contract', { validity: true })
-    .then(c => c.setEvaluationOptions({ allowBigInt: true }).readState())
-    //.setEvaluationOptions({ allowBigInt: true }).readState()
+    .setEvaluationOptions({ allowBigInt: true })
+    .readState()
     .then(path(['cachedValue', 'state']))
     .catch(e => console.log('ERROR', e.message))
 
@@ -150,7 +149,7 @@ export async function getANT(ANT) {
   let subdomain = 'not_defined'
   try {
     //const registry = warp.contract(REGISTRY)
-    const ant = await warp.contract(ANT).syncState('https://cache-2.permaweb.tools/contract', { validity: true })
+    const ant = await warp.contract(ANT).syncState('https://dre-1.warp.cc/contract', { validity: true })
 
     //const regState = await registry.readState().then(path(['cachedValue', 'state']))
 
