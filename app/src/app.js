@@ -16,11 +16,11 @@ export function posts(env) {
 }
 
 export function loadBalances(addr) {
-  const getTokenBalance = (contract) => fetch(`https://dre-4.warp.cc/contract/?id=${contract}`)
+  const getTokenBalance = (contract) => fetch(`https://dre-u.warp.cc/contract/?id=${contract}`)
     .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(path(['state', 'balances', addr]))
 
-  const getTokenBalanceDRE5 = (contract) => fetch(`https://dre-5.warp.cc/contract/?id=${contract}`)
+  const getTokenBalanceDRE5 = (contract) => fetch(`https://dre-u.warp.cc/contract/?id=${contract}`)
     .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(path(['state', 'balances', addr]))
 
