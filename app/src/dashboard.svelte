@@ -7,16 +7,16 @@
 
 <NavBar />
 <main class="container mx-auto min-h-screen">
-  <PagesHead>
+  <!-- <PagesHead>
     <h1 class="txt-gradient text-2xl font-bold">
       You’re all set to create on the Permaweb.
     </h1>
     <h3 class="text-gray-400 text-lg font-semibold">
       Select your next step below.
     </h3>
-  </PagesHead>
+  </PagesHead> -->
 
   <ActionCards />
 
-  <Copyright />
+  <!-- <Copyright /> -->
 </main>

@@ -3,7 +3,7 @@
   import ConnectModal from "./dialogs/connect.svelte";
   import WalletHelp from "./dialogs/help-wallet.svelte";
   import { address } from "./store.js";
-  let version = __APP_VERSION__.split(".")[2];
+  let version = __APP_VERSION__;
 
   let connectDlg = false;
   let walletHelp = false;

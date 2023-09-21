@@ -1,5 +1,5 @@
 <script>
-  let version = __APP_VERSION__.split(".")[2];
+  let version = __APP_VERSION__;
 </script>
 
 <div class="navbar bg-base-100 container mx-auto">
@@ -7,7 +7,8 @@
     <a
       href="/"
       class="normal-case txt-gradient  
-    font-extrabold text-2xl inline-block tracking-wide">PermaPages</a
+    font-extrabold text-2xl inline-block tracking-wide"
+      >PermaPages</a
     >
     <div
       class="badge text-xs ml-2 bg-[#F3F5FB] border-none text-black font-semibold"
@@ -18,11 +19,14 @@
 
   <nav class="flex-none">
     <ul class="hidden md:inline-flex gap-2 items-center menu menu-horizontal">
-      <li>
+      <!-- <li>
         <a href="/dashboard">Dashboard</a>
-      </li>
+      </li> -->
       <li>
         <a href="/pages">Pages</a>
+      </li>
+      <li>
+        <a href="/posts">Posts</a>
       </li>
       <li>
         <a href="/arns">ArNS</a>

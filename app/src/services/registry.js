@@ -106,16 +106,17 @@ export async function getFees(subdomain = '') {
 }
 
 export async function listANTs(owner) {
-  const regState = await warp.contract(REGISTRY)
-    .setEvaluationOptions({ allowBigInt: true })
-    .readState()
-    .then(path(['cachedValue', 'state']))
-    .catch(e => console.log('ERROR', e.message))
-
+  // const regState = await warp.contract(REGISTRY)
+  //   .setEvaluationOptions({ allowBigInt: true })
+  //   .readState()
+  //   .then(path(['cachedValue', 'state']))
+  //   .catch(e => console.log('ERROR', e.message))
+  //console.log('regState', regState)
+  const approvedSrc = ['JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg']
   const query = {
     query: `
   query {
-    transactions(first: 100, owners: ["${owner}"], tags: {name: "Contract-Src", values: [${regState.approvedANTSourceCodeTxs.map(s => `"${s}"`)}]}) {
+    transactions(first: 100, owners: ["${owner}"], tags: {name: "Contract-Src", values: [${approvedSrc.map(s => `"${s}"`)}]}) {
       edges {
         node {
           id

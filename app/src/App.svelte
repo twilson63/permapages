@@ -45,7 +45,7 @@
     redirect="/notes/Xx8lQw1q9xOUn1mB7CMagKHgv8XUy9NxsrQLtfqZItY"
   />
   <Route path="/dashboard">
-    <Dashboard />
+    <Pages />
   </Route>
   <Route path="/arns/*">
     {#if not(isEmpty($address))}

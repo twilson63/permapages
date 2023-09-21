@@ -25,7 +25,7 @@
       await arweaveWallet.disconnect();
       await arweaveWallet.connect(
         ["ACCESS_ADDRESS", "SIGN_TRANSACTION", "DISPATCH"],
-        { name: "img" }
+        { name: "pages", logo: window.location.origin + "/permapages.svg" }
       );
       const addr = await arweaveWallet.getActiveAddress();
       $address = addr;

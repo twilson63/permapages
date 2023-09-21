@@ -16,7 +16,7 @@
 
 <NavBar />
 <main class="container mx-auto min-h-screen">
-  <PagesHead>
+  <!-- <PagesHead>
     <a
       href="/dashboard"
       class="btn rounded-full bg-[#F9F9F9] min-h-[2.5rem] h-[2.5rem] px-8 hover:bg-gray-200 border-none"
@@ -24,7 +24,7 @@
       <img src="polygon-icon.svg" alt="polygon-icon" />
       <span class="text-[#696969] ml-4">Back</span>
     </a>
-  </PagesHead>
+  </PagesHead> -->
   {#await postData() then posts}
     <PagesPosts {posts} />
   {/await}
@@ -32,5 +32,5 @@
   <PagesDrafts {drafts} />
   -->
 
-  <Copyright />
+  <!-- <Copyright /> -->
 </main>
