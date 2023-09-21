@@ -343,13 +343,16 @@
         <div>
           <div class="flex items-center">
             <div class="flex-1 flex items-center space-x-8">
-              <h2 class="text-2xl mb-2">ArNS Registry Portal</h2>
-              <a class="link" href="https://ar.io/arns">More Information</a>
+              <h2 class="text-2xl mb-2">
+                <a class="link" href="https://ar.io/arns">SubDomains (ArNS)</a>
+              </h2>
               {#if $address}
-                <div>ArNS Balance: {balance}</div>
-                <div>$AR Balance: {ar}</div>
+                <div class="flex flex-col">
+                  <div>$ArNS: {balance}</div>
+                  <div>$AR: {Number(ar).toFixed(4)}</div>
+                </div>
               {/if}
-              <blockquote class="text-sm p-4">
+              <blockquote class="text-sm p-4 w-[380px]">
                 In order to register a subdomain, you need a small amount of $AR
                 in your wallet and enough $ARNS TEST Tokens
               </blockquote>

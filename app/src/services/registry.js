@@ -112,7 +112,7 @@ export async function listANTs(owner) {
   //   .then(path(['cachedValue', 'state']))
   //   .catch(e => console.log('ERROR', e.message))
   //console.log('regState', regState)
-  const approvedSrc = ['JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg']
+  const approvedSrc = ['JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg', 'PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY']
   const query = {
     query: `
   query {
