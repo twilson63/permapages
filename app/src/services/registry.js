@@ -113,10 +113,9 @@ export async function listANTs(owner) {
   //   .catch(e => console.log('ERROR', e.message))
   //console.log('regState', regState)
   const approvedSrc = ['JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg', 'PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY']
-  const query = {
-    query: `
+  const queryTarget = `
   query {
-    transactions(first: 100, owners: ["${owner}"], tags: {name: "Contract-Src", values: [${approvedSrc.map(s => `"${s}"`)}]}) {
+    transactions(first: 100, owners: ["${owner}"], tags: {name: "Contract-Src", values: [${approvedSrc.map(s => `"${s}"`).join(',')}]}) {
       edges {
         node {
           id
@@ -125,6 +124,9 @@ export async function listANTs(owner) {
     }
   }
       `
+
+  const query = {
+    query: queryTarget
   }
 
   const result = await arweave.api.post('graphql', query)
@@ -150,7 +152,7 @@ export async function getANT(ANT) {
   let subdomain = 'not_defined'
   try {
     //const registry = warp.contract(REGISTRY)
-    const ant = await warp.contract(ANT).syncState('https://dre-3.warp.cc/contract', { validity: true })
+    const ant = await warp.contract(ANT).syncState('https://dre-2.warp.cc/contract', { validity: true })
 
     //const regState = await registry.readState().then(path(['cachedValue', 'state']))
 
