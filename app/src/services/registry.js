@@ -152,7 +152,7 @@ export async function getANT(ANT) {
   let subdomain = 'not_defined'
   try {
     //const registry = warp.contract(REGISTRY)
-    const ant = await warp.contract(ANT).syncState('https://dre-2.warp.cc/contract', { validity: true })
+    const ant = await warp.contract(ANT) //.syncState('https://dre-2.warp.cc/contract', { validity: true })
 
     //const regState = await registry.readState().then(path(['cachedValue', 'state']))
 
