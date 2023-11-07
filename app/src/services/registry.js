@@ -17,7 +17,7 @@ LoggerFactory.INST.logLevel("error");
 //const warp = WarpFactory.forMainnet()
 const warp = WarpFactory.forMainnet(defaultCacheOptions, true).use(new DeployPlugin())
 const REGISTRY = "bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"
-const ANT_SOURCE = "PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY"
+const ANT_SOURCE = "H2uxnw_oVIEzXeBeYmxDgJuxPqwBCGPO4OmQzdWQu3U"
 //const ANT_SOURCE = "JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg"
 
 export async function search(name) {
@@ -51,7 +51,7 @@ export async function register({ name, owner, transactionId }) {
       ticker: `ANT-${name.toUpperCase()}`,
       name,
       owner,
-      controller: owner,
+      controllers: [owner],
       evolve: null,
       records: {
         ["@"]: transactionId
@@ -112,7 +112,7 @@ export async function listANTs(owner) {
   //   .then(path(['cachedValue', 'state']))
   //   .catch(e => console.log('ERROR', e.message))
   //console.log('regState', regState)
-  const approvedSrc = ['JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg', 'PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY']
+  const approvedSrc = ['H2uxnw_oVIEzXeBeYmxDgJuxPqwBCGPO4OmQzdWQu3U', 'JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg', 'PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY']
   const queryTarget = `
   query {
     transactions(first: 100, owners: ["${owner}"], tags: {name: "Contract-Src", values: [${approvedSrc.map(s => `"${s}"`).join(',')}]}) {
