@@ -45,8 +45,8 @@
     //   link: "nft",
     // },
     {
-      title: "Free Space",
-      subtitle: "make a fully custom page with html & more",
+      title: "Create Web Page",
+      subtitle: "make a fully custom page with markdown or html",
       icon: [Code],
       link: "/pages/new",
     },

@@ -28,15 +28,7 @@
   let removeDialog = false;
   let removeData = {};
 
-  let transferDialog = false;
-  let transferData = {};
-
-  let searchDialog = false;
-  let searchMessage = "";
-  let searchText = "";
   let connectDialog = false;
-  let registerDialog = false;
-  let registerData = { subdomain: "", type: "permapage" };
   let undernameDialog = false;
   let undernameData = {
     record: "",
@@ -51,93 +43,10 @@
   let timeout2 = null;
   let submitDialog = false;
 
-  $: balance = "Checking...";
-  let ar = "Checking...";
-  let fees = [0, 0];
-  $: {
-    getFees(registerData.subdomain).then((x) => (fees = x));
-  }
-
   onDestroy(() => {
     clearTimeout(timeout);
     clearTimeout(timeout2);
   });
-
-  async function doSearch() {
-    if (!/^(?:[a-zA-Z0-9])+[a-zA-Z0-9-]*(?:[a-zA-Z0-9])$/.test(searchText)) {
-      searchText = "";
-      searchMessage = "This subdomain is not allowed";
-      searchDialog = true;
-      return;
-    }
-    if (searchText === "www") {
-      searchText = "";
-      searchMessage = "This subdomain is not allowed";
-      searchDialog = true;
-      return;
-    }
-    const result = await search(searchText);
-    if (result.ok) {
-      searchMessage = "No registration found. You may register this subdomain";
-      searchDialog = true;
-    } else {
-      searchText = "";
-      searchMessage = "This subdomain is already registered";
-      searchDialog = true;
-    }
-  }
-
-  async function registerDomain() {
-    if ($address) {
-      registerDialog = true;
-      // load pages
-      // show dialog
-    } else {
-      // show message dialog
-      connectDialog = true;
-    }
-  }
-  async function submitRegistration() {
-    registerDialog = false;
-    if (registerData.subdomain === "") {
-      errorMessage = `ERROR: subdomain must include characters!`;
-      errorDialog = true;
-      return;
-    }
-    if (registerData.transactionId === "") {
-      errorMessage = `ERROR: ${
-        registerData.type === "arweave"
-          ? "TransactionId is not set!"
-          : "Permapage is not selected!"
-      } `;
-      errorDialog = true;
-      return;
-    }
-    registering = true;
-    const result = await pages({ register }).purchase({
-      name: registerData.subdomain,
-      owner: $address,
-      transactionId: registerData.transactionId,
-    });
-    registering = false;
-    if (result.ok) {
-      $arnsCache = [
-        {
-          id: result.id,
-          name: registerData.subdomain,
-          subdomain: registerData.subdomain,
-          records: { "@": registerData.transactionId },
-        },
-        ...$arnsCache,
-      ];
-      list = doListANTS($address);
-      successData.message = `You have successfully registered your subdomain ${registerData.subdomain}`;
-      successDialog = true;
-    } else {
-      errorMessage = result.message;
-      errorDialog = true;
-    }
-  }
 
   async function addUndername() {
     if ($address) {
@@ -226,29 +135,6 @@
       errorDialog = true;
     }
     changeData = {};
-  }
-
-  function showTransferDialog(e) {
-    transferData.ANT = e.id;
-    transferDialog = true;
-  }
-
-  async function handleTransfer() {
-    transferDialog = false;
-    const result = await transferSubdomain(
-      transferData.ANT,
-      transferData.target
-    );
-    if (result.ok) {
-      successData = {
-        message: "Successfully removed transferred subdomain",
-      };
-      successDialog = true;
-    } else {
-      errorMessage = result.message;
-      errorDialog = true;
-    }
-    transferData = {};
   }
 
   function showRemoveDialog(e) {
@@ -344,25 +230,10 @@
           <div class="flex items-center">
             <div class="flex-1 flex items-center space-x-8">
               <h2 class="text-2xl mb-2">
-                <a class="link" href="https://ar.io/arns">SubDomains (ArNS)</a>
+                <a class="link" href="https://ar.io/arns">SubDomains</a>
               </h2>
-              {#if $address}
-                <div class="flex flex-col">
-                  <div>$ArNS: {balance}</div>
-                  <div>$AR: {Number(ar).toFixed(4)}</div>
-                </div>
-              {/if}
-              <blockquote class="text-sm p-4 w-[380px]">
-                In order to register a subdomain, you need a small amount of $AR
-                in your wallet and enough $ARNS TEST Tokens
-              </blockquote>
             </div>
             <div class="flex-none">
-              <button
-                disabled={balance === "Not Found" || ar === "Not Found"}
-                on:click={registerDomain}
-                class="btn btn-secondary">Register</button
-              >
               <button on:click={addUndername} class="btn btn-outline"
                 >Add Undername</button
               >
@@ -372,23 +243,11 @@
             </div>
           </div>
           <div class="overflow-x-auto">
-            <div class="flex space-x-4 justify-center my-16">
-              <label class="label">Is subdomain available</label>
-              <input
-                class="input input-bordered"
-                placeholder="enter subdomain"
-                pattern="^(?:[a-zA-Z0-9])+[a-zA-Z0-9-]*(?:[a-zA-Z0-9])$"
-                bind:value={searchText}
-              />
-              <button class="btn btn-outline" on:click={doSearch}>Search</button
-              >
-            </div>
             {#if $address}
               {#await list}
                 <div class="alert alert-info">Loading sub-domains</div>
               {:then records}
                 <SubdomainTable
-                  title="My Records"
                   {records}
                   on:change={showChangeDialog}
                   on:transfer={showTransferDialog}
@@ -468,24 +327,6 @@
   {/if}
 </Modal>
 <Modal
-  open={transferDialog}
-  cancel={true}
-  on:click={handleTransfer}
-  on:cancel={() => (transferDialog = false)}
->
-  <h3 class="text-2xl" />
-  <div class="form-control">
-    <label class="label">Target Wallet Address</label>
-    <input
-      type="text"
-      class="input input-bordered"
-      bind:value={transferData.target}
-      minlength="43"
-      maxlength="43"
-    />
-  </div>
-</Modal>
-<Modal
   open={removeDialog}
   on:click={handleRemove}
   cancel={true}
@@ -497,120 +338,6 @@
     remain under your control, the subdomain will no longer point to any arweave
     transaction.
   </p>
-</Modal>
-<Modal open={searchDialog} on:click={() => (searchDialog = false)}>
-  <h3 class="text-2xl">Search Result</h3>
-  <p class="my-8">{searchMessage}</p>
-</Modal>
-<Modal
-  open={connectDialog}
-  on:click={() => {
-    connectDialog = false;
-    router.goto("/connect");
-  }}
->
-  <h3 class="text-2xl">Wallet Connection Required!</h3>
-  <p class="my-8">
-    To register a subdomain you must be connected to permanotes.
-  </p>
-</Modal>
-<Modal open={registerDialog} ok={false}>
-  <h3 class="text-2xl">Register subdomain</h3>
-  <table class="table">
-    <tr>
-      <th />
-      <th>$ARNS Test</th>
-      <th>$AR</th>
-    </tr>
-    <tr>
-      <th>Balance</th>
-      <td>{balance}</td>
-      <td>{ar}</td>
-    </tr>
-    <tr>
-      <th>Fee</th>
-      <td>{fees ? fees[0] : "unknown"}</td>
-      <td>{fees ? fees[1] : "unknown"}</td>
-    </tr>
-  </table>
-  <form on:submit|preventDefault={submitRegistration}>
-    <div class="form-control">
-      <label class="label">Subdomain</label>
-      <label class="input-group w-full">
-        <input
-          class="input input-bordered w-full"
-          bind:value={registerData.subdomain}
-          minlength="1"
-          maxlength="20"
-          pattern="^(?:[a-zA-Z0-9-])*(?:[a-zA-Z0-9])$"
-        />
-        <span>.arweave.dev</span>
-      </label>
-      <small class="mt-2 text-secondary"
-        >Only Letters and Numbers and '-' maybe used to create subdomain - no
-        '_,-' allowed as last character.</small
-      >
-    </div>
-    <div class="mt-8 form-control">
-      <label class="label">Choose reference</label>
-      <label class="label">
-        <input
-          type="radio"
-          name="reference"
-          class="radio radio-primary"
-          value="permapage"
-          bind:group={registerData.type}
-        />
-        Permapage
-      </label>
-      <label class="label">
-        <input
-          type="radio"
-          name="reference"
-          class="radio radio-primary"
-          bind:group={registerData.type}
-          value="arweave"
-        />
-        Arweave Transaction
-      </label>
-    </div>
-    {#if registerData.type === "permapage"}
-      <div class="form-control">
-        <label class="label">Select Permapage</label>
-        <select
-          class="select select-bordered"
-          bind:value={registerData.transactionId}
-        >
-          <option class="option" value="">Select Permapage</option>
-          {#await listPermapages() then permapages}
-            {#each permapages as p}
-              <option value={p.webpage || p.id}>{p.title}</option>
-            {/each}
-          {/await}
-        </select>
-      </div>
-    {/if}
-    {#if registerData.type === "arweave"}
-      <div class="form-control">
-        <label class="label">Arweave Transaction</label>
-        <input
-          class="input input-bordered"
-          bind:value={registerData.transactionId}
-          placeholder="Arweave Transaction Id"
-          minlength="43"
-          maxlength="43"
-        />
-      </div>
-    {/if}
-    <div class="mt-16 flex space-x-2 justify-end">
-      <button class="btn btn-primary">Register</button>
-      <button
-        type="button"
-        class="btn"
-        on:click={() => (registerDialog = false)}>Cancel</button
-      >
-    </div>
-  </form>
 </Modal>
 <Modal open={successDialog} on:click={() => (successDialog = false)}>
   <h3 class="text-3xl text-success">Success!</h3>

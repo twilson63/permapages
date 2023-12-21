@@ -52,8 +52,11 @@ export function loadBalances(addr) {
 export function widgets({ gql }) {
   async function list() {
     return Async.of(buildWidgetList())
+      .map(query => ({ query }))
       .chain(Async.fromPromise(gql))
-      .map(pluckNodes)
+      //.map(x => (console.log(x), x))
+      //.map(pluckNodes)
+      .map(pluck('node'))
       .map(formatWidgets)
       .toPromise()
   }
@@ -87,7 +90,7 @@ export function profiles({ gql, post, load }) {
   }
 
   async function stamps(addr) {
-    return Async.fromPromise(fetch)('https://cache.permapages.app/FMRHYgSijiUNBrFy-XqyNNXenHsCV0ThR4lGAPO4chA')
+    return Async.fromPromise(fetch)('https://dre-1.warp.cc/contract/?id=FMRHYgSijiUNBrFy-XqyNNXenHsCV0ThR4lGAPO4chA')
       .chain(res => Async.fromPromise(res.json.bind(res))())
       .map(prop('stamps'))
       .map(values)
@@ -413,7 +416,11 @@ query {
     { name: "App-Name", values: ["Permapage-Widget"]},
     { name: "App-Version", values: ["0.0.1"]}
   ]) {
+    pageInfo {
+      hasNextPage
+    }
     edges {
+      cursor
       node {
         id
         tags {

@@ -37,7 +37,6 @@
 </script>
 
 <div>
-  <h3 class="text-xl">{title}</h3>
   <div class="overflow-x-auto">
     <table class="table w-full">
       <!-- head -->

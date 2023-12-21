@@ -9,8 +9,8 @@
     loadPage,
     loadProfile,
     loadState,
-    gql,
   } from "../services/arweave.js";
+  import { gql } from "../services/gql.js";
   import { register, listANTs, updateSubDomain } from "../services/registry.js";
   import { pages, profiles, widgets } from "../app.js";
   import { address, pageCache } from "../store.js";

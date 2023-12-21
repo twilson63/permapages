@@ -9,6 +9,15 @@ const run = ({ query, variables }) => fetch(`https://${getHost()}/graphql`, {
   body: JSON.stringify({ query, variables })
 }).then(res => res.ok ? res.json() : Promise.reject(res))
 
+const run2 = ({ query, variables }) => fetch(`https://arweave-search.goldsky.com/graphql`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ query, variables })
+}).then(res => res.ok ? res.json() : Promise.reject(res))
+
+
 /**
   @typedef {object} GQLInput
   @property {string} query
@@ -24,7 +33,7 @@ export const gql = async (q) => {
   let cursor = ""
 
   while (hasNextPage) {
-    const result = await run({ query: q.query, variables: { ...q.variables, cursor } })
+    const result = await run2({ query: q.query, variables: { ...q.variables, cursor } })
       .then(path(['data', 'transactions']))
 
     if (result.edges && result.edges.length) {
