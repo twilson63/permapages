@@ -166,7 +166,7 @@
             description: p.description,
             creator: p.owner || p.creator,
             balances: {
-              [$address]: 10000,
+              [$address]: 100,
             },
             contentType: "text/html",
             createdAt: Date.now(),
