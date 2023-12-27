@@ -195,6 +195,7 @@
     );
     // load for arweave
     const results = await listANTs($address);
+
     // keep only the ones not showing up in arweave gql yet
     const pending = ($arnsCache || []).filter((n) =>
       find(propEq("name", n.name), results) ? false : true
@@ -250,7 +251,6 @@
                 <SubdomainTable
                   {records}
                   on:change={showChangeDialog}
-                  on:transfer={showTransferDialog}
                   on:remove={showRemoveDialog}
                 />
               {/await}
