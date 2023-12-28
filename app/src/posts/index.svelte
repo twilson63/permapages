@@ -9,7 +9,6 @@
 
   async function postData() {
     const result = await posts.list($address);
-    console.log(result);
     return result;
   }
 </script>

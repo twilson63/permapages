@@ -47,6 +47,11 @@ export const createProfile = (data) => {
 }
 
 export const txToProfile = (tx) => {
+  if (!tx) {
+    return {
+
+    }
+  }
   const tsValue = getTag('Timestamp')(tx.tags)
   const timestamp = tsValue ? tsValue : new Date().toISOString()
   const page = {

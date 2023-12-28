@@ -4,7 +4,8 @@
   import { ArweaveWebWallet } from "arweave-wallet-connector";
   import { router } from "tinro";
 
-  import { gql, postProfileTx, loadProfile } from "../services/arweave.js";
+  import { postProfileTx, loadProfile } from "../services/arweave.js";
+  import { gql } from "../services/gql.js";
   import { address, account } from "../store.js";
   import { profiles } from "../app.js";
 
@@ -25,7 +26,7 @@
       await arweaveWallet.disconnect();
       await arweaveWallet.connect(
         ["ACCESS_ADDRESS", "SIGN_TRANSACTION", "DISPATCH"],
-        { name: "pages", logo: window.location.origin + "/permapages.svg" }
+        { name: "pages", logo: window.location.origin + "/permapages.svg" },
       );
       const addr = await arweaveWallet.getActiveAddress();
       $address = addr;
@@ -80,7 +81,7 @@
     <h2 class="text-2xl font-bold text-[#160042]">
       Arweave wallet needed to post
     </h2>
-    <p class="text-xl  text-[#160042]">Select your preferred wallet below:</p>
+    <p class="text-xl text-[#160042]">Select your preferred wallet below:</p>
     <button
       class="btn btn-block rounded-full hover:bg-gray-400 bg-black normal-case"
       on:click={arconnect}>ArConnect</button
@@ -95,7 +96,7 @@
         dispatch("help");
         open = false;
       }}
-      class="link no-underline text-center  text-[#160042]"
+      class="link no-underline text-center text-[#160042]"
       >I don't have a wallet</button
     >
   </div>

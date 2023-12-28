@@ -6,12 +6,8 @@
   import ProfileView from "./components/profile.svelte";
   import Passport from "./components/passport.svelte";
 
-  import {
-    gql,
-    postProfileTx,
-    loadProfile,
-    upload,
-  } from "./services/arweave.js";
+  import { postProfileTx, loadProfile, upload } from "./services/arweave.js";
+  import { gql } from "./services/gql.js";
   import Navbar from "./components/navbar.svelte";
   import Modal from "./components/modal.svelte";
 
@@ -74,7 +70,7 @@
     <div class="flex flex-col md:flex-row w-full items-start">
       {#await profileObject then p}
         {#if p}
-          <div class="flex-1 flex flex-col ">
+          <div class="flex-1 flex flex-col">
             <ProfileView profile={p} />
             <div class="mt-16 flex justify-center items-center">
               <div class="flex space-x-2">

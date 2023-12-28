@@ -5,12 +5,8 @@
   import { address, account } from "../store.js";
   import { profiles } from "../app.js";
   import { Jumper } from "svelte-loading-spinners";
-  import {
-    gql,
-    postProfileTx,
-    loadProfile,
-    upload,
-  } from "../services/arweave.js";
+  import { postProfileTx, loadProfile, upload } from "../services/arweave.js";
+  import { gql } from "../services/gql.js";
 
   import { router } from "tinro";
 

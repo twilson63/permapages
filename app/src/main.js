@@ -1,8 +1,10 @@
 import './tailwind.css'
 import App from './App.svelte'
 
-import { gql, postProfileTx, loadProfile } from "./services/arweave.js";
+import { postProfileTx, loadProfile } from "./services/arweave.js";
+import { gql } from './services/gql.js'
 import { address, account } from "./store.js";
+
 import { profiles } from "./app.js";
 
 window.addEventListener("arweaveWalletLoaded", async () => {
