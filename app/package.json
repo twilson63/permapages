@@ -1,7 +1,7 @@
 {
   "name": "permapages",
   "private": true,
-  "version": "0.2.9",
+  "version": "0.2.10",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,26 +11,26 @@
     "deploy": "arkb deploy dist --use-bundler https://node2.bundlr.network --wallet ../wallet.json --tag-name DEPLOY --tag-value permapages"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
+    "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "@tailwindcss/typography": "^0.5.2",
     "@verto/flex": "^0.1.7",
     "autoprefixer": "^10.4.4",
     "daisyui": "^2.11.1",
-    "esbuild": "^0.15.5",
+    "esbuild": "^0.19.10",
     "eslint": "^8.14.0",
     "esm": "^3.2.25",
     "postcss": "^8.4.12",
     "replace-in-file": "^6.3.5",
-    "svelte": "^3.44.0",
+    "svelte": "^4.2.8",
     "svelte-loading-spinners": "^0.1.7",
     "tailwindcss": "^3.0.23",
     "tinro": "^0.6.12",
     "uvu": "^0.5.3",
-    "vite": "3.x",
-    "vitest": "^0.12.3"
+    "vite": "^5.0.10",
+    "vitest": "^1.1.0"
   },
   "dependencies": {
-    "@permaweb/stampjs": "^0.3.1",
+    "@permaweb/stampjs": "^0.6.2",
     "ardb": "^1.1.10",
     "arweave": "^1.13.4",
     "arweave-account": "^1.2.5",
@@ -49,8 +49,8 @@
     "mustache": "^4.2.0",
     "ramda": "^0.28.0",
     "smartweave": "^0.4.48",
-    "warp-contracts": "^1.4.7",
-    "warp-contracts-plugin-deploy": "^1.0.8",
+    "warp-contracts": "1.4.26",
+    "warp-contracts-plugin-deploy": "^1.0.12",
     "zod": "^3.14.2"
   }
 }

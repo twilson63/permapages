@@ -21,6 +21,7 @@ export const cache = writable([])
 //webpages.subscribe(data => localStorage.setItem('webpages', JSON.stringify(data)))
 export const pageCache = writable([])
 
+export const postCache = writable([])
 
 export const arnsCache = writable(JSON.parse(localStorage.getItem(`arnsCache-${_addr}`) || '[]'))
 arnsCache.subscribe(v => {

@@ -5,11 +5,12 @@
   import PagesDrafts from "../components/pages-drafts.svelte";
   import Copyright from "../widgets/copyright.svelte";
   import { posts } from "../api.js";
-  import { address } from "../store.js";
+  import { address, postCache } from "../store.js";
+  import { uniqBy, prop } from "ramda";
 
   async function postData() {
     const result = await posts.list($address);
-    return result;
+    return uniqBy(prop("assetId"), $postCache.concat(result)); //[...$postCache, ...result];
   }
 </script>
 

@@ -92,12 +92,14 @@ export default function ({ gql, query, publish, md, getData }) {
                   claimable: []
                 })
               },
-              ...topicTags
+              ...topicTags,
+              { name: 'App-Name', value: 'PermaPages' }
             ]
           }
         }
       })
       .chain(Async.fromPromise(publish))
+      .map(({ contractTxId }) => assoc('id', contractTxId, post))
   }
 
   function list(addr) {
@@ -141,6 +143,9 @@ function buildFindByIdQuery(id) {
           cursor
           node {
             id
+            owner {
+              address
+            }
             tags {
               name
               value
@@ -171,6 +176,9 @@ function buildQuery(addr) {
           cursor
           node {
             id
+            owner {
+              address
+            }
             tags {
               name
               value
@@ -201,6 +209,7 @@ function toPostItem(node) {
     assetId: getTag('Asset-Id'),
     published,
     stamps: 0,
+    owner: node.owner.address,
     topics
   }
 }

@@ -9,7 +9,7 @@
 
   const tweetUrl = (p) => {
     return `https://twitter.com/intent/tweet?text=${encodeURI(
-      `👀 "${p.title}" at arweave.net/${p.transaction}`
+      `👀 "${p.title}" at arweave.net/${p.transaction}`,
     )}&hashtags=permaweb&via=permapages`;
   };
 </script>
@@ -17,7 +17,7 @@
 <div class="mt-10 w-full flex flex-row items-center justify-between">
   <div class="flex items-center gap-4">
     <h1 class="text-2xl font-bold">Blog Posts</h1>
-    <select class="bg-white outline-none w-16  cursor-pointer">
+    <select class="bg-white outline-none w-16 cursor-pointer">
       <option selected>All</option>
       <option>Drafts</option>
       <option>Published</option>
@@ -64,12 +64,10 @@
       <div class="flex flex-col mx-auto justify-start">
         <h3 class="text-lg font-bold text-[#7D7D7D]">Transaction ID</h3>
         <p class="text-sm text-gray-500 flex items-center gap-2">
-          <span class="w-[200px] truncate text-ellipsis"
-            >{post.transaction}</span
-          >
+          <span class="w-[200px] truncate text-ellipsis">{post.id}</span>
           <button
             class="cursor-pointer btn bg-transparent hover:bg-transparent border-none p-0 m-0 min-h-[20px] h-[20px]"
-            on:click={() => copyTrx(post.transaction)}
+            on:click={() => copyTrx(post.id)}
           >
             <img src="copy.svg" alt="copy" width="16px" />
           </button>
@@ -85,7 +83,7 @@
 
       <div class="flex flex-col items-center mx-auto">
         <h3 class="text-lg font-bold text-[#7D7D7D]">View</h3>
-        <a href="https://arweave.net/{post.transaction}"
+        <a href="https://arweave.net/{post.id}"
           ><img src="eye.svg" alt="eye" width="20px" /></a
         >
       </div>

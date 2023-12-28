@@ -177,7 +177,7 @@ export const postWebpage = async (page) => {
     description: page.description,
     creator: page.creator,
     balances: {
-      [page.creator]: 10000
+      [page.creator]: 100
     },
     contentType: 'text/html',
     createdAt: Date.now(),
@@ -206,14 +206,15 @@ export const postWebpage = async (page) => {
       { name: 'Type', value: 'page' },
       { name: 'Protocol', value: page.protocol },
       { name: 'Timestamp', value: new Date().toISOString() },
-      { name: 'Indexed-By', value: 'ucm' }
+      { name: 'Indexed-By', value: 'ucm' },
+      { name: APP_NAME, value: 'PermaPages' }
     ].concat(topics)
   }
 
   // dispatch to bundlr
   return createDataEntry(de.data).map(addTags(de.tags)).chain(dispatch)
     // register on warp
-    .chain(result => Async.fromPromise(warp.register.bind(warp))(result.id, 'node2'))
+    .chain(result => Async.fromPromise(warp.register.bind(warp))(result.id, 'arweave'))
     .map(prop('contractTxId'))
     .toPromise()
 

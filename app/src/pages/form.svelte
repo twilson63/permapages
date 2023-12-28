@@ -173,14 +173,14 @@
             claimable: [],
             settings: [["isTradeable", true]],
           },
-          p.state
+          p.state,
         );
 
         const ants = await listANTs($address);
         ant = ants.find((ant) =>
           ant.records["@"]?.transactionId
             ? ant.records["@"].transactionId === page.webpage
-            : ant.records["@"] === page.webpage
+            : ant.records["@"] === page.webpage,
         )?.id;
       });
   } else {
@@ -306,11 +306,11 @@
 
       if (page.profile) {
         let profileData = await profiles({ gql, load: loadProfile }).get(
-          $address
+          $address,
         );
-        console.log("data: ", profileData);
+
         const profileWidget = Mustache.render(profileTemplate(), profileData);
-        console.log("profile: ", profileWidget);
+
         page.html = profileWidget + "\n" + page.html;
       }
 
@@ -370,7 +370,7 @@
 
   async function getnfts(wallet) {
     const results = await fetch(
-      "https://api.opensea.io/api/v1/assets?owner=" + wallet
+      "https://api.opensea.io/api/v1/assets?owner=" + wallet,
     ).then((res) => res.json());
 
     return results.assets;
@@ -413,11 +413,11 @@
     return ws
       .filter(
         (w) =>
-          !["widget-connector", "widget-poap", "widget-stamp"].includes(w.name)
+          !["widget-connector", "widget-poap", "widget-stamp"].includes(w.name),
       )
       .reduce((a, v) => (find(propEq("name", v.name), a) ? a : [...a, v]), []) // only show latest widgets
       .filter((w) =>
-        page.widgets.find((a) => a.elementId === w.elementId) ? false : true
+        page.widgets.find((a) => a.elementId === w.elementId) ? false : true,
       );
   }
 

@@ -1,10 +1,8 @@
 import Arweave from 'arweave'
 import { map } from 'ramda'
-import { WarpFactory, LoggerFactory } from 'https://unpkg.com/warp-contracts@1.2.52/bundles/web.bundle.min.js'
+import { DeployPlugin } from 'warp-contracts-plugin-deploy'
+import { WarpFactory, LoggerFactory } from 'warp-contracts'
 import getHost from './get-host'
-
-//const URL = 'https://gateway.redstone.finance/gateway/contracts/deploy'
-const URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
 
 let options = {}
 
@@ -12,7 +10,7 @@ options = { host: getHost(), port: 443, protocol: 'https' }
 const arweave = Arweave.init(options)
 
 LoggerFactory.INST.logLevel('error')
-const warp = WarpFactory.forMainnet()
+const warp = WarpFactory.forMainnet().use(new DeployPlugin())
 
 export const getData = (id) => arweave.api.get(id)
 //.then(res => res.ok ? res.data : Promise.reject(res))
@@ -38,43 +36,22 @@ export const getData = (id) => arweave.api.get(id)
 export const publish = (asset) => {
   return Promise.resolve(asset)
     .then(asset => dispatch(asset.asset))
-    .then(result => warp.register(result.id, 'node2'))
+    //.then(asset => new Promise(resolve => setTimeout(() => resolve(asset), 5000)))
+    .then(result => warp.register(result.id, 'arweave'))
+  //.then(({ contractTxId }) => assoc('id', contractTxId, asset))
   //.then(([_, asset]) => asset)
   //.then(post)
   //.then(x => (console.log('asset', x), x))
 }
 
 async function dispatch({ data, tags }) {
-  if (!arweaveWallet) {
+  if (!globalThis.arweaveWallet) {
     return Promise.reject('No wallet found')
   }
 
   const tx = await arweave.createTransaction({ data })
   map(t => tx.addTag(t.name, t.value), tags)
 
-  const result = await arweaveWallet.dispatch(tx)
+  const result = await globalThis.arweaveWallet.dispatch(tx)
   return { data, tags, id: result.id }
-}
-
-async function post({ data, tags, id }) {
-  if (!fetch) {
-    return Promise.reject('fetch is required!')
-  }
-  const tx = await arweave.createTransaction({ data })
-  map(t => tx.addTag(t.name, t.value), tags)
-
-  await arweave.transactions.sign(tx, 'use_wallet')
-  tx.id = id
-  //console.log('tx: ', tx)
-  const res = await fetch(URL, {
-    method: 'POST',
-    body: JSON.stringify({ contractTx: tx }),
-    headers: {
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Content-Type': 'application/json',
-      Accept: 'application/json'
-    }
-  }).then(res => res.ok ? res.json() : Promise.reject(res))
-
-  return { id, ...res }
 }
