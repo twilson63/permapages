@@ -308,9 +308,9 @@
         let profileData = await profiles({ gql, load: loadProfile }).get(
           $address
         );
-
+        console.log("data: ", profileData);
         const profileWidget = Mustache.render(profileTemplate(), profileData);
-
+        console.log("profile: ", profileWidget);
         page.html = profileWidget + "\n" + page.html;
       }
 

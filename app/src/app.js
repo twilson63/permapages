@@ -70,8 +70,9 @@ export function profiles({ gql, post, load }) {
   async function get(addr) {
     return Async.of(addr)
       .map(buildProfileQry)
+      .map(query => ({ query }))
       .chain(Async.fromPromise(gql))
-      .map(pluckNodes)
+      .map(pluck('node'))
       .chain(nodes => isEmpty(nodes) ? Async.Rejected(null) : Async.Resolved(nodes))
       .map(formatProfiles)
       .map(head)
@@ -208,7 +209,11 @@ query {
       { name: "Protocol", values: ["PermaProfile-v0.1"]}
     ]
   ) {
+    pageInfo {
+      hasNextPage
+    }
     edges {
+      cursor
       node {
         id
         owner {
