@@ -116,14 +116,12 @@
       return;
     }
 
-    console.log("CHG .", changeData);
-
     const result = await updateSubDomain({
       ant: changeData.ANT,
       subdomain: changeData.subdomain,
       transactionId: changeData.transactionId,
     }).catch((e) => console.log("CHG error", e));
-    console.log("CHG ", result);
+
     submitDialog = false;
     if (result.ok) {
       successData = {
@@ -165,7 +163,7 @@
     const ps = await pages({ gql }).list($address);
 
     return ps.reduce(
-      (acc, v) => (find(propEq("title", v.title), acc) ? acc : [...acc, v]),
+      (acc, v) => (find(propEq(v.title, "title"), acc) ? acc : [...acc, v]),
       []
     );
   }
@@ -198,13 +196,13 @@
 
     // keep only the ones not showing up in arweave gql yet
     const pending = ($arnsCache || []).filter((n) =>
-      find(propEq("name", n.name), results) ? false : true
+      find(propEq(n.name, "name"), results) ? false : true
     );
     // update store keeping only the uncached
     $arnsCache = pending; // keep only the ANTS not found
     // return list
     return [...pending, ...results].reduce(
-      (acc, v) => (find(propEq("id", v.id), acc) ? acc : [...acc, v]),
+      (acc, v) => (find(propEq(v.id, "id"), acc) ? acc : [...acc, v]),
       []
     );
   }

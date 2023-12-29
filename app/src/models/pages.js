@@ -32,6 +32,17 @@ const schema = z.object({
   noContract: z.boolean().optional(),
   noBundlr: z.boolean().optional(),
   units: z.number().optional(),
+  license: z.string().optional(),
+  derivation: z.boolean().optional(),
+  derivationValue: z.string().optional(),
+  derivationValuePlus: z.string().optional(),
+  commercial: z.boolean().optional(),
+  commercialValue: z.string().optional(),
+  commercialValuePlus: z.string().optional(),
+  dataModelTraining: z.boolean().optional(),
+  dataModelTrainingValue: z.string().optional(),
+  dataModelTrainingValuePlus: z.string().optional(),
+
   widgets: z.array(
     z.object({
       source: z.string(),
@@ -46,12 +57,13 @@ const schema = z.object({
 
 const getTag = name => compose(
   prop('value'),
-  find(propEq('name', name))
+  find(propEq(name, 'name'))
 )
 
 export const createPage = (data) => {
   data.timestamp = new Date().toISOString()
   const result = schema.safeParse(data)
+
   if (result.success) {
     return Async.Resolved(result.data)
   } else {

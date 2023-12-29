@@ -61,7 +61,7 @@
     const ps = await pages({ gql }).list($address);
 
     return ps.reduce(
-      (acc, v) => (find(propEq("title", v.title), acc) ? acc : [...acc, v]),
+      (acc, v) => (find(propEq(v.title, "title"), acc) ? acc : [...acc, v]),
       []
     );
   }

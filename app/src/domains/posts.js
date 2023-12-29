@@ -20,7 +20,7 @@ export default function ({ gql, query, publish, md, getData }) {
           filter(n => find(t => t.name === 'Type', n.tags).value === 'blog-post' && find(t => t.name === 'Uploader', n.tags) === undefined),
           pluck('node')
         )(edges)
-        if (asset.tags.find(propEq('name', 'Protocol-Name'))?.value === 'Permapage-Post-v4') {
+        if (asset.tags.find(propEq('Protocol-Name', 'name'))?.value === 'Permapage-Post-v4') {
           return Async.fromPromise(getData)(asset.id)
             .map(
               (a) => ({
@@ -35,7 +35,7 @@ export default function ({ gql, query, publish, md, getData }) {
 
             )
         } else {
-          return Async.of(asset.tags.find(propEq('name', 'Asset-Id'))?.value)
+          return Async.of(asset.tags.find(propEq('Asset-Id', 'name'))?.value)
             .map(id => ({ query: buildSourceQuery(), variables: { ids: [id] } }))
             .chain(Async.fromPromise(gql))
             .map(path(['0', 'node', 'id']))
@@ -194,7 +194,7 @@ function buildQuery(addr) {
 }
 
 function toPostItem(node) {
-  const getTag = compose(prop('value'), n => find(propEq('name', n), node.tags))
+  const getTag = compose(prop('value'), n => find(propEq(n, 'name'), node.tags))
   const published = getTag('Published') ? Number(getTag('Published')) : Date.now()
   const topics = join(', ', pluck('value', filter(t => /^Topic:/.test(t.name), node.tags)))
   const protocol = getTag('Protocol-Name') || 'PermaPages-Post-v0.3'
