@@ -142,7 +142,7 @@ export function pages({ register, post, gql, postWebpage, load, loadState, postV
 
   //const void = () => null
 
-  async function create(page, notify) {
+  async function create(page) {
     return Async.of(page)
       .chain(pageModel.validate)
       .chain(Async.fromPromise(postWebpage))

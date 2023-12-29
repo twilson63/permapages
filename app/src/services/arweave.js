@@ -177,7 +177,7 @@ export const postWebpage = async (page) => {
     description: page.description,
     creator: page.creator,
     balances: {
-      [page.creator]: 100
+      [page.creator]: page.units || 100
     },
     contentType: 'text/html',
     createdAt: Date.now(),

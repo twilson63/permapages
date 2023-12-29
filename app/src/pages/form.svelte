@@ -133,6 +133,8 @@
     widgets: [],
     includeFooter: true,
     allowStamps: false,
+    units: 100,
+    theme: "corporate",
   };
 
   if (meta().query.fork) {
@@ -166,21 +168,21 @@
             description: p.description,
             creator: p.owner || p.creator,
             balances: {
-              [$address]: 100,
+              [$address]: p.units,
             },
             contentType: "text/html",
             createdAt: Date.now(),
             claimable: [],
             settings: [["isTradeable", true]],
           },
-          p.state,
+          p.state
         );
 
         const ants = await listANTs($address);
         ant = ants.find((ant) =>
           ant.records["@"]?.transactionId
             ? ant.records["@"].transactionId === page.webpage
-            : ant.records["@"] === page.webpage,
+            : ant.records["@"] === page.webpage
         )?.id;
       });
   } else {
@@ -198,7 +200,7 @@
 
       page.content = easymde.value();
       page.creator = $address;
-
+      page.units = Number(page.units);
       // allowStamps is set
       if (page.allowStamps) {
         //if (!find(propEq("elementId", "passport"), page.widgets)) {
@@ -306,7 +308,7 @@
 
       if (page.profile) {
         let profileData = await profiles({ gql, load: loadProfile }).get(
-          $address,
+          $address
         );
 
         const profileWidget = Mustache.render(profileTemplate(), profileData);
@@ -325,9 +327,7 @@
       } else {
         result = await pages({
           postWebpage,
-        }).create(page, (m) => {
-          step = m.step;
-        });
+        }).create(page);
       }
 
       $pageCache = [
@@ -343,13 +343,13 @@
         ...$pageCache,
       ];
 
-      if (updateSubdomain) {
-        const updateResult = await updateSubDomain({
-          ant: ant,
-          subdomain: "@",
-          transactionId: result.webpage,
-        });
-      }
+      // if (updateSubdomain) {
+      //   const updateResult = await updateSubDomain({
+      //     ant: ant,
+      //     subdomain: "@",
+      //     transactionId: result.webpage,
+      //   });
+      // }
 
       submitting = false;
 
@@ -370,7 +370,7 @@
 
   async function getnfts(wallet) {
     const results = await fetch(
-      "https://api.opensea.io/api/v1/assets?owner=" + wallet,
+      "https://api.opensea.io/api/v1/assets?owner=" + wallet
     ).then((res) => res.json());
 
     return results.assets;
@@ -413,11 +413,11 @@
     return ws
       .filter(
         (w) =>
-          !["widget-connector", "widget-poap", "widget-stamp"].includes(w.name),
+          !["widget-connector", "widget-poap", "widget-stamp"].includes(w.name)
       )
       .reduce((a, v) => (find(propEq("name", v.name), a) ? a : [...a, v]), []) // only show latest widgets
       .filter((w) =>
-        page.widgets.find((a) => a.elementId === w.elementId) ? false : true,
+        page.widgets.find((a) => a.elementId === w.elementId) ? false : true
       );
   }
 
@@ -476,11 +476,31 @@
                   >toggle on to include your profile as the web page header.</span
                 >
               </div>
-
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.profile}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.profile ? "ON" : "OFF"}
+                </div>
+              </div>
+            </label>
+          </div>
+          <div class="mt-4 form-control">
+            <label for="gallery" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Atomic Asset Units</span>
+                <br />
+                <span class="hidden md:inline-block text-sm"
+                  >Enter the number of units for trading this Atomic Asset</span
+                >
+              </div>
               <input
-                type="checkbox"
-                class="toggle toggle-secondary"
-                bind:checked={page.profile}
+                type="input"
+                class="input input-bordered w-1/2"
+                bind:value={page.units}
               />
             </label>
           </div>
@@ -530,11 +550,16 @@
                 <br />
                 <span class="text-sm">toggle off to not receive stamps</span>
               </div>
-              <input
-                type="checkbox"
-                class="toggle toggle-secondary"
-                bind:checked={page.allowStamps}
-              />
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.allowStamps}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.allowStamps ? "ON" : "OFF"}
+                </div>
+              </div>
             </label>
           </div>
 
@@ -543,13 +568,20 @@
               <div>
                 <span class="label-text text-xl">Disable Contract</span>
                 <br />
-                <span class="text-sm">Deploy without contract</span>
+                <span class="text-sm"
+                  >Deploy without contract ($AR is required!)</span
+                >
               </div>
-              <input
-                type="checkbox"
-                class="toggle toggle-secondary"
-                bind:checked={page.noContract}
-              />
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.noContract}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.noContract ? "ON" : "OFF"}
+                </div>
+              </div>
             </label>
           </div>
           <div class="mt-4 form-control">
@@ -559,11 +591,16 @@
                 <br />
                 <span class="text-sm">Dispatch Page to Layer 1</span>
               </div>
-              <input
-                type="checkbox"
-                class="toggle toggle-secondary"
-                bind:checked={page.noBundlr}
-              />
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.noBundlr}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.noBundlr ? "ON" : "OFF"}
+                </div>
+              </div>
             </label>
           </div>
           <div class="mt-4 form-control">
@@ -573,11 +610,16 @@
                 <br />
                 <span class="text-sm">toggle off to not include footer</span>
               </div>
-              <input
-                type="checkbox"
-                class="toggle toggle-secondary"
-                bind:checked={page.includeFooter}
-              />
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.includeFooter}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.includeFooter ? "ON" : "OFF"}
+                </div>
+              </div>
             </label>
           </div>
 
@@ -676,7 +718,7 @@
         />
         <small>(Create a list of topics separated by commas.)</small>
       </div>
-      {#if ant}
+      <!-- {#if ant}
         <div class="form-control">
           <label class="label">
             <input
@@ -687,7 +729,7 @@
             <span>Update Arweave Subdomain</span>
           </label>
         </div>
-      {/if}
+      {/if} -->
       <div class="modal-action">
         <button for="confirm" class="btn">Submit</button>
       </div>
@@ -697,9 +739,9 @@
 <Modal open={submitting} ok={false}>
   <h3 class="text-2xl">Creating Webpage!</h3>
   <ul class="steps steps-vertical">
-    <li class="step {step === 1 ? 'step-primary' : ''}">Generating Page</li>
-    <li class="step {step === 2 ? 'step-primary' : ''}">Publishing Page</li>
+    <li class="step {step === 1 ? 'step-primary' : ''}">Publishing Page</li>
     <!--
+    <li class="step {step === 1 ? 'step-primary' : ''}">Generating Page</li>
     <li class="step {step === 3 ? 'step-primary' : ''}">Saving Source</li>
     -->
   </ul>

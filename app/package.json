@@ -1,7 +1,7 @@
 {
   "name": "permapages",
   "private": true,
-  "version": "0.2.10",
+  "version": "0.2.11",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -47,7 +47,7 @@
     "markdown-it-container": "^3.0.0",
     "marked": "^4.0.14",
     "mustache": "^4.2.0",
-    "ramda": "^0.28.0",
+    "ramda": "^0.29.1",
     "smartweave": "^0.4.48",
     "warp-contracts": "1.4.26",
     "warp-contracts-plugin-deploy": "^1.0.12",
