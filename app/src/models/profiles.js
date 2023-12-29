@@ -33,7 +33,7 @@ const schema = z.object({
 
 const getTag = name => compose(
   prop('value'),
-  find(propEq('name', name))
+  find(propEq(name, 'name'))
 )
 
 export const createProfile = (data) => {

@@ -135,6 +135,16 @@
     allowStamps: false,
     units: 100,
     theme: "corporate",
+    license: "IVjAM1C3x3GFdc3t9EqMnbtGnpgTuJbaiYZa1lk09_8",
+    derivation: false,
+    derivationValue: "",
+    derivationValuePlus: "1",
+    commercial: false,
+    commercialValue: "",
+    commercialValuePlus: "1",
+    dataModelTraining: false,
+    dataModelTrainingValue: "",
+    dataModelTrainingValuePlus: "1",
   };
 
   if (meta().query.fork) {
@@ -160,6 +170,21 @@
         page.allowStamps = p.allowStamps || false;
         page.noContract = p.noContract || false;
         page.noBundlr = p.noBundlr || false;
+        page.license =
+          p.license || "IVjAM1C3x3GFdc3t9EqMnbtGnpgTuJbaiYZa1lk09_8";
+
+        page.derivation = p.derivation || false;
+        page.derivationValue = p.derivationValue;
+        page.derivationValuePlus = p.derivationValuePlus || "1";
+
+        page.commercial = p.commercial || false;
+        page.commercialValue = p.commercialValue;
+        page.commercialValuePlus = p.commercialValuePlus || "1";
+
+        page.dataModelTraining = p.dataModelTraining || false;
+        page.dataModelTrainingValue = p.dataModelTrainingValue;
+        page.dataModelTrainingValuePlus = p.dataModelTrainingValuePlus || "1";
+
         page.state = mergeAll(
           {
             ticker: "PAGE",
@@ -177,13 +202,6 @@
           },
           p.state
         );
-
-        const ants = await listANTs($address);
-        ant = ants.find((ant) =>
-          ant.records["@"]?.transactionId
-            ? ant.records["@"].transactionId === page.webpage
-            : ant.records["@"] === page.webpage
-        )?.id;
       });
   } else {
   }
@@ -415,7 +433,7 @@
         (w) =>
           !["widget-connector", "widget-poap", "widget-stamp"].includes(w.name)
       )
-      .reduce((a, v) => (find(propEq("name", v.name), a) ? a : [...a, v]), []) // only show latest widgets
+      .reduce((a, v) => (find(propEq(v.name, "name"), a) ? a : [...a, v]), []) // only show latest widgets
       .filter((w) =>
         page.widgets.find((a) => a.elementId === w.elementId) ? false : true
       );
@@ -504,7 +522,177 @@
               />
             </label>
           </div>
+          <!-- License Info -->
           <div class="mt-4 form-control">
+            <label for="gallery" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">License</span>
+                <br />
+                <span class="hidden md:inline-block text-sm">TX of License</span
+                >
+              </div>
+              <input
+                type="input"
+                class="input input-bordered w-1/2"
+                bind:value={page.license}
+              />
+            </label>
+          </div>
+          <div class="mt-4 form-control">
+            <label for="profile" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Allow Derived Works</span>
+                <br />
+                <span class="text-sm">toggle on to allow for derived works</span
+                >
+              </div>
+
+              {#if page.derivation}
+                <select
+                  class="select select-bordered w-[300px]"
+                  bind:value={page.derivationValue}
+                >
+                  <option>select</option>
+                  <option value="Allowed">Allowed</option>
+                  <option value="Allowed-With-Credit"
+                    >Allowed with Credit</option
+                  >
+                  <option value="Allowed-With-Indication"
+                    >Allowed with Indication</option
+                  >
+                  <option value="Allowed-With-License-Passthrough"
+                    >Allowed with license passthrough</option
+                  >
+                  <option value="Allowed-With-RevenueShare"
+                    >Allowed with Revenue Share</option
+                  >
+                  <option value="Allowed-With-Fee-One-Time"
+                    >Allowed with One Time Fee</option
+                  >
+                  <option value="Allowed-With-Fee-Monthly"
+                    >Allowed with Monthly Fee</option
+                  >
+                </select>
+                {#if ["Allowed-With-RevenueShare", "Allowed-With-Fee-One-Time", "Allowed-With-Fee-Monthly"].includes(page.derivationValue)}
+                  <input
+                    type="input"
+                    class="input input-bordered w-[100px]"
+                    bind:value={page.derivationValuePlus}
+                  />
+                {/if}
+              {/if}
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.derivation}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.derivation ? "ON" : "OFF"}
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <div class="mt-4 form-control">
+            <label for="profile" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Allow Commercial Use</span>
+                <br />
+                <span class="text-sm"
+                  >toggle on to allow for Commercial Use</span
+                >
+              </div>
+
+              {#if page.commercial}
+                <select
+                  class="select select-bordered w-[300px]"
+                  bind:value={page.commercialValue}
+                >
+                  <option>select</option>
+                  <option value="Allowed">Allowed</option>
+                  <option value="Allowed-With-Credit"
+                    >Allowed with Credit</option
+                  >
+                  <option value="Allowed-With-RevenueShare"
+                    >Allowed with Revenue Share</option
+                  >
+                  <option value="Allowed-With-Fee-One-Time"
+                    >Allowed with One Time Fee</option
+                  >
+                  <option value="Allowed-With-Fee-Monthly"
+                    >Allowed with Monthly Fee</option
+                  >
+                </select>
+                {#if ["Allowed-With-RevenueShare", "Allowed-With-Fee-One-Time", "Allowed-With-Fee-Monthly"].includes(page.commercialValue)}
+                  <input
+                    type="input"
+                    class="input input-bordered w-[100px]"
+                    bind:value={page.commercialValuePlus}
+                  />
+                {/if}
+              {/if}
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.commercial}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.commercial ? "ON" : "OFF"}
+                </div>
+              </div>
+            </label>
+          </div>
+          <div class="mt-4 form-control">
+            <label for="profile" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Allow Data Model Training</span
+                >
+                <br />
+                <span class="text-sm"
+                  >toggle on to allow for Data Model Training</span
+                >
+              </div>
+
+              {#if page.dataModelTraining}
+                <select
+                  class="select select-bordered w-[300px]"
+                  bind:value={page.dataModelTrainingValue}
+                >
+                  <option>select</option>
+                  <option value="Allowed">Allowed</option>
+                  <option value="Allowed-With-RevenueShare"
+                    >Allowed with Revenue Share</option
+                  >
+                  <option value="Allowed-With-Fee-One-Time"
+                    >Allowed with One Time Fee</option
+                  >
+                  <option value="Allowed-With-Fee-Monthly"
+                    >Allowed with Monthly Fee</option
+                  >
+                </select>
+                {#if ["Allowed-With-RevenueShare", "Allowed-With-Fee-One-Time", "Allowed-With-Fee-Monthly"].includes(page.dataModelTrainingValue)}
+                  <input
+                    type="input"
+                    class="input input-bordered w-[100px]"
+                    bind:value={page.dataModelTrainingValuePlus}
+                  />
+                {/if}
+              {/if}
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.dataModelTraining}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.dataModelTraining ? "ON" : "OFF"}
+                </div>
+              </div>
+            </label>
+          </div>
+          <!-- <div class="mt-4 form-control">
             <label for="gallery" class="label cursor-pointer">
               <div>
                 <span class="label-text text-xl">NFT Gallery</span>
@@ -519,16 +707,15 @@
                 bind:value={page.ethwallet}
               />
             </label>
-          </div>
+          </div> -->
           <div class="my-8 form-control">
             <label class="label">
               <div>
                 <span class="label-text text-xl">Select Theme</span>
                 <br />
                 <span class="hidden md:inline-block text-sm"
-                  >Select a fun theme for your page, by default, the `light`
-                  theme is chosen unless browser is set to dark mode, then the
-                  `dark` theme is chosen.</span
+                  >Select a fun theme for your page, by default, the `corporate`
+                  theme is chosen.</span
                 >
               </div>
               <select
@@ -563,46 +750,6 @@
             </label>
           </div>
 
-          <div class="mt-4 form-control">
-            <label for="contract" class="label cursor-pointer">
-              <div>
-                <span class="label-text text-xl">Disable Contract</span>
-                <br />
-                <span class="text-sm"
-                  >Deploy without contract ($AR is required!)</span
-                >
-              </div>
-              <div class="flex space-x-2">
-                <input
-                  type="checkbox"
-                  class="toggle toggle-secondary"
-                  bind:checked={page.noContract}
-                />
-                <div class="font-mono text-gray-400">
-                  {page.noContract ? "ON" : "OFF"}
-                </div>
-              </div>
-            </label>
-          </div>
-          <div class="mt-4 form-control">
-            <label for="dispatch-l1" class="label cursor-pointer">
-              <div>
-                <span class="label-text text-xl">Dispatch L1</span>
-                <br />
-                <span class="text-sm">Dispatch Page to Layer 1</span>
-              </div>
-              <div class="flex space-x-2">
-                <input
-                  type="checkbox"
-                  class="toggle toggle-secondary"
-                  bind:checked={page.noBundlr}
-                />
-                <div class="font-mono text-gray-400">
-                  {page.noBundlr ? "ON" : "OFF"}
-                </div>
-              </div>
-            </label>
-          </div>
           <div class="mt-4 form-control">
             <label for="footer" class="label cursor-pointer">
               <div>
@@ -650,6 +797,46 @@
               {/each}
             </div>
           {/if}
+          <div class="mt-4 form-control">
+            <label for="contract" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Disable Contract</span>
+                <br />
+                <span class="text-sm">Deploy without contract</span>
+              </div>
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.noContract}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.noContract ? "ON" : "OFF"}
+                </div>
+              </div>
+            </label>
+          </div>
+          <div class="mt-4 form-control">
+            <label for="dispatch-l1" class="label cursor-pointer">
+              <div>
+                <span class="label-text text-xl">Dispatch L1</span>
+                <br />
+                <span class="text-sm"
+                  >Dispatch Page to Layer 1 ($AR is required!)</span
+                >
+              </div>
+              <div class="flex space-x-2">
+                <input
+                  type="checkbox"
+                  class="toggle toggle-secondary"
+                  bind:checked={page.noBundlr}
+                />
+                <div class="font-mono text-gray-400">
+                  {page.noBundlr ? "ON" : "OFF"}
+                </div>
+              </div>
+            </label>
+          </div>
         {/if}
 
         <div class="mt-8 flex justify-end space-x-2">

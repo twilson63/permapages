@@ -9,7 +9,6 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Last Status</th>
       <th>TransactionId</th>
       <th>Actions</th>
     </tr>
@@ -19,13 +18,12 @@
       <!-- row 1 -->
       <tr>
         <td>{title.length > 30 ? take(30, title) + "..." : title}</td>
-        <td>{status ? take(20, status) : "no status"}...</td>
         <td>{webpage || id}</td>
 
         <td>
           <a
             target="_blank"
-            href="https://arweave.net/{webpage || id}"
+            href="https://g8way.io/{webpage || id}"
             class="link uppercase">Link</a
           >
           <a href="/pages/new?fork={id}" class="link uppercase">Edit</a>

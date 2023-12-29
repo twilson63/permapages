@@ -114,9 +114,9 @@ export function profiles({ gql, post, load }) {
       .map(pluckNodes)
       .map(map(tx => ({
         id: tx.id,
-        title: (find(propEq('name', 'Title'), tx.tags) || find(propEq('name', 'Page-Title'), tx.tags)).value,
-        type: find(propEq('name', 'Type'), tx.tags)?.value || 'page',
-        description: find(propEq('name', 'Description'), tx.tags)?.value || ''
+        title: (find(propEq('Title', 'name'), tx.tags) || find(propEq('Page-Title', 'name'), tx.tags)).value,
+        type: find(propEq('Type', 'name'), tx.tags)?.value || 'page',
+        description: find(propEq('Description', 'name'), tx.tags)?.value || ''
       })))
       .toPromise()
   }
@@ -156,8 +156,10 @@ export function pages({ register, post, gql, postWebpage, load, loadState, postV
   async function list(account) {
     return Async.of(account)
       .map(buildPermaPageQuery)
+      .map(query => ({ query, variables: {} }))
       .chain(Async.fromPromise(gql))
-      .map(pluckNodes)
+      .map(pluck('node'))
+      //.map(pluckNodes)
       .map(formatPages)
       .toPromise()
   }
@@ -387,10 +389,19 @@ query {
 
 function buildPermaPageQuery(owner) {
   return `
-  query {
-    transactions(first: 100, owners: ["${owner}"], 
-      tags:{name:"Protocol", values:["PermaPages-v0.3", "PermaPages-v0.4"]}) {
+  query($cursor: String) {
+    transactions(first: 100, 
+      after: $cursor, 
+      owners: ["${owner}"], 
+      tags:[
+        {name: "Content-Type", values: ["text/html"]},
+        {name:"Protocol", values:["PermaPages-v0.3", "PermaPages-v0.4", "PermaPages-v0.5"]} 
+      ]) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
+        cursor
         node {
           id
           owner{
@@ -441,7 +452,7 @@ query {
 
 function getTag(tags) {
   return function (name) {
-    return tags.find(propEq('name', name))?.value
+    return tags.find(propEq(name, 'name'))?.value
   }
 
 }

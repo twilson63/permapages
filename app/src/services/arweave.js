@@ -54,17 +54,17 @@ const addTags = tags => tx => {
   return tx
 }
 
-const sign = tx =>
-  Async.fromPromise(arweave.transactions.sign.bind(arweave.transactions))(tx).map(always(tx))
-const post = contractTx => Async.fromPromise(fetch)(WARP_URL, {
-  method: 'POST',
-  body: JSON.stringify({ contractTx }),
-  headers: {
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Content-Type': 'application/json',
-    Accept: 'application/json'
-  }
-}).chain(response => response.ok ? Async.fromPromise(response.json.bind(response))() : Async.Rejected(response))
+// const sign = tx =>
+//   Async.fromPromise(arweave.transactions.sign.bind(arweave.transactions))(tx).map(always(tx))
+// const post = contractTx => Async.fromPromise(fetch)(WARP_URL, {
+//   method: 'POST',
+//   body: JSON.stringify({ contractTx }),
+//   headers: {
+//     'Accept-Encoding': 'gzip, deflate, br',
+//     'Content-Type': 'application/json',
+//     Accept: 'application/json'
+//   }
+// }).chain(response => response.ok ? Async.fromPromise(response.json.bind(response))() : Async.Rejected(response))
 
 //--- end ---
 
@@ -207,9 +207,13 @@ export const postWebpage = async (page) => {
       { name: 'Protocol', value: page.protocol },
       { name: 'Timestamp', value: new Date().toISOString() },
       { name: 'Indexed-By', value: 'ucm' },
-      { name: APP_NAME, value: 'PermaPages' }
+      { name: APP_NAME, value: 'PermaPages' },
+      { name: "License", value: page.license }
     ].concat(topics)
   }
+  de.tags = de.tags.concat(derivation(page))
+  de.tags = de.tags.concat(commercial(page))
+  de.tags = de.tags.concat(dataModelTraining(page))
 
   // dispatch to bundlr
   return createDataEntry(de.data).map(addTags(de.tags)).chain(dispatch)
@@ -456,4 +460,56 @@ export async function buildPublicKey(pk) {
   };
 
   return crypto.subtle.importKey('jwk', keyData, algo, false, ['encrypt']);
+}
+
+
+function derivation(page) {
+  if (page.derivation) {
+    let value = page.derivationValue
+    if (page.derivationValue === "Allowed-With-RevenueShare") {
+      value = `${value}-${page.derivationValuePlus}%`
+    }
+    if (page.derivationValue === "Allowed-With-Fee-One-Time") {
+      value = `${value}-${page.derivationValuePlus}`
+    }
+    if (page.derivationValue === "Allowed-With-Fee-Monthly") {
+      value = `${value}-${page.derivationValuePlus}`
+    }
+    return [{ name: 'Derivation', value }]
+  }
+  return []
+}
+
+function commercial(page) {
+  if (page.commercial) {
+    let value = page.commercialValue
+    if (page.commercialValue === "Allowed-With-RevenueShare") {
+      value = `${value}-${page.commercialValuePlus}%`
+    }
+    if (page.commercialValue === "Allowed-With-Fee-One-Time") {
+      value = `${value}-${page.commercialValuePlus}`
+    }
+    if (page.commercialValue === "Allowed-With-Fee-Monthly") {
+      value = `${value}-${page.commercialValuePlus}`
+    }
+    return [{ name: 'Commercial-Use', value }]
+  }
+  return []
+}
+
+function dataModelTraining(page) {
+  if (page.dataModelTraining) {
+    let value = page.dataModelTrainingValue
+    if (page.dataModelTrainingValue === "Allowed-With-RevenueShare") {
+      value = `${value}-${page.dataModelTrainingValuePlus}%`
+    }
+    if (page.dataModelTrainingValue === "Allowed-With-Fee-One-Time") {
+      value = `${value}-${page.dataModelTrainingValuePlus}`
+    }
+    if (page.dataModelTrainingValue === "Allowed-With-Fee-Monthly") {
+      value = `${value}-${page.dataModelTrainingValuePlus}`
+    }
+    return [{ name: 'Data-Model-Training', value }]
+  }
+  return []
 }

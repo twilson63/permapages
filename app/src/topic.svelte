@@ -24,10 +24,10 @@
       let results = await notes({ gql }).byTopic(topic);
       loading = false;
 
-      results = results.filter(propEq("public", true));
+      results = results.filter(propEq(true, "public"));
 
       return results.reduce(
-        (acc, v) => (find(propEq("slug", v.slug), acc) ? acc : [...acc, v]),
+        (acc, v) => (find(propEq(v.slug, "slug"), acc) ? acc : [...acc, v]),
         []
       );
     } catch (e) {
