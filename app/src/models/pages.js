@@ -18,7 +18,7 @@ const schema = z.object({
   description: z.string().max(150),
   topics: z.array(z.string()).optional(),
   status: z.string().max(150).optional(),
-  protocol: z.string().default('PermaPages-v0.4'),
+  protocol: z.string().default('PermaPages-v0.5'),
   content: z.string(),
   html: z.string(),
   profile: z.boolean().default(false),
@@ -31,6 +31,7 @@ const schema = z.object({
   allowStamps: z.boolean().optional(),
   noContract: z.boolean().optional(),
   noBundlr: z.boolean().optional(),
+  units: z.number().optional(),
   widgets: z.array(
     z.object({
       source: z.string(),
