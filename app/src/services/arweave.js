@@ -216,10 +216,14 @@ export const postWebpage = async (page) => {
   de.tags = de.tags.concat(dataModelTraining(page))
 
   // dispatch to bundlr
-  return createDataEntry(de.data).map(addTags(de.tags)).chain(dispatch)
-    // register on warp
-    .chain(result => Async.fromPromise(warp.register.bind(warp))(result.id, 'arweave'))
-    .map(prop('contractTxId'))
+  return createDataEntry(de.data).map(addTags(de.tags))
+    .chain(dispatch)
+    .map(prop('id'))
+    //.map(x => (console.log(x), x))
+    // warp is deprecated need to migrate to ao --- x ---- register on warp
+    //.chain(result => Async.fromPromise(warp.register.bind(warp))(result.id, 'arweave'))
+    //.map(x => (console.log(x), x))
+    //.map(prop('contractTxId'))
     .toPromise()
 
 

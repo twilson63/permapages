@@ -50,12 +50,12 @@
       icon: [Code],
       link: "/pages/new",
     },
-    {
-      title: "SubDomains",
-      subtitle: "Manage your SubDomains with ArNS",
-      icon: [User],
-      link: "/arns",
-    },
+    // {
+    //   title: "SubDomains",
+    //   subtitle: "Manage your SubDomains with ArNS",
+    //   icon: [User],
+    //   link: "/arns",
+    // },
   ];
 
   async function postData() {
@@ -64,13 +64,6 @@
 </script>
 
 <div class="w-full mt-10 flex flex-wrap justify-between gap-4">
-  <GradientBox
-    title={firstbox.title}
-    subtitle={firstbox.subtitle}
-    link={firstbox.link}
-    icons={firstbox.icon}
-  />
-
   {#each boxslist as box}
     <GradientBox
       title={box.title}

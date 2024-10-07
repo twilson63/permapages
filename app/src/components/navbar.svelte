@@ -6,9 +6,8 @@
   <div class="flex-1">
     <a
       href="/"
-      class="normal-case txt-gradient  
-    font-extrabold text-2xl inline-block tracking-wide"
-      >PermaPages</a
+      class="normal-case txt-gradient
+    font-extrabold text-2xl inline-block tracking-wide">PermaPages</a
     >
     <div
       class="badge text-xs ml-2 bg-[#F3F5FB] border-none text-black font-semibold"
@@ -24,12 +23,6 @@
       </li>
       <li>
         <a href="/pages">Pages</a>
-      </li>
-      <li>
-        <a href="/posts">Posts</a>
-      </li>
-      <li>
-        <a href="/arns">SubDomains</a>
       </li>
       <li>
         <a href="/account">Account</a>
