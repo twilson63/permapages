@@ -1,14 +1,14 @@
 {
   "name": "permapages",
   "private": true,
-  "version": "0.2.12",
+  "version": "0.2.13",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "deploy": "arkb deploy dist --use-bundler https://node2.bundlr.network --wallet ../wallet.json --tag-name DEPLOY --tag-value permapages"
+    "deploy": "arx upload-dir dist -t arweave -w ~/.wallet.json --index-file index.html --tags DEPLOY permapages"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.1",

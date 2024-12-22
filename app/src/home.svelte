@@ -197,13 +197,13 @@
                 <button
                   on:click={() => {
                     if ($address) {
-                      router.goto("/dashboard");
+                      router.goto("/pages");
                     } else {
                       connectDlg = true;
                     }
                   }}
                   class="button w-button"
-                  >{$address ? "dashboard" : "connect"}</button
+                  >{$address ? "my pages" : "connect"}</button
                 >
 
                 <a
