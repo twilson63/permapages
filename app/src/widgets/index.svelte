@@ -569,9 +569,9 @@
                         >
                         <a href="/pages" class="footer4_link">Pages</a>
                         <a
-                          href="https://pilot.ar.io"
+                          href="https://arns.arweave.net"
                           target="_blank"
-                          class="footer4_link">Get ArNS Tokens</a
+                          class="footer4_link">Get an ArNS Name</a
                         >
                         <a
                           href="https://www.arweave.org/"

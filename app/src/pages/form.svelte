@@ -442,23 +442,26 @@
 </script>
 
 <Navbar />
-<main>
-  <section class="hero bg-base-100 min-h-screen items-start w-full">
-    <div class="hero-content flex-col w-full">
+<main class="min-h-screen bg-base-200">
+  <section class="w-full">
+    <div class="container mx-auto flex flex-col px-4 py-10">
+      <p class="eyebrow mb-2">Compose</p>
+      <h1 class="mb-6 text-3xl font-bold">New page</h1>
       {#if error}
         <div class="alert alert-error">
           {error}
         </div>
       {/if}
       <form class="w-full" on:submit|preventDefault={submit}>
-        <div class="form-control">
-          <label for="content" class="label"
-            >Page Content <span class="text-sm"
-              >(use the markdown language or html to add content your page)</span
+        <div class="form-control rounded-xl border border-base-300 bg-base-100 p-5">
+          <label for="content" class="label font-semibold"
+            >Content
+            <span class="text-sm font-normal text-base-content/60"
+              >markdown or HTML — this becomes the page</span
             ></label
           >
           <textarea
-            class="textarea textarea-bordered textarea-secondary bg-white"
+            class="textarea textarea-bordered bg-base-100"
             id="content"
             name="content"
             bind:value={page.content}
@@ -466,8 +469,10 @@
         </div>
         <button
           type="button"
-          class="btn btn-ghost my-16"
-          on:click={() => (advanced = !advanced)}>Show Advanced Options</button
+          class="btn btn-outline btn-sm my-8 rounded-full"
+          aria-expanded={advanced}
+          on:click={() => (advanced = !advanced)}
+          >{advanced ? "Hide" : "Show"} appearance, license &amp; domain options</button
         >
         {#if advanced}
           <div class="mt-4 form-control">
@@ -824,17 +829,15 @@
           </div>
         {/if}
 
-        <div class="mt-8 flex justify-end space-x-2">
-          <!--
-          <button type="button" class="btn btn-secondary" on:click={preview}
-            >Preview</button
-          >
-          -->
-          <button type="submit" class="btn btn-primary">Publish</button>
-          <a class="btn" href="/pages" on:click={() => easymde.value("")}
+        <div class="mt-8 flex items-center justify-end gap-3">
+          <a class="btn btn-ghost rounded-full" href="/pages" on:click={() => easymde.value("")}
             >Cancel</a
           >
+          <button type="submit" class="btn btn-primary px-8">Publish page</button>
         </div>
+        <p class="mt-2 text-right text-xs text-base-content/50">
+          Publishing signs the page with your wallet and stores it permanently — free under 100KB.
+        </p>
       </form>
     </div>
   </section>

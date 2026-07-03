@@ -1,99 +1,53 @@
 <script>
   let version = __APP_VERSION__;
+
+  const links = [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/pages", label: "Pages" },
+    { href: "/posts", label: "Posts" },
+    { href: "/arns", label: "Domains" },
+    { href: "/account", label: "Account" },
+  ];
 </script>
 
-<div class="navbar bg-base-100 container mx-auto">
-  <div class="flex-1">
-    <a
-      href="/"
-      class="normal-case txt-gradient  
-    font-extrabold text-2xl inline-block tracking-wide"
-      >PermaPages</a
-    >
-    <div
-      class="badge text-xs ml-2 bg-[#F3F5FB] border-none text-black font-semibold"
-    >
-      BETA {version}
+<header class="border-b border-base-300 bg-base-100">
+  <div class="navbar container mx-auto px-4">
+    <div class="flex-1 items-baseline gap-3">
+      <a href="/" class="wordmark text-2xl">PermaPages</a>
+      <span
+        class="hidden sm:inline-block text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-base-content/50"
+        >v{version}</span
+      >
     </div>
-  </div>
 
-  <nav class="flex-none">
-    <ul class="hidden md:inline-flex gap-2 items-center menu menu-horizontal">
-      <li>
-        <a href="/dashboard">Dashboard</a>
-      </li>
-      <li>
-        <a href="/pages">Pages</a>
-      </li>
-      <li>
-        <a href="/posts">Posts</a>
-      </li>
-      <li>
-        <a href="/arns">SubDomains</a>
-      </li>
-      <li>
-        <a href="/account">Account</a>
-      </li>
-      <!--
-      <li>
-        <a href="/#/#">About</a>
-      </li>
-      <li>
-        <a href="/#/#">Dashboard</a>
-      </li>
-      
-      <li>
-        <a href="/#/#">Invite</a>
-      </li>
-      <li tabindex="0">
-        <a href="/#/#">
-          Transactions
-          <svg
-            class="fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            ><path
-              d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
-            /></svg
-          >
-        </a>
-        <ul class="mt-1 p-2 bg-white border rounded-3xl">
-          <li><a href="/#/#">Submenu 1</a></li>
-          <li><a href="/#/#">Submenu 2</a></li>
-        </ul>
-      </li>
+    <nav class="flex-none" aria-label="Primary">
+      <ul class="hidden md:flex items-center gap-1">
+        {#each links as link}
+          <li>
+            <a
+              href={link.href}
+              class="rounded-full px-4 py-2 text-sm font-medium text-base-content/80 hover:bg-base-200 hover:text-base-content focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+              >{link.label}</a
+            >
+          </li>
+        {/each}
+      </ul>
 
-      <li>
-        <a
-          href="/#/#"
-          class="group gradient inline-block bg-gradient-to-r from-[#FF00E5] to-[#7B55EC]"
+      <!-- compact menu for small screens -->
+      <details class="dropdown dropdown-end md:hidden">
+        <summary class="btn btn-ghost btn-sm rounded-full px-3" aria-label="Open menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+          </svg>
+        </summary>
+        <ul
+          class="dropdown-content menu mt-2 w-44 rounded-xl border border-base-300 bg-base-100 p-2 shadow-lg z-40"
         >
-          <div
-            class="px-4 py-1 bg-white inline-block rounded-full group-hover:bg-gradient-to-r group-hover:to-[#7B55EC]
-             group-hover:from-[#FF00E5]"
-          >
-            <div class="txt-gradient inline-block group-hover:text-white">Explore Pages</div>
-          </div>
-        </a>
-      </li>
-    -->
-    </ul>
-  </nav>
-</div>
-
-<style>
-  nav ul li a {
-    @apply rounded-full px-4 py-2 font-semibold;
-  }
-  nav ul li a:hover {
-    @apply bg-gray-100 shadow-sm;
-  }
-  nav ul li .gradient {
-    @apply p-[2px] drop-shadow-sm;
-  }
-  nav ul li .gradient:hover {
-    @apply p-[2px] drop-shadow-md;
-  }
-</style>
+          {#each links as link}
+            <li><a href={link.href}>{link.label}</a></li>
+          {/each}
+        </ul>
+      </details>
+    </nav>
+  </div>
+</header>

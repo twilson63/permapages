@@ -18,7 +18,11 @@ export function posts(env) {
 const STAMP_PROCESS = 'LaC2VtxqGekpRPuJh-TkI_ByAqCS2_KB3YuhMJ5yBtc'
 
 export function loadBalances(addr) {
-  const format = (y) => (x) => (Number(x) / y).toFixed(4)
+  const format = (y) => (x) => {
+    const n = Number(x)
+    if (Number.isNaN(n)) throw new Error('not a balance')
+    return (n / y).toFixed(4)
+  }
 
   // STAMP balance: HyperBEAM patched read first (one unsigned GET, no CU),
   // stampjs dryrun as the fallback for nodes/processes without patched state
@@ -34,7 +38,9 @@ export function loadBalances(addr) {
     import('./services/registry.js').then(({ getBalance }) => getBalance(addr))
 
   return Promise.allSettled([
-    fetch(`https://${getHost()}/wallet/${addr}/balance`).then(res => res.text()).then(format(1e12)),
+    fetch(`https://${getHost()}/wallet/${addr}/balance`)
+      .then(res => res.ok ? res.text() : Promise.reject(res))
+      .then(format(1e12)),
     stampBalance().then(format(1e12)),
     arioBalance().then(n => Number(n).toFixed(2))
   ]).then(([ar, stamp, ario]) => ({
