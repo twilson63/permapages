@@ -31,7 +31,7 @@ export function loadBalances(addr) {
       { signal: AbortSignal.timeout(4000) })
       .then(res => res.ok ? res.json() : Promise.reject(res))
       .catch(() => import('@permaweb/stampjs')
-        .then(({ default: Stamps }) => Stamps.init({ process: STAMP_PROCESS }).balance()))
+        .then(({ default: Stamps }) => Stamps.init({ process: STAMP_PROCESS }).balance(addr)))
 
   // ARIO balance via the AR.IO SDK (HyperBEAM-accelerated internally)
   const arioBalance = () =>

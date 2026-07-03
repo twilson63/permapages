@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@ar.io/sdk": "^3.24.0",
-    "@permaweb/aoconnect": "^0.0.98",
     "@permaweb/stampjs": "^1.0.4",
     "arweave": "^1.13.4",
     "crocks": "^0.12.4",

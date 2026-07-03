@@ -201,26 +201,17 @@
       confirm = false;
       submitting = true;
 
+      // publishing must ship pre-highlighted code — make sure hljs is ready
+      await enableCodeHighlight(md);
+
       page.content = easymde.value();
       page.creator = $address;
       page.units = Number(page.units);
-      // allowStamps is set
-      if (page.allowStamps) {
-        //if (!find(propEq("elementId", "passport"), page.widgets)) {
-        page.widgets = [
-          ...page.widgets.filter((w) => w.elementId !== "passport"),
-          {
-            source: "https://stamp-widget.arweave.dev",
-            elementId: "passport",
-            name: "passport",
-            description: "Permapage Passport Widget",
-            version: "latest",
-          },
-        ];
-        // }
-      } else {
-        page.widgets = page.widgets.filter((w) => w.elementId !== "passport");
-      }
+      // the legacy stamp widget targeted the retired Warp STAMP contract and
+      // lived at a mutable URL — permanent pages only carry txid-pinned
+      // widgets now. The allowStamps flag stays in the page meta for a
+      // future AO-native stamp widget.
+      page.widgets = page.widgets.filter((w) => w.elementId !== "passport");
 
       // upgrade current page widgets
       // if (allWidgets.length > 0) {
