@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import autoprefixer from 'autoprefixer'
 import tailwind from 'tailwindcss'
 import tailwindConfig from './tailwind.config.js'
@@ -13,7 +14,9 @@ const publicUrl = `5173-${host}`
 function renderChunks(deps) {
   let chunks = {};
   Object.keys(deps).forEach((key) => {
-    if (['ramda', 'crocks', 'zod', 'marked', 'dompurify'].includes(key)) return;
+    // vendor deps share one chunk; dynamically-imported deps must be left
+    // out entirely so they stay off the initial-load module graph
+    if (['ramda', 'crocks', 'zod', 'marked', 'dompurify', '@ar.io/sdk'].includes(key)) return;
     chunks[key] = [key];
   });
   return chunks;
@@ -22,7 +25,8 @@ function renderChunks(deps) {
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '',
-  plugins: [svelte()],
+  // @ar.io/sdk's bundling dep (arbundles) expects node's crypto/buffer in the browser
+  plugins: [nodePolyfills({ include: ['crypto', 'buffer', 'stream', 'process'] }), svelte()],
   define: {
     '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
     '__ATOMIC_ASSET_SRC__': '"Of9pi--Gj7hCTawhgxOwbuWnFI1h24TTgO5pw8ENJNQ"',

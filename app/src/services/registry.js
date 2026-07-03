@@ -1,205 +1,156 @@
-import Arweave from 'arweave'
-import { WarpFactory, defaultCacheOptions, LoggerFactory } from 'warp-contracts'
-import { DeployPlugin, InjectedArweaveSigner } from 'warp-contracts-plugin-deploy'
-
+/**
+ * ArNS service on the AR.IO network (AO era).
+ *
+ * Names live in the ARIO mainnet process; each name's records live in an
+ * ANT (an AO process owned by the user). Reads go through the AR.IO SDK's
+ * remote CU; writes are signed by the connected Wander wallet.
+ *
+ * Name purchases moved to arns.arweave.net — the in-app purchase flow is
+ * retired and links out instead.
+ */
 import getHost from './get-host'
 
-import { map, pluck, head, filter, compose, toPairs, equals, propOr, identity, path } from 'ramda'
+const ARNS_PORTAL = 'https://arns.arweave.net'
 
-
-let options = {}
-options = { host: getHost(), port: 443, protocol: 'https' }
-const arweave = Arweave.init(options)
-
-LoggerFactory.INST.logLevel("error");
-//const warp = WarpFactory.custom(arweave, defaultCacheOptions, 'mainnet').useArweaveGateway().build()
-//const warp = WarpFactory.forMainnet({ arweave, useArweaveGw: true })
-//const warp = WarpFactory.forMainnet()
-const warp = WarpFactory.forMainnet(defaultCacheOptions, true).use(new DeployPlugin())
-const REGISTRY = "bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"
-const ANT_SOURCE = "H2uxnw_oVIEzXeBeYmxDgJuxPqwBCGPO4OmQzdWQu3U"
-//const ANT_SOURCE = "JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg"
+// the AR.IO SDK (and its AO/bundling deps) is ~880KB gzipped — load it only
+// when an ArNS screen actually needs it, never on app boot
+let sdkPromise = null
+const sdk = () => {
+  sdkPromise = sdkPromise || import('@ar.io/sdk/web')
+  return sdkPromise
+}
+const getArio = async () => {
+  const { ARIO } = await sdk()
+  return ARIO.mainnet()
+}
+const getAnt = async (processId, withSigner = false) => {
+  const { ANT, ArconnectSigner } = await sdk()
+  return ANT.init(withSigner
+    ? { processId, signer: new ArconnectSigner(globalThis.arweaveWallet) }
+    : { processId })
+}
 
 export async function search(name) {
-  const registry = warp.pst(REGISTRY).connect('use_wallet')
-  const registryState = hydrate(await registry.currentState())
-
-  if (registryState.records[name]) {
-    return { ok: false, message: `This name ${name} is already taken and is not available for purchase` }
+  try {
+    const ario = await getArio()
+    const record = await ario.getArNSRecord({ name })
+    if (record) {
+      return { ok: false, message: `This name ${name} is already taken and is not available for purchase` }
+    }
+    return { ok: true }
+  } catch (e) {
+    return { ok: true }
   }
-  return { ok: true }
 }
-export async function register({ name, owner, transactionId }) {
-  const registry = warp.pst(REGISTRY).connect('use_wallet')
-  const registryState = hydrate(await registry.currentState())
 
-  if (registryState.records[name]) {
-    return { ok: false, message: `This name ${name} is already taken and is not available for purchase` }
+export async function register() {
+  return {
+    ok: false,
+    message: `ArNS name registration has moved to the AR.IO network portal — visit ${ARNS_PORTAL} to lease or buy a name, then link it to your page here.`
   }
-
-  const arnsBalance = registryState.balances[owner]
-
-  if (typeof arnsBalance === 'undefined' || arnsBalance < registryState.fees[name.length]) {
-    return { ok: false, message: `Not enough ArNS Test Token to purchase this subdomain.` }
-  }
-
-  //const userSigner = new InjectedArweaveSigner(window.arweaveWallet)
-  // create ANT contract
-  const ant = await warp.createContract.deployFromSourceTx({
-    wallet: 'use_wallet', //userSigner, //'use_wallet',
-    initState: JSON.stringify({
-      ticker: `ANT-${name.toUpperCase()}`,
-      name,
-      owner,
-      controllers: [owner],
-      evolve: null,
-      records: {
-        ["@"]: transactionId
-      },
-      balances: {
-        [owner]: 1
-      }
-    }),
-    srcTxId: ANT_SOURCE
-  }, true)
-
-
-  // buy ArNS
-  const res = await registry.writeInteraction({
-    function: 'buyRecord',
-    name,
-    contractTxId: ant.contractTxId,
-    tierNumber: 1,
-    years: 1
-  }, { disableBundling: true })
-
-
-
-  return { ok: true, ant, message: `Successfully registred ${name}.arweave.net` }
 }
 
 export async function getARBalance(owner) {
-  //const { data } = await arweave.api.get(`wallet/${owner}/balance`)
-  const data = await fetch(`https://${getHost()}/wallet/${owner}/balance`)
+  const winston = await fetch(`https://${getHost()}/wallet/${owner}/balance`)
     .then(res => res.text())
-
-  return arweave.ar.winstonToAr(data)
-  //return await arweave.wallets.getBalance(owner).then(x => arweave.ar.winstonToAr(x)).catch(e => 'N/A')
-
+  return (Number(winston) / 1e12).toFixed(6)
 }
 
+// ARIO token balance (replaces the retired ArNS test-token balance)
 export async function getBalance(owner) {
-  const registry = await warp.contract(REGISTRY).setEvaluationOptions({ allowBigInt: true })
-
-  const result = await registry.readState().then(path(['cachedValue', 'state', 'balances', owner]))
-    .catch(e => console.log(e.message))
-  return result ?? 0
+  try {
+    const ario = await getArio()
+    const mARIO = await ario.getBalance({ address: owner })
+    return Number((mARIO / 1e6).toFixed(2))
+  } catch (e) {
+    return 0
+  }
 }
 
 export async function getFees(subdomain = '') {
   if (subdomain === '') return [0, 0]
-  const registry = warp.pst(REGISTRY).connect('use_wallet')
-  const registryState = hydrate(await registry.currentState())
-  const fee = (await arweave.api.get(`price/${subdomain.length}`)).data
-  const price = registryState.fees[subdomain.length]
-  return [price, arweave.ar.winstonToAr(fee)]
+  const fee = await fetch(`https://${getHost()}/price/${subdomain.length}`).then(res => res.text())
+  return [0, (Number(fee) / 1e12).toFixed(6)]
 }
 
 export async function listANTs(owner) {
-  // const regState = await warp.contract(REGISTRY)
-  //   .setEvaluationOptions({ allowBigInt: true })
-  //   .readState()
-  //   .then(path(['cachedValue', 'state']))
-  //   .catch(e => console.log('ERROR', e.message))
-  //console.log('regState', regState)
-  const approvedSrc = ['H2uxnw_oVIEzXeBeYmxDgJuxPqwBCGPO4OmQzdWQu3U', 'JIIB01pRbNK2-UyNxwQK-6eknrjENMTpTvQmB8ZDzQg', 'PEI1efYrsX08HUwvc6y-h6TSpsNlo2r6_fWL2_GdwhY']
-  const queryTarget = `
-  query {
-    transactions(first: 100, owners: ["${owner}"], tags: {name: "Contract-Src", values: [${approvedSrc.map(s => `"${s}"`).join(',')}]}) {
-      edges {
-        node {
-          id
-        }
-      }
-    }
-  }
-      `
+  const ario = await getArio()
+  const { items } = await ario.getArNSRecordsForAddress({ address: owner, limit: 1000 })
 
-  const query = {
-    query: queryTarget
-  }
-
-  const result = await arweave.api.post('graphql', query)
-
-  const ids = pluck('id', pluck('node', result.data.data.transactions.edges))
+  // one ANT process can back several names — read each process once
+  const byProcess = items.reduce((acc, item) => {
+    acc[item.processId] = acc[item.processId] || []
+    acc[item.processId].push(item)
+    return acc
+  }, {})
 
   const ants = await Promise.all(
-    map(getANT, ids)
+    Object.entries(byProcess).map(async ([processId, names]) => {
+      try {
+        const ant = await getAnt(processId)
+        const [info, records] = await Promise.all([ant.getInfo(), ant.getRecords()])
+        return names.map(({ name }) => ({
+          id: processId,
+          name,
+          subdomain: name,
+          ticker: info.Ticker || `ANT-${name.toUpperCase()}`,
+          owner: info.Owner,
+          records
+        }))
+      } catch (e) {
+        return names.map(({ name }) => ({ id: processId, name, subdomain: name, records: {} }))
+      }
+    })
   )
 
-  return Promise.resolve(ants.filter(rec => rec.subdomain !== 'not_defined'))
+  return ants.flat().filter(rec => rec.subdomain !== 'not_defined')
 }
 
-const valueEquals = v => ([key, value]) => equals(value.contractTxId, v)
-const getSubdomain = (contract, records) => compose(
-  head,
-  propOr([null], 0),
-  filter(valueEquals(contract)),
-  toPairs
-)(records)
-
-export async function getANT(ANT) {
-  let subdomain = 'not_defined'
+export async function getANT(processId) {
   try {
-    //const registry = warp.contract(REGISTRY)
-    const ant = await warp.contract(ANT) //.syncState('https://dre-2.warp.cc/contract', { validity: true })
-
-    //const regState = await registry.readState().then(path(['cachedValue', 'state']))
-
-    //subdomain = getSubdomain(ANT, regState.records)
-    const antState = await ant.readState().then(path(['cachedValue', 'state']))
-
-    return { ...antState, id: ANT, subdomain: antState.name }
+    const ant = await getAnt(processId)
+    const [info, records] = await Promise.all([ant.getInfo(), ant.getRecords()])
+    return {
+      id: processId,
+      name: info.Name,
+      subdomain: info.Name,
+      ticker: info.Ticker,
+      owner: info.Owner,
+      records
+    }
   } catch (e) {
-    return { id: ANT, subdomain }
+    return { id: processId, subdomain: 'not_defined', records: {} }
   }
 }
 
 export async function updateSubDomain({ ant, subdomain = '@', transactionId }) {
-  const w = WarpFactory.forMainnet()
-  const result = await w.contract(ant).connect('use_wallet')
-    .writeInteraction({
-      function: 'setRecord',
-      subDomain: subdomain,
-      transactionId
-    }, { disableBundling: true, strict: true })
-
-  console.log('CHG ', result)
-
-  return { ok: true, id: result.originalTxId, message: 'successfully updated subdomain' }
+  try {
+    const client = await getAnt(ant, true)
+    const result = subdomain === '@'
+      ? await client.setBaseNameRecord({ transactionId, ttlSeconds: 900 })
+      : await client.setUndernameRecord({ undername: subdomain, transactionId, ttlSeconds: 900 })
+    return { ok: true, id: result.id, message: 'successfully updated subdomain' }
+  } catch (e) {
+    return { ok: false, message: e.message || 'could not update subdomain' }
+  }
 }
 
 export async function removeSubDomain({ ant, subdomain }) {
-
-  await warp.pst(ant).connect('use_wallet')
-    .writeInteraction({
-      function: 'removeRecord',
-      subDomain: subdomain
-    })
-  return { ok: true, message: 'successfully removed subdomain' }
+  try {
+    const client = await getAnt(ant, true)
+    await client.removeUndernameRecord({ undername: subdomain })
+    return { ok: true, message: 'successfully removed subdomain' }
+  } catch (e) {
+    return { ok: false, message: e.message || 'could not remove subdomain' }
+  }
 }
 
-export async function transfer(ANT, target) {
-  const ant = warp.pst(ANT).connect('use_wallet')
-  await ant.transfer({
-    target,
-    qty: 1
-  })
-  return { ok: true }
+export async function transfer(ant, target) {
+  try {
+    const client = await getAnt(ant, true)
+    await client.transfer({ target })
+    return { ok: true }
+  } catch (e) {
+    return { ok: false, message: e.message || 'could not transfer ANT' }
+  }
 }
-
-// utility functions
-function hydrate(s) {
-  return JSON.parse(JSON.stringify(s))
-}
-
