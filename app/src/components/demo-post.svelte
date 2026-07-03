@@ -57,14 +57,12 @@
   </p>
 
   <p class="mt-4">
-    The "stamp protocol" can be seen as a system of reward points. The recent
-    development of burned AR, or bAR may be an exchange mechanism that can be
-    driven by smartweave contracts on Arweave. In addition to the above,
-    embedded marketplaces within an individual NFT is also now becoming a
-    reality with Verto Flex. There are specific limitations that developers can
-    add via add pair that is essentially a gate that says "I want this
-    contracted to be traded with x OR I don't want this to be traded with
-    anything".
+    The "stamp protocol" can be seen as a system of reward points. It now runs
+    as an AO process on Arweave, rewarding creators when readers stamp their
+    work. In addition to the above, embedded marketplaces within an individual
+    atomic asset are also now a reality with the Universal Content Marketplace,
+    where creators can decide exactly how - or whether - their work can be
+    traded.
   </p>
 
   <p class="mt-4">

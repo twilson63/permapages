@@ -1,7 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import Modal from "../components/modal.svelte";
-  import { ArweaveWebWallet } from "arweave-wallet-connector";
   import { router } from "tinro";
 
   import { postProfileTx, loadProfile } from "../services/arweave.js";
@@ -20,7 +19,7 @@
 
   async function arconnect() {
     if (!window.arweaveWallet) {
-      window.open("https://arconnect.io");
+      window.open("https://www.wander.app");
     }
     try {
       await arweaveWallet.disconnect();
@@ -44,28 +43,6 @@
     }
   }
 
-  async function arwallet() {
-    try {
-      const wallet = new ArweaveWebWallet({
-        name: "pages",
-        logo: `${window.location.origin}/permapages_logo.svg`,
-      });
-      wallet.setUrl("arweave.app");
-      await wallet.connect();
-
-      const addr = await arweaveWallet.getActiveAddress();
-      $address = addr;
-
-      const result = await profileMgr.get($address);
-      $account = { id: $address, profile: result };
-      console.log($account);
-
-      open = false;
-      router.goto("/dashboard");
-    } catch (e) {
-      console.log(e);
-    }
-  }
 </script>
 
 <Modal
@@ -84,12 +61,7 @@
     <p class="text-xl text-[#160042]">Select your preferred wallet below:</p>
     <button
       class="btn btn-block rounded-full hover:bg-gray-400 bg-black normal-case"
-      on:click={arconnect}>ArConnect</button
-    >
-    <button
-      on:click={arwallet}
-      class="btn btn-block rounded-full bg-[#E4E6F1] text-black hover:bg-gray-400 normal-case"
-      >Arweave.app</button
+      on:click={arconnect}>Wander</button
     >
     <button
       on:click={() => {

@@ -1,0 +1,2 @@
+2026-07-03 begin — task: modernize-stack (Arweave latest + AO + HyperBEAM instant pages + UX redesign). Status: research in-flight (codebase map + ecosystem research agents).
+2026-07-03 plan-approved — PRD written (docs/modernize-stack-prd.html), plan-review gate passed after repairing 3 blockers (stale test baseline, grep gate scoping, widget contract Q6). Baseline: build green, vitest RED 5/6. Next: Step 1.

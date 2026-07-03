@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRD — PermaPages Modernization: Instant Pages on Arweave/AO/HyperBEAM</title>
+<style>
+  :root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --accent:#3f51b5; --pass:#0a7a33; --warn:#a15c00; --bg:#fff; --code:#f5f5f5; }
+  @media (prefers-color-scheme: dark) { :root { --ink:#e8e8e8; --muted:#9a9a9a; --line:#333; --accent:#8c9eff; --pass:#5dd48a; --warn:#f0b35c; --bg:#141414; --code:#222; } }
+  body { font: 15px/1.55 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); max-width: 60rem; margin: 2rem auto; padding: 0 1.25rem; }
+  h1 { font-size: 1.6rem; line-height: 1.25; } h2 { font-size: 1.2rem; margin-top: 2.2rem; border-bottom: 1px solid var(--line); padding-bottom: .3rem; } h3 { font-size: 1rem; margin-top: 1.6rem; }
+  table { border-collapse: collapse; width: 100%; margin: .8rem 0; font-size: .88rem; }
+  th, td { border: 1px solid var(--line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
+  th { background: var(--code); }
+  code, pre { background: var(--code); border-radius: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; }
+  code { padding: .1em .35em; } pre { padding: .8rem; overflow-x: auto; }
+  .chip { display: inline-block; padding: .1em .6em; border-radius: 999px; font-size: .78rem; font-weight: 600; }
+  .goal { background: #e3f0e8; color: var(--pass); } .nogoal { background: #f5e8e0; color: var(--warn); }
+  @media (prefers-color-scheme: dark) { .goal { background:#173322; } .nogoal { background:#332417; } }
+  .meta { color: var(--muted); font-size: .85rem; }
+  ul { padding-left: 1.3rem; } li { margin: .25rem 0; }
+  .step { border: 1px solid var(--line); border-radius: 8px; padding: .9rem 1.1rem; margin: 1rem 0; }
+  .step h3 { margin-top: 0; }
+</style>
+</head>
+<body>
+<h1>PRD — PermaPages Modernization: Instant Pages on Arweave / AO / HyperBEAM</h1>
+<p class="meta">Task slug: <code>modernize-stack</code> · Created 2026-07-03 · Companion doc: <a href="modernize-stack-progress.html">modernize-stack-progress.html</a> · Repo: <code>/Users/tron/code/permapages</code> (app in <code>app/</code>, Svelte 4 + Vite 5 + tinro)</p>
+
+<h2>Summary</h2>
+<p>PermaPages (v0.2.12) is a pre-AO permaweb app: page publishing registers Warp/SmartWeave contracts, state reads evaluate contracts client-side from genesis, the deploy path targets the dead Bundlr network, and every published page embeds the in-browser Tailwind CDN compiler. This work modernizes the stack to the mid-2026 ecosystem — plain data-item publishing via Wander <code>dispatch()</code> (Turbo bundling), AO reads via HyperBEAM patched HTTP GETs, ArNS via <code>@ar.io/sdk</code> 4.x — so all three "page" surfaces load instantly, and redesigns the five core screens.</p>
+
+<h2>Definition: "instant pages" (three surfaces)</h2>
+<table>
+<tr><th>Surface</th><th>Today</th><th>Target</th></tr>
+<tr><td><strong>App shell</strong> (dist/ from a gateway)</td><td>~3MB+ JS incl. 1.58MB warp-deploy chunk; 913KB highlight.js chunk</td><td>No warp/smartweave code shipped; no chunk &gt;600KB; home-route JS ≤500KB raw; highlight.js editor-only via dynamic import</td></tr>
+<tr><td><strong>Published page</strong> (immutable HTML at gateway/{txid})</td><td>Runtime Tailwind compiler (cdn.tailwindcss.com), full daisyUI CSS, unpkg arweave bundle — blank until CDN JS runs</td><td>First paint with zero JS: inlined ≤15KB static stylesheet; no mutable CDN refs; widgets stay deferred txid-pinned modules</td></tr>
+<tr><td><strong>State reads</strong> (page meta, balances, stamps, ArNS)</td><td>Client-side Warp <code>readState</code> replaying from genesis; serial DRE fetches; serial GraphQL pagination</td><td>Zero <code>readState</code>. Single parallel HTTP GETs: embedded page meta, gateway balance, HyperBEAM <code>/&lt;procId&gt;~process@1.0/compute/…</code> patched reads, ar.io gateway resolver</td></tr>
+</table>
+
+<h3>Definition: "Arweave latest / AO latest / HyperBEAM"</h3>
+<ul>
+<li><strong>Arweave latest</strong>: pages/posts as plain signed data items via <code>window.arweaveWallet.dispatch()</code> (Wander → Turbo, free &lt;100KiB). Remove <code>smartweave</code>, <code>warp-contracts(+plugin)</code>, <code>arweave-account</code>, <code>arweave-wallet-connector</code>, dead deps <code>ardb</code>/<code>arweave-bundles</code>/<code>@verto/flex</code>. Deploy script → <code>permaweb-deploy</code>.</li>
+<li><strong>AO latest</strong>: <code>@permaweb/aoconnect</code> ^0.0.98; STAMPs via <code>@permaweb/stampjs</code> ^1.0.4 (AO process). No dryrun on critical paths.</li>
+<li><strong>HyperBEAM</strong>: AO state reads via patched HTTP GETs on <code>forward.computer</code> (<code>~process@1.0/compute</code>), <code>dryrun</code> only as coded fallback for unpatched processes.</li>
+</ul>
+
+<h2>Goals <span class="chip goal">in scope</span></h2>
+<ol>
+<li>Zero client-side SmartWeave/Warp evaluation; warp deps deleted from package.json.</li>
+<li>Published-page template renders content with no JS and no runtime CSS compiler.</li>
+<li>ArNS screens work read-only on <code>@ar.io/sdk</code> 4.x; "point name at page" (<code>ANT.setRecord</code>) preserved (link-out fallback allowed).</li>
+<li>Dashboard/pages-list data loads via parallel single GETs.</li>
+<li>Redesign of home, connect dialog, dashboard, pages list, editor — each ≥4/5 on the taste rubric.</li>
+<li><code>npx vite build</code> and <code>npx vitest run</code> green after every step.</li>
+</ol>
+
+<h2>Non-goals <span class="chip nogoal">out of scope</span></h2>
+<ul>
+<li>No migration of already-published pages (immutable on Arweave).</li>
+<li>No AO process spawned per page (no <code>createAtomicAsset</code> process-per-page from browser wallet). New pages are plain data items with existing <code>Protocol: PermaPages-v0.5</code> tags.</li>
+<li>No Svelte 5 / SvelteKit rewrite; no router change.</li>
+<li>No in-app ArNS purchase/claim (pilot.ar.io + warp registry dead → link out to arns.arweave.net).</li>
+<li>No <code>@ardrive/turbo-sdk</code> dependency (dispatch already routes through Turbo).</li>
+<li>No arweave.app wallet (unmaintained connector); Wander only.</li>
+<li>No new backend/cache service; must work from any ar.io gateway.</li>
+</ul>
+
+<h2>Constraints</h2>
+<ul>
+<li>Keep Svelte 4 + tinro hash routing. App must build with <code>npx vite build</code>, tests with <code>npx vitest run</code>, after every step.</li>
+<li>Wallet flows stay on <code>window.arweaveWallet</code> with scopes exactly <code>ACCESS_ADDRESS, SIGN_TRANSACTION, DISPATCH</code>.</li>
+<li><strong>Frozen code</strong>: Wander <code>arweaveWallet.encrypt/decrypt</code> branches in <code>load()</code>/<code>postTx()</code> (services/arweave.js) — private-notes compatibility. Any diff there is a review flag.</li>
+<li>Every <code>dispatch()</code> call site must be behind an explicit user action (no dispatch on mount/reactive).</li>
+<li>No secrets/wallets committed; <code>wallet.json</code> stays untracked.</li>
+<li>GraphQL discovery tags on published items unchanged (existing pages must keep listing).</li>
+</ul>
+
+<h2>Plan (8 steps — each ends with build + tests green)</h2>
+
+<div class="step"><h3>Step 1 — Purge dead dependencies, dead code paths, and the stale test</h3>
+<p>Remove never-imported deps (<code>ardb</code>, <code>arweave-bundles</code>, <code>@verto/flex</code>, old <code>@permaweb/stampjs@0.6.2</code>, <code>esbuild</code>, <code>replace-in-file</code>), the dead <code>payment()</code>/smartweave import, orphaned <code>src/show.svelte</code>, and the arweave.app wallet path. Leave Wander encrypt/decrypt branches byte-identical. <strong>Delete or repair stale <code>test/app.test.js</code></strong> — it imports a <code>notes</code> export removed from app.js long ago; true baseline is <em>1 test file / 5 tests failing</em> (verified 2026-07-03), so the "green after every step" invariant starts here.</p>
+<ul><li><strong>Acceptance</strong>: <code>grep -rn "smartweave\|arweave-wallet-connector\|@verto\|ardb\b\|arweave-bundles" src/</code> empty; connect dialog offers Wander only; build green AND vitest fully green (stale test dealt with).</li>
+<li><strong>Evidence</strong>: grep output, package.json diff, baseline bundle-size table, vitest summary before/after.</li></ul></div>
+
+<div class="step"><h3>Step 2 — Instant page reads: delete <code>loadState</code> from the read path</h3>
+<p>Rework <code>pages().get</code> (app.js) and editor load (form.svelte) to use only embedded base64 meta via <code>loadPage</code>/<code>parse()</code>; delete <code>loadState</code>. Parallelize independent calls in <code>domains/posts.js</code>.</p>
+<ul><li><strong>Acceptance</strong>: <code>grep -rn "loadState\|readState" src/</code> hits only services/registry.js (handled in Step 4) and <code>atomic.test.js</code> fixture prose (data, not code — permanent exception); editor load performs no warp/DRE calls; build+tests green. Also delete the stale warp/syncState comment at <code>services/atomic.js:6</code>.</li>
+<li><strong>Evidence</strong>: grep, diffs, manual dev-server note.</li></ul></div>
+
+<div class="step"><h3>Step 3 — Modern publish path: plain dispatch, no warp.register</h3>
+<p>Drop <code>Contract-Src</code>/<code>Init-State</code>/<code>App-Name: SmartWeaveContract</code> tags and <code>warp.register</code> from <code>postWebpage</code> and <code>services/assets.js</code>; keep Protocol/Title/Type/UDL/topic tags. Extract pure tag-builder + vitest.</p>
+<ul><li><strong>Acceptance</strong>: tag-builder unit test passes; <code>grep -n "warp.register\|DeployPlugin" src/</code> empty; gql discovery query text untouched; build+tests green.</li>
+<li><strong>Evidence</strong>: vitest output, diff, grep.</li></ul></div>
+
+<div class="step"><h3>Step 4 — ArNS on @ar.io/sdk 4.x; delete warp from the repo</h3>
+<p>Rewrite <code>services/registry.js</code> on <code>ARIO.mainnet()</code> + gateway resolver; <code>ANT.setRecord</code> for pointing names (link-out fallback allowed if v4 API friction — record which shipped). Remove claim/purchase and <code>deployFromSourceTx</code>. Then delete <code>warp-contracts</code>(+plugin) from package.json; retire <code>__ARNS_CONTRACT__</code>.</p>
+<ul><li><strong>Acceptance</strong>: no warp <em>imports</em> anywhere — <code>grep -rn "warp-contracts" src/*.js src/**/*.js src/**/*.svelte package.json</code> shows zero import/require/dependency hits; no warp chunks in build; ArNS list renders live records for a known address; build+tests green. (Remaining textual "warp" mentions are assigned: <code>dre-*.warp.cc</code> URLs in app.js/sw-cache.js → Step 5; <code>unpkg.com/warp-contracts</code> in posts.js published template + <code>window.warp</code> widget-docs copy in widgets/build.svelte → Step 6; the repo-wide full-text grep lives in the Definition of Done.)</li>
+<li><strong>Evidence</strong>: before/after bundle table (expect &gt;2MB dist reduction), grep, manual check note, chosen setRecord path.</li></ul></div>
+
+<div class="step"><h3>Step 5 — Dashboard reads: gateway + HyperBEAM, no DRE</h3>
+<p>Replace <code>loadBalances</code>: AR from gateway (keep); drop $U tile (defunct); STAMPs via <code>@permaweb/stampjs</code> ^1.0.4 with HyperBEAM patched-GET first, dryrun fallback, "NA" on failure; ArNS count from Step 4. All fetches in <code>Promise.allSettled</code>. <strong>This step adds <code>@permaweb/aoconnect</code> ^0.0.98</strong> (required by stampjs's <code>Stamps.init({process: connect(), …})</code> and the HyperBEAM/dryrun fallback path).</p>
+<ul><li><strong>Acceptance</strong>: <code>grep -rn "dre-" src/</code> empty; dashboard loads with ≤3 parallel GETs — named: (1) gateway <code>/wallet/{addr}/balance</code>, (2) STAMP count read, (3) ArNS records — none blocking another; build+tests green.</li>
+<li><strong>Evidence</strong>: grep, diff, observed request waterfall note.</li></ul></div>
+
+<div class="step"><h3>Step 6 — Published-page template: zero-JS first paint</h3>
+<p>Rewrite <code>createHtml</code> (atomic.js) + sibling templates (app.js htmlTemplate, posts.js generateHtml): single inlined ≤15KB static stylesheet (typography/prose/dark-mode), no cdn.tailwindcss.com / daisyUI / unpkg arweave / unpkg warp-contracts. Widgets stay deferred txid-pinned. Stamp widget removed from new-page template (Q3). Update atomic.test.js + add CDN-free assertion test. <strong>Widget runtime contract changes (Q6)</strong>: new pages no longer expose <code>window.arweave</code>/<code>window.warp</code>/Tailwind/daisyUI globals — check the built-in profile and opensea widgets against the new template (they must not depend on removed globals; fix them if they do), and update the widget-author docs in <code>widgets/build.svelte</code> to state the new contract. Third-party widgets depending on <code>window.warp</code> break on <em>new</em> pages by design (warp removal is the point) — flagged to user in the final report.</p>
+<ul><li><strong>Acceptance</strong>: sample rendered page fully styled with JS disabled; tests assert no cdn.tailwindcss.com/unpkg refs in output; built-in profile + opensea widget sources verified against new template (no removed-global references, or fixed); widgets/build.svelte docs updated; build+tests green.</li>
+<li><strong>Evidence</strong>: vitest run, rendered sample note/screenshot, template greps, widget-source audit note.</li></ul></div>
+
+<div class="step"><h3>Step 7 — App-shell performance budget</h3>
+<p>Dynamic-import highlight.js in editor only; lazy-load editor + compose routes via <code>{#await import(...)}</code>; prune manualChunks; deploy script → <code>permaweb-deploy</code> (documented, not run).</p>
+<ul><li><strong>Acceptance</strong>: no chunk &gt;600KB; home-route JS ≤500KB raw (measured as the sum of JS files fetched when loading <code>/#/</code> on <code>npx vite preview</code>, from the dev-tools network panel or curl of the emitted HTML's script graph); highlight.js absent from home waterfall; build+tests green.</li>
+<li><strong>Evidence</strong>: vite chunk table in progress HTML, preview network listing.</li></ul></div>
+
+<div class="step"><h3>Step 8 — UX redesign (frontend-design skill) + final validation</h3>
+<p>Redesign in priority order: home, connect dialog (plain-language permission explanation before requesting), dashboard, pages list, editor (restructure 1000-line form into scannable sections; publish logic untouched). Distinct type scale/palette/spacing — must not read as stock daisyUI. Includes removing the dead <code>pilot.ar.io</code> reference from home copy (<code>home/how-it-works.svelte</code>).</p>
+<ul><li><strong>Acceptance (1–5, every screen ≥4)</strong>: distinctiveness; typographic hierarchy; color intentionality; spacing rhythm; motion restraint. Functional: usable at 375px; AA contrast; skeletons not spinner-jumps; permissions explained pre-request.</li>
+<li><strong>Evidence</strong>: per-screen screenshots, self-scored rubric table, final build+vitest output.</li></ul></div>
+
+<h2>Definition of done</h2>
+<pre>cd /Users/tron/code/permapages/app
+npx vite build     # green, no chunk &gt;600KB, no warp chunk
+npx vitest run     # green, incl. new tag-builder + template tests
+grep -rn "warp-contracts\|smartweave\|arweave-account\|arweave-wallet-connector\|dre-.\.warp\.cc\|cdn\.tailwindcss\.com\|pilot\.ar\.io" src/ package.json   # empty (fixture prose excepted)
+git status         # no wallet.json, no dist committed</pre>
+<p>Plus: dashboard/pages-list load via parallel single GETs; sample published page styled with JS disabled; five screens ≥4/5; wallet writes exclusively via <code>window.arweaveWallet</code>.</p>
+
+<h2>Security &amp; privacy</h2>
+<ul>
+<li>Connect scope stays exactly <code>ACCESS_ADDRESS, SIGN_TRANSACTION, DISPATCH</code>; no ENCRYPT/DECRYPT/ACCESS_PUBLIC_KEY additions. Dialog discloses scopes in user language.</li>
+<li>Wander encrypt/decrypt branches preserved verbatim (private notes). Review flag on any diff.</li>
+<li>Every dispatch call site behind explicit user action.</li>
+<li>New-page template free of mutable CDN URLs (supply-chain forever-risk on immutable HTML); widget scripts txid-pinned.</li>
+<li><code>wallet.json</code> untracked; no secrets in scripts/CI.</li>
+</ul>
+
+<h2>Open questions — defaults chosen, proceed</h2>
+<table>
+<tr><th>#</th><th>Question</th><th>Default</th><th>Blocker?</th></tr>
+<tr><td>1</td><td>New pages as AO-process atomic assets (tradeable)?</td><td>No — plain data items, tags preserved; reversible (affects only new pages)</td><td>No</td></tr>
+<tr><td>2</td><td>ANT.setRecord in-session vs link-out?</td><td>Attempt in-session; link-out fallback if v4 friction; record choice</td><td>No</td></tr>
+<tr><td>3</td><td>Stamp widget on new pages?</td><td>Remove (targets dead warp contract); keep allowStamps tag; flag to user post-hoc</td><td>No</td></tr>
+<tr><td>4</td><td>$U balance tile?</td><td>Drop (token defunct)</td><td>No</td></tr>
+<tr><td>5</td><td>GraphQL endpoint?</td><td>Keep goldsky (works); arweave.net primary only if trivial</td><td>No</td></tr>
+<tr><td>6</td><td>Widget runtime contract on new pages (globals <code>window.arweave</code>/<code>window.warp</code>/Tailwind/daisyUI disappear)?</td><td>Audit + fix built-in profile/opensea widgets; update widgets/build.svelte author docs; accept breakage of window.warp-dependent third-party widgets on new pages (inherent to warp removal); flag in final report</td><td>No</td></tr>
+</table>
+
+<h2>LLM-as-judge rubric</h2>
+<table>
+<tr><th>Area</th><th>Judgment</th></tr>
+<tr><td>Correctness</td><td>Solves the stated problem without regressions (existing pages still list/load; publish path signs and dispatches)</td></tr>
+<tr><td>Acceptance coverage</td><td>Every step criterion has evidence in the progress HTML</td></tr>
+<tr><td>Security/privacy</td><td>Wallet scopes unchanged; frozen crypto branches untouched; dispatch behind user action; no secrets</td></tr>
+<tr><td>Simplicity</td><td>Surgical modernization, no over-engineering, dead code actually deleted</td></tr>
+<tr><td>Taste</td><td>Five screens ≥4/5: distinctive, hierarchical, intentional color, rhythmic spacing, restrained motion</td></tr>
+<tr><td>Originality</td><td>Not stock daisyUI; consistent with PermaPages identity</td></tr>
+<tr><td>Maintainability</td><td>Pure tag-builder, tested templates, pruned config</td></tr>
+<tr><td>Validation</td><td>Build+vitest green per step; grep gates; manual network-waterfall checks</td></tr>
+</table>
+
+<h2>Validation commands</h2>
+<pre>cd /Users/tron/code/permapages/app
+npx vite build
+npx vitest run
+npx vite preview   # manual network checks</pre>
+
+<p class="meta">Research artifacts: scratchpad codebase-map.md + ecosystem-research.md (session-local). Baseline (verified 2026-07-03): build green in 5.8s — chunks: warp-contracts-plugin-deploy 1,578KB, highlight.js 913KB, index 503KB, warp-contracts 325KB. Tests RED at baseline: 1 file / 5 tests failing (stale test/app.test.js imports removed <code>notes</code> export) — repaired in Step 1. Plan-review gate: 3 blockers found and fixed in this revision (stale test baseline, unsatisfiable grep gates rescoped, widget runtime contract added as Q6/Step 6).</p>
+</body>
+</html>

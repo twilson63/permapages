@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress — PermaPages Modernization (modernize-stack)</title>
+<style>
+  :root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --pass:#0a7a33; --fail:#b3261e; --warn:#a15c00; --bg:#fff; --code:#f5f5f5; }
+  @media (prefers-color-scheme: dark) { :root { --ink:#e8e8e8; --muted:#9a9a9a; --line:#333; --pass:#5dd48a; --fail:#ff8a80; --warn:#f0b35c; --bg:#141414; --code:#222; } }
+  body { font: 15px/1.55 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); max-width: 62rem; margin: 2rem auto; padding: 0 1.25rem; }
+  h1 { font-size: 1.5rem; } h2 { font-size: 1.15rem; margin-top: 2rem; border-bottom: 1px solid var(--line); padding-bottom: .3rem; }
+  table { border-collapse: collapse; width: 100%; margin: .8rem 0; font-size: .87rem; }
+  th, td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  th { background: var(--code); }
+  code, pre { background: var(--code); border-radius: 4px; font-family: ui-monospace, Menlo, monospace; font-size: .85em; }
+  code { padding: .1em .3em; } pre { padding: .7rem; overflow-x: auto; }
+  .chip { display: inline-block; padding: .05em .55em; border-radius: 999px; font-size: .76rem; font-weight: 700; }
+  .pending { background: var(--code); color: var(--muted); } .inprog { background: #e3ecfd; color: #1a47b8; }
+  .pass { background: #e3f0e8; color: var(--pass); } .fail { background: #fbe4e2; color: var(--fail); } .repair { background: #f8edd8; color: var(--warn); }
+  @media (prefers-color-scheme: dark) { .inprog { background:#16233f; } .pass { background:#173322; } .fail { background:#3a1a17; } .repair { background:#36290f; } }
+  .meta { color: var(--muted); font-size: .85rem; }
+</style>
+</head>
+<body>
+<h1>Progress — PermaPages Modernization</h1>
+<p class="meta">Task slug: <code>modernize-stack</code> · PRD: <a href="modernize-stack-prd.html">modernize-stack-prd.html</a> · Started 2026-07-03</p>
+
+<h2>Status: <span class="chip inprog">in-progress</span></h2>
+
+<h2>Step checklist</h2>
+<table id="steps">
+<tr><th>Step</th><th>Title</th><th>Status</th><th>Evidence summary</th></tr>
+<tr><td>1</td><td>Purge dead deps + dead code</td><td><span class="chip pending">pending</span></td><td>—</td></tr>
+<tr><td>2</td><td>Delete loadState from read path</td><td><span class="chip pending">pending</span></td><td>—</td></tr>
+<tr><td>3</td><td>Publish via plain dispatch, no warp.register</td><td><span class="chip pending">pending</span></td><td>—</td></tr>
+<tr><td>4</td><td>ArNS on @ar.io/sdk 4.x; warp deleted</td><td><span class="chip pending">pending</span></td><td>—</td></tr>
+<tr><td>5</td><td>Dashboard reads: gateway + HyperBEAM, no DRE</td><td><span class="chip pending">pending</span></td><td>—</td></tr>
+<tr><td>6</td><td>Published-page template: zero-JS first paint</td><td><span class="chip pending">pending</span></td><td>—</td></tr>
+<tr><td>7</td><td>App-shell performance budget</td><td><span class="chip pending">pending</span></td><td>—</td></tr>
+<tr><td>8</td><td>UX redesign + final validation</td><td><span class="chip pending">pending</span></td><td>—</td></tr>
+</table>
+
+<h2>Bundle-size trend</h2>
+<table id="bundle-trend">
+<tr><th>Checkpoint</th><th>Total dist JS</th><th>Largest chunk</th><th>Notes</th></tr>
+<tr><td>Baseline (pre-work)</td><td>~3.9MB+ JS</td><td>warp-contracts-plugin-deploy 1,578.71 kB</td><td>highlight.js 913KB, index 503KB, warp-contracts 325KB; build green 5.8s</td></tr>
+</table>
+
+<h2>Reviewer / judge findings</h2>
+<table id="reviews">
+<tr><th>Gate</th><th>Verdict</th><th>Findings</th></tr>
+<tr><td>Plan review</td><td><span class="chip pass">passed (after repair)</span></td><td>Judge verdict: strong plan, 3 blockers — (1) baseline vitest RED (stale test/app.test.js imports removed <code>notes</code> export; 5 tests failing) contradicting "green after every step" → added to Step 1 + true baseline recorded; (2) Step 2/4 grep gates unsatisfiable as ordered (dre-*.warp.cc URLs land in Step 5, posts.js unpkg-warp template + widgets/build.svelte docs in Step 6, atomic.test.js fixture prose permanent exception) → gates rescoped to imports, full-text grep moved to DoD; (3) Step 6 silently broke documented widget contract (window.arweave/window.warp/Tailwind globals) → new Q6 + widget-audit acceptance item. Non-blocking suggestions also applied: pilot.ar.io in home copy assigned to Step 8, aoconnect dep explicitly in Step 5, ≤500KB measurement method stated, Step 5's 3 GETs named. Area scores: definitions PASS, DoD PASS, coverage PASS, research accuracy PASS (7/7 spot-checks), security PASS, taste rubric PASS.</td></tr>
+<tr><td>Implementation review</td><td><span class="chip pending">pending</span></td><td>—</td></tr>
+</table>
+
+<h2>Risk flags</h2>
+<ul id="risk-flags">
+<li>None triggered yet. Watch: frozen encrypt/decrypt branches; wallet scope changes; new dispatch call sites.</li>
+</ul>
+
+<h2>Step evidence log</h2>
+<div id="evidence"><p class="meta">Populated as steps complete.</p></div>
+
+<h2>Handoff checkpoints</h2>
+<pre id="handoff">2026-07-03 begin — research complete (codebase map + ecosystem research), PRD written, awaiting plan-review gate.</pre>
+</body>
+</html>

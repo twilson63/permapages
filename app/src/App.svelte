@@ -4,7 +4,6 @@
   import Announcer from "./components/announcer.svelte";
   import Transition from "./components/transition.svelte";
   import Home from "./home.svelte";
-  import Connect from "./connect.svelte";
   import Account from "./account.svelte";
   import AccountForm from "./accounts/form.svelte";
   import Notfound from "./404.svelte";
