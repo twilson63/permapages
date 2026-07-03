@@ -16,7 +16,7 @@
   import markdownIt from "markdown-it";
   import container from "markdown-it-container";
   import attrs from "markdown-it-attrs";
-  import hljs from "highlight.js";
+  import { enableCodeHighlight } from "../services/md.js";
   import opensea from "../widgets/opensea.js";
   import Mustache from "mustache";
   import { onMount } from "svelte";
@@ -99,6 +99,9 @@
   });
 
   md.use(attrs);
+
+  // code blocks are highlighted at compose time so published pages need no JS
+  enableCodeHighlight(md);
 
   const slugify = compose(toLower, join("-"), split(" "));
 

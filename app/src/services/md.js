@@ -4,6 +4,27 @@ import attrs from "markdown-it-attrs";
 
 export const md = markdownIt({ html: true, linkify: true });
 
+/**
+ * Turn on compose-time syntax highlighting. Code is highlighted once, when
+ * the author renders/publishes, so published pages carry pre-highlighted
+ * markup and need zero JS to paint. highlight.js loads lazily — only in
+ * the editor, never in the published page or the app shell.
+ */
+export async function enableCodeHighlight(instance = md) {
+  const { default: hljs } = await import("highlight.js");
+  instance.set({
+    highlight: (str, lang) => {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(str, { language: lang, ignoreIllegals: true }).value;
+        } catch (e) { /* fall through to no highlighting */ }
+      }
+      return "";
+    },
+  });
+  return instance;
+}
+
 md.use(container, "info", {
   validate: function (params) {
     return params.trim().match(/^(info|success|warning|error)+$/);
