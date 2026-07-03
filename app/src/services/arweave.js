@@ -1,34 +1,19 @@
 import Arweave from 'arweave'
 import { parse, htmlify } from './atomic'
+import { buildPageTags } from './tags'
 
 import path from 'ramda/src/path'
 import pluck from 'ramda/src/pluck'
 import prop from 'ramda/src/prop'
 import map from 'ramda/src/map'
-import compose from 'ramda/src/compose'
-import join from 'ramda/src/join'
-import split from 'ramda/src/split'
-import toLower from 'ramda/src/toLower'
 import getHost from './get-host'
 
 import { Async } from 'crocks'
-import { DeployPlugin } from 'warp-contracts-plugin-deploy'
-import { WarpFactory, LoggerFactory } from 'warp-contracts'
-
-const DATAFI_PAGE_SRC = __ATOMIC_ASSET_SRC__
-
-const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] =
-  ['App-Name', 'App-Version', 'SDK', 'Content-Type', 'Contract-Src', 'Init-State']
 
 let _options = {}
 
 _options = { host: getHost(), port: 443, protocol: 'https' }
 export const arweave = Arweave.init(_options)
-
-// global warp
-//const { WarpFactory, LoggerFactory } = window.warp
-LoggerFactory.INST.logLevel("error");
-const warp = WarpFactory.forMainnet().use(new DeployPlugin())
 
 //--- Helper functions
 const createDataEntry = data => Async.fromPromise(arweave.createTransaction.bind(arweave))({ data })
@@ -98,65 +83,13 @@ export const postWebpage = async (page) => {
   const html = htmlify(page)
   const dispatch = Async.fromPromise(window.arweaveWallet.dispatch.bind(window.arweaveWallet))
 
-  const slugify = compose(
-    toLower,
-    join('-'),
-    split(' ')
-  )
-
-  const initState = page.state || {
-    ticker: 'PERMAPAGE',
-    name: page.title,
-    title: page.title,
-    description: page.description,
-    creator: page.creator,
-    balances: {
-      [page.creator]: page.units || 100
-    },
-    contentType: 'text/html',
-    createdAt: Date.now(),
-    emergencyHaltWallet: page.owner,
-    halted: false,
-    claimable: [],
-    settings: [["isTradeable", true]]
-  }
-
-  const topics = page.topics.map(t => ({
-    name: `topic:${t}`,
-    value: t
-  }))
-
-  // create data-entry
-  const de = {
-    data: html,
-    tags: [
-      { name: APP_NAME, value: 'SmartWeaveContract' },
-      { name: APP_VERSION, value: '0.3.0' },
-      { name: CONTENT_TYPE, value: 'text/html' },
-      { name: CONTRACT_SRC, value: DATAFI_PAGE_SRC },
-      { name: INIT_STATE, value: JSON.stringify(initState) },
-      { name: 'Title', value: page.title },
-      { name: 'Description', value: page.description },
-      { name: 'Type', value: 'page' },
-      { name: 'Protocol', value: page.protocol },
-      { name: 'Timestamp', value: new Date().toISOString() },
-      { name: 'Indexed-By', value: 'ucm' },
-      { name: APP_NAME, value: 'PermaPages' },
-      { name: "License", value: page.license }
-    ].concat(topics)
-  }
-  de.tags = de.tags.concat(derivation(page))
-  de.tags = de.tags.concat(commercial(page))
-  de.tags = de.tags.concat(dataModelTraining(page))
-
-  // dispatch to bundlr
-  return createDataEntry(de.data).map(addTags(de.tags)).chain(dispatch)
-    // register on warp
-    .chain(result => Async.fromPromise(warp.register.bind(warp))(result.id, 'arweave'))
-    .map(prop('contractTxId'))
+  // pages are plain signed data items — the wallet's dispatch bundles
+  // them via Turbo (free under 100KiB), no contract registration needed
+  return createDataEntry(html)
+    .map(addTags(buildPageTags(page)))
+    .chain(dispatch)
+    .map(prop('id'))
     .toPromise()
-
-
 }
 
 // make generic way to deploy to arweave....
@@ -329,55 +262,4 @@ query {
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function derivation(page) {
-  if (page.derivation) {
-    let value = page.derivationValue
-    if (page.derivationValue === "Allowed-With-RevenueShare") {
-      value = `${value}-${page.derivationValuePlus}%`
-    }
-    if (page.derivationValue === "Allowed-With-Fee-One-Time") {
-      value = `${value}-${page.derivationValuePlus}`
-    }
-    if (page.derivationValue === "Allowed-With-Fee-Monthly") {
-      value = `${value}-${page.derivationValuePlus}`
-    }
-    return [{ name: 'Derivation', value }]
-  }
-  return []
-}
-
-function commercial(page) {
-  if (page.commercial) {
-    let value = page.commercialValue
-    if (page.commercialValue === "Allowed-With-RevenueShare") {
-      value = `${value}-${page.commercialValuePlus}%`
-    }
-    if (page.commercialValue === "Allowed-With-Fee-One-Time") {
-      value = `${value}-${page.commercialValuePlus}`
-    }
-    if (page.commercialValue === "Allowed-With-Fee-Monthly") {
-      value = `${value}-${page.commercialValuePlus}`
-    }
-    return [{ name: 'Commercial-Use', value }]
-  }
-  return []
-}
-
-function dataModelTraining(page) {
-  if (page.dataModelTraining) {
-    let value = page.dataModelTrainingValue
-    if (page.dataModelTrainingValue === "Allowed-With-RevenueShare") {
-      value = `${value}-${page.dataModelTrainingValuePlus}%`
-    }
-    if (page.dataModelTrainingValue === "Allowed-With-Fee-One-Time") {
-      value = `${value}-${page.dataModelTrainingValuePlus}`
-    }
-    if (page.dataModelTrainingValue === "Allowed-With-Fee-Monthly") {
-      value = `${value}-${page.dataModelTrainingValuePlus}`
-    }
-    return [{ name: 'Data-Model-Training', value }]
-  }
-  return []
 }

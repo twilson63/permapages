@@ -2,10 +2,7 @@ import { parseHTML } from 'linkedom/worker'
 import { Async } from 'crocks'
 import { assoc, lens, lensProp, trim, split, over, identity, compose, prop, filter, find, path, propEq, map, pluck, __, head, uniqBy, join, omit } from 'ramda'
 import { encode, decode } from 'js-base64';
-
-const APP_WALLET = 'K92n-x2kHiRIBmS0yRGz5ii3OEXFw58__742Qu0DTgA'
-const SRC = __ATOMIC_ASSET_SRC__
-const STAMP_CONTRACT = __STAMP_CONTRACT__
+import { buildPostTags } from '../services/tags.js'
 
 const lensHtml = lens(identity, assoc('html'))
 
@@ -58,37 +55,12 @@ export default function ({ gql, publish, md, getData }) {
         return {
           asset: {
             data: post.html,
-            tags: [
-              { name: 'Content-Type', value: 'text/html' },
-              { name: 'App-Name', value: 'SmartWeaveContract' },
-              { name: 'Title', value: post.title },
-              { name: 'Description', value: post.description },
-              { name: 'Type', value: 'blog-post' },
-              { name: 'Published', value: Date.now() },
-              { name: 'Protocol-Name', value: 'Permapage-Post-v4' },
-              { name: 'Asset-Id', value: post.assetId },
-              { name: 'App-Version', value: '0.3.0' },
-              { name: 'Contract-Src', value: SRC },
-              {
-                name: 'Init-State', value: JSON.stringify({
-                  balances: {
-                    [post.owner]: 990000,
-                    [APP_WALLET]: 1000
-                  },
-                  name: post.title,
-                  ticker: "POST",
-                  settings: [['isTradeable', true]],
-                  claimable: []
-                })
-              },
-              ...topicTags,
-              { name: 'App-Name', value: 'PermaPages' }
-            ]
+            tags: buildPostTags(post, topicTags)
           }
         }
       })
       .chain(Async.fromPromise(publish))
-      .map(({ contractTxId }) => assoc('id', contractTxId, post))
+      .map(({ id }) => assoc('id', id, post))
   }
 
   function list(addr) {
