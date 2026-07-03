@@ -1,13 +1,13 @@
 <script>
-  import hljs from "highlight.js";
   import { onMount } from "svelte";
   import MobileNav from './mobile-nav.svelte';
 
-  let watchVideo = false 
+  let watchVideo = false
 
-  onMount(() => hljs.highlightAll())
-
-
+  onMount(async () => {
+    const { default: hljs } = await import("highlight.js/lib/common");
+    hljs.highlightAll();
+  })
 </script>
 <svelte:head>
   <title>Permapages Widgets - Build</title>

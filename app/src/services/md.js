@@ -11,7 +11,7 @@ export const md = markdownIt({ html: true, linkify: true });
  * the editor, never in the published page or the app shell.
  */
 export async function enableCodeHighlight(instance = md) {
-  const { default: hljs } = await import("highlight.js");
+  const { default: hljs } = await import("highlight.js/lib/common");
   instance.set({
     highlight: (str, lang) => {
       if (lang && hljs.getLanguage(lang)) {

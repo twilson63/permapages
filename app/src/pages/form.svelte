@@ -17,6 +17,7 @@
   import container from "markdown-it-container";
   import attrs from "markdown-it-attrs";
   import { enableCodeHighlight } from "../services/md.js";
+  import { loadEasyMDE } from "../services/easymde-loader.js";
   import opensea from "../widgets/opensea.js";
   import Mustache from "mustache";
   import { onMount } from "svelte";
@@ -109,6 +110,7 @@
     loadWidgets().then((widgets) => {
       allWidgets = widgets;
     });
+    await loadEasyMDE();
     easymde = new window.EasyMDE({
       autosave: {
         enabled: true,

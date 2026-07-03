@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "deploy": "arkb deploy dist --use-bundler https://node2.bundlr.network --wallet ../wallet.json --tag-name DEPLOY --tag-value permapages"
+    "deploy": "npx permaweb-deploy --deploy-folder dist --arns-name permapages"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.1",

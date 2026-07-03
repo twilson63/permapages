@@ -4,23 +4,10 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import autoprefixer from 'autoprefixer'
 import tailwind from 'tailwindcss'
 import tailwindConfig from './tailwind.config.js'
-import fs from 'fs'
-// import { dependencies } from './package.json';
-const { dependencies } = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
 
 const [schema, host] = process.env.GITPOD_WORKSPACE_URL ? process.env.GITPOD_WORKSPACE_URL.split('://') : [null, null]
 const publicUrl = `5173-${host}`
 
-function renderChunks(deps) {
-  let chunks = {};
-  Object.keys(deps).forEach((key) => {
-    // vendor deps share one chunk; dynamically-imported deps must be left
-    // out entirely so they stay off the initial-load module graph
-    if (['ramda', 'crocks', 'zod', 'marked', 'dompurify', '@ar.io/sdk'].includes(key)) return;
-    chunks[key] = [key];
-  });
-  return chunks;
-}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -48,14 +35,6 @@ export default defineConfig({
 
   },
   build: {
-    sourcemap: false,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['ramda', 'crocks', 'zod', 'marked', 'dompurify'],
-          ...renderChunks(dependencies),
-        },
-      },
-    },
+    sourcemap: false
   }
 })

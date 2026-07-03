@@ -1,5 +1,5 @@
 import { parseHTML } from 'linkedom/worker'
-import { Async } from 'crocks'
+import Async from 'crocks/Async/index.js'
 import { assoc, lens, lensProp, trim, split, over, identity, compose, prop, filter, find, path, propEq, map, pluck, __, head, uniqBy, join, omit } from 'ramda'
 import { encode, decode } from 'js-base64';
 import { buildPostTags } from '../services/tags.js'
@@ -7,7 +7,7 @@ import { PAGE_CSS } from '../services/template-css.js'
 
 const lensHtml = lens(identity, assoc('html'))
 
-export default function ({ gql, publish, md, getData }) {
+export default function ({ gql, publish, getData }) {
   function get(id) {
     return Async.of(id)
       .map(buildFindByIdQuery)
@@ -42,12 +42,13 @@ export default function ({ gql, publish, md, getData }) {
       })
   }
 
-  function preview(post) {
-    return generateHtml(md)(post)
-  }
-
   function create(post) {
-    return Async.of(post)
+    // markdown-it (+ compose-time hljs) loads only when actually publishing
+    const loadMd = Async.fromPromise(() =>
+      import('../services/md.js').then(({ md, enableCodeHighlight }) =>
+        enableCodeHighlight(md).then(() => md)))
+    return loadMd()
+      .chain(md => Async.of(post)
       .map(p => p.assetId ? p : assoc('assetId', crypto.randomUUID(), p))
       .map(over(lensHtml, generateHtml(md)))
       .map(over(lensProp('topics'), compose(map(trim), split(','))))
@@ -61,7 +62,7 @@ export default function ({ gql, publish, md, getData }) {
         }
       })
       .chain(Async.fromPromise(publish))
-      .map(({ id }) => assoc('id', id, post))
+      .map(({ id }) => assoc('id', id, post)))
   }
 
   function list(addr) {
@@ -75,8 +76,7 @@ export default function ({ gql, publish, md, getData }) {
   return {
     list,
     create,
-    get,
-    preview
+    get
   }
 }
 //tags: { name: "Asset-Id", values: $ids }

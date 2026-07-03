@@ -8,7 +8,7 @@ import prop from 'ramda/src/prop'
 import map from 'ramda/src/map'
 import getHost from './get-host'
 
-import { Async } from 'crocks'
+import Async from 'crocks/Async/index.js'
 
 let _options = {}
 
