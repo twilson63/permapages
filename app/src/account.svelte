@@ -4,7 +4,6 @@
   import { profiles } from "./app.js";
   import { Jumper } from "svelte-loading-spinners";
   import ProfileView from "./components/profile.svelte";
-  import Passport from "./components/passport.svelte";
 
   import { postProfileTx, loadProfile, upload } from "./services/arweave.js";
   import { gql } from "./services/gql.js";
@@ -23,11 +22,6 @@
   async function getPageProfile(address) {
     const result = await profileMgr.get(address);
     $account = { id: address, profile: result };
-    return result;
-  }
-
-  async function getStamps(address) {
-    const result = await profileMgr.stamps(address);
     return result;
   }
 
@@ -84,15 +78,6 @@
               </div>
             </div>
           </div>
-          <!--
-          {#await getStamps($address) then stamps}
-            <div class="flex-none w-full md:w-[300px]">
-              <h3 class="px-8 pt-4 text-3xl">Stamps ({stamps.length})</h3>
-              <p class="px-8">Pages stamped.</p>
-              <Passport {stamps} />
-            </div>
-          {/await}
-          -->
         {:else}
           <div class="flex space-x-8">
             <div class="card shadow-xl w-1/2 flex-1">

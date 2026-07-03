@@ -28,12 +28,7 @@ export default defineConfig({
   // @ar.io/sdk's bundling dep (arbundles) expects node's crypto/buffer in the browser
   plugins: [nodePolyfills({ include: ['crypto', 'buffer', 'stream', 'process'] }), svelte()],
   define: {
-    '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
-    '__ATOMIC_ASSET_SRC__': '"Of9pi--Gj7hCTawhgxOwbuWnFI1h24TTgO5pw8ENJNQ"',
-    '__STAMP_CONTRACT__': '"TlqASNDLA1Uh8yFiH-BzR_1FDag4s735F3PoUFEv2Mo"',
-    '__U__': '"KTzTXT_ANmF84fWEKHzWURD1LWd9QaFR9yfYUwH2Lxw"',
-    '__ARNS_CONTRACT__': '"bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U"'
-
+    '__APP_VERSION__': JSON.stringify(process.env.npm_package_version)
   },
   optimizeDeps: {
     exclude: ['tinro']

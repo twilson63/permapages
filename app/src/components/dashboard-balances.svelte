@@ -38,32 +38,11 @@
     </div>
 
     <div class="h-full p-4 px-6">
-      <div class="w-full">
+      <div class="w-full mt-auto">
         <h4
           class="text-gray-400 text-lg font-semibold mt-4 flex flex-row items-center gap-1"
         >
-          <span>U Balance</span>
-          <!--
-          <button
-            ><img src="info-icon.png" alt="info-icon" width="18px" /></button
-          >
-          -->
-        </h4>
-        <p class="text-black text-xl mt-2 font-semibold tracking-wide">
-          $U {@html showBalance(balances.bar)}
-        </p>
-      </div>
-
-      <div class="w-full mt-auto">
-        <h4
-          class="text-gray-400 text-lg font-semibold mt-5 flex flex-row items-center gap-1"
-        >
           <span>Stamp Coin</span>
-          <!--
-          <button
-            ><img src="info-icon.png" alt="info-icon" width="18px" /></button
-          >
-          -->
         </h4>
         <p class="text-black text-xl mt-2 font-semibold tracking-wide">
           $STAMP {@html showBalance(balances.stamp)}
@@ -73,22 +52,11 @@
 
     <div class="h-full p-4 px-6">
       <div class="w-full">
-        <h4 class="text-gray-400 text-lg font-semibold mt-4">AR Name System</h4>
+        <h4 class="text-gray-400 text-lg font-semibold mt-4">AR.IO Network</h4>
         <p class="text-black text-xl mt-2 font-semibold tracking-wide">
-          $ArNS {balances.arns}
+          $ARIO {@html showBalance(balances.ario)}
         </p>
       </div>
-
-      <!--
-      <div class="w-full mt-auto flex flex-col items-center justify-center">
-        <button
-          class="px-5 py-2 bg-gray-100 text-black rounded-full mt-4 font-semibold drop-shadow-sm
-               hover:bg-gray-200">Get ArNS tokens</button
-        >
-
-        <a href="/#/#" class="text-gray-400 mt-1">What is ArNS?</a>
-      </div>
-      -->
     </div>
 
     <!-- <div class="flex flex-row items-center gap-2 mt-8 ml-auto">

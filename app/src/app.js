@@ -5,9 +5,8 @@ import createPosts from './domains/posts.js'
 import getHost from './services/get-host.js'
 
 import {
-  compose, pluck, reverse, sortBy, groupBy, prop, map, path, head,
-  isEmpty, identity, propEq, has,
-  values, reduce, find, keys, divide, __, nth
+  compose, pluck, reverse, sortBy, prop, map, path, head,
+  isEmpty, identity, propEq
 } from 'ramda'
 
 
@@ -15,37 +14,33 @@ export function posts(env) {
   return createPosts(env)
 }
 
+// the $STAMP token lives in an AO process
+const STAMP_PROCESS = 'LaC2VtxqGekpRPuJh-TkI_ByAqCS2_KB3YuhMJ5yBtc'
+
 export function loadBalances(addr) {
-  const getTokenBalance = (contract) => fetch(`https://dre-u.warp.cc/contract/?id=${contract}`)
-    .then(res => res.ok ? res.json() : Promise.reject(res))
-    .then(path(['state', 'balances', addr]))
+  const format = (y) => (x) => (Number(x) / y).toFixed(4)
 
-  const getTokenBalanceDRE5 = (contract) => fetch(`https://dre-u.warp.cc/contract/?id=${contract}`)
-    .then(res => res.ok ? res.json() : Promise.reject(res))
-    .then(path(['state', 'balances', addr]))
+  // STAMP balance: HyperBEAM patched read first (one unsigned GET, no CU),
+  // stampjs dryrun as the fallback for nodes/processes without patched state
+  const stampBalance = () =>
+    fetch(`https://forward.computer/${STAMP_PROCESS}~process@1.0/now/balances/${addr}/serialize~json@1.0`,
+      { signal: AbortSignal.timeout(4000) })
+      .then(res => res.ok ? res.json() : Promise.reject(res))
+      .catch(() => import('@permaweb/stampjs')
+        .then(({ default: Stamps }) => Stamps.init({ process: STAMP_PROCESS }).balance()))
 
-  const format = (y) => (x) => compose(
-    n => n.toFixed(4),
-    divide(__, y)
-  )(x)
+  // ARIO balance via the AR.IO SDK (HyperBEAM-accelerated internally)
+  const arioBalance = () =>
+    import('./services/registry.js').then(({ getBalance }) => getBalance(addr))
 
-  return Promise.all([
-    // get AR Balance
-    fetch(`https://${getHost()}/wallet/${addr}/balance`).then(res => res.text()).then(Number).then(format(1e12)).catch(() => "NA"),
-    // get bAR Balance
-    getTokenBalanceDRE5(__U__).then(format(1e6)).catch(() => "NA"),
-    // get STAMP Balance
-    getTokenBalance(__STAMP_CONTRACT__).then(format(1e12)).catch(() => "NA"),
-    // get ArNS Balance
-    getTokenBalance(__ARNS_CONTRACT__)
-      //.then(format(1e12))
-      .then(String)
-      .catch(() => "NA")
-  ]).then(balances => ({
-    ar: nth(0, balances),
-    bar: nth(1, balances),
-    stamp: nth(2, balances),
-    arns: nth(3, balances)
+  return Promise.allSettled([
+    fetch(`https://${getHost()}/wallet/${addr}/balance`).then(res => res.text()).then(format(1e12)),
+    stampBalance().then(format(1e12)),
+    arioBalance().then(n => Number(n).toFixed(2))
+  ]).then(([ar, stamp, ario]) => ({
+    ar: ar.status === 'fulfilled' ? ar.value : 'NA',
+    stamp: stamp.status === 'fulfilled' ? stamp.value : 'NA',
+    ario: ario.status === 'fulfilled' ? ario.value : 'NA'
   }))
 }
 
@@ -90,42 +85,10 @@ export function profiles({ gql, post, load }) {
       .toPromise()
   }
 
-  async function stamps(addr) {
-    return Async.fromPromise(fetch)('https://dre-1.warp.cc/contract/?id=FMRHYgSijiUNBrFy-XqyNNXenHsCV0ThR4lGAPO4chA')
-      .chain(res => Async.fromPromise(res.json.bind(res))())
-      .map(prop('stamps'))
-      .map(values)
-      .map(reverse)
-      .map(groupBy((s) => s.address))
-      .map(stampers => reduce((a, x) => [
-        ...a,
-        {
-          stamper: x,
-          count: stampers[x].length,
-          assets: stampers[x].map(prop('asset'))
-          // assets: stampers[x].map((o) => ({ asset: o.asset, timestamp: o.timestamp })), Need this to add timestamp
-        },
-      ], [], keys(stampers)
-      ))
-      .map(find(propEq('stamper', addr)))
-      .map(prop('assets'))
-      .map(buildAssetQuery)
-      .chain(Async.fromPromise(gql))
-      .map(pluckNodes)
-      .map(map(tx => ({
-        id: tx.id,
-        title: (find(propEq('Title', 'name'), tx.tags) || find(propEq('Page-Title', 'name'), tx.tags)).value,
-        type: find(propEq('Type', 'name'), tx.tags)?.value || 'page',
-        description: find(propEq('Description', 'name'), tx.tags)?.value || ''
-      })))
-      .toPromise()
-  }
-
   return {
     get,
     create,
-    load,
-    stamps
+    load
   }
 }
 
@@ -227,29 +190,6 @@ query {
     }
   }
 }  
-  `
-}
-
-function buildAssetQuery(assets) {
-  return `
-query {
-  transactions(
-    first: 100,
-    ids: [${assets.map(a => `"${a}"`).join(',')}]) {
-    edges {
-      node {
-        id
-        owner {
-          address
-        },
-        tags {
-          name
-          value
-        }
-      }
-    }
-  }
-}
   `
 }
 
