@@ -8,7 +8,6 @@
     postWebpage,
     loadPage,
     loadProfile,
-    loadState,
   } from "../services/arweave.js";
   import { gql } from "../services/gql.js";
   import { register, listANTs, updateSubDomain } from "../services/registry.js";
@@ -23,7 +22,6 @@
   import { onMount } from "svelte";
   import compose from "ramda/src/compose";
   import append from "ramda/src/append";
-  import mergeAll from "ramda/src/mergeAll";
   import join from "ramda/src/join";
   import split from "ramda/src/split";
   import toLower from "ramda/src/toLower";
@@ -149,7 +147,7 @@
 
   if (meta().query.fork) {
     // getNote from meta().query.fork
-    pages({ load: loadPage, loadState })
+    pages({ load: loadPage })
       .get(meta().query.fork)
       .then(async (p) => {
         topics = p.topics ? p.topics.join(", ") : "";
@@ -184,24 +182,6 @@
         page.dataModelTraining = p.dataModelTraining || false;
         page.dataModelTrainingValue = p.dataModelTrainingValue;
         page.dataModelTrainingValuePlus = p.dataModelTrainingValuePlus || "1";
-
-        page.state = mergeAll(
-          {
-            ticker: "PAGE",
-            name: p.title,
-            title: p.title,
-            description: p.description,
-            creator: p.owner || p.creator,
-            balances: {
-              [$address]: p.units,
-            },
-            contentType: "text/html",
-            createdAt: Date.now(),
-            claimable: [],
-            settings: [["isTradeable", true]],
-          },
-          p.state
-        );
       });
   } else {
   }

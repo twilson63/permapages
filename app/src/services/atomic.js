@@ -2,11 +2,6 @@ import { parseHTML } from 'linkedom/worker'
 import { trim, pick } from 'ramda'
 import { encode, decode } from 'js-base64';
 
-// const Arweave = window.arweave
-// const { WarpFactory } = window.warp
-
-// const arweave = Arweave.init({})
-
 export function parse(page) {
   // parse html
   const { document } = parseHTML(page)
@@ -29,20 +24,7 @@ export function parse(page) {
 }
 
 export function htmlify(page, head) {
-  const html = createHtml(page, head)
-  // const tx = arweave.createTransaction({ data: html })
-  // tx.addTag('Content-Type', 'text/html')
-  // tx.addTag('App-Name', 'SmartWeaveContract')
-  // tx.addTag('App-Version', '0.3.0')
-  // tx.addTag('Contract-Src', '')
-  // tx.addTag('Protocol-Name', page.protocol)
-  // tx.addTag('Type', 'webpage')
-  // tx.addTag('Title', page.title)
-  // tx.addTag('Description', page.description)
-  // //tx.addTag('Topics:')                                                                                                      c')
-  // const result = await window.arweaveWallet.dispatch(tx)
-  // await WarpFactory.forMainnet().register(tx.id, 'node2')
-  return html
+  return createHtml(page, head)
 }
 
 

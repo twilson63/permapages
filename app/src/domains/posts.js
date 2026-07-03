@@ -9,7 +9,7 @@ const STAMP_CONTRACT = __STAMP_CONTRACT__
 
 const lensHtml = lens(identity, assoc('html'))
 
-export default function ({ gql, query, publish, md, getData }) {
+export default function ({ gql, publish, md, getData }) {
   function get(id) {
     return Async.of(id)
       .map(buildFindByIdQuery)
@@ -29,11 +29,6 @@ export default function ({ gql, query, publish, md, getData }) {
                 html: a.data
               })
             )
-            .chain(post =>
-              Async.fromPromise(query)(post.transaction, ['prop', 'balances'])
-                .map(assoc('balances', __, post))
-
-            )
         } else {
           return Async.of(asset.tags.find(propEq('Asset-Id', 'name'))?.value)
             .map(id => ({ query: buildSourceQuery(), variables: { ids: [id] } }))
@@ -44,12 +39,6 @@ export default function ({ gql, query, publish, md, getData }) {
               ...toPostItem(asset),
               content: a.data
             }))
-            .chain(post =>
-              Async.fromPromise(query)(post.transaction, ['prop', 'balances'])
-                .map(assoc('balances', __, post))
-
-            )
-
         }
 
       })
@@ -109,20 +98,6 @@ export default function ({ gql, query, publish, md, getData }) {
       .map(pluck('node'))
       .map(map(toPostItem))
       .map(uniqBy(prop('assetId')))
-    // .chain(nodes =>
-    //   Async.fromPromise(query)(STAMP_CONTRACT, ['compose',
-    //     ['mapObjIndexed', ['length']],
-    //     ['groupBy', ['prop', 'asset']],
-    //     // would be nice to filter only the assets from nodes
-    //     //['filter', ['flip', ['includes']], pluck('id', nodes)],
-    //     ['values'],
-    //     ['prop', 'stamps']
-    //   ])
-    //     .map(counts => map(
-    //       n => assoc('stamps', counts[n.id] || 0, n),
-    //       nodes
-    //     ))
-    // )
   }
   return {
     list,

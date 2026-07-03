@@ -6,7 +6,7 @@ import getHost from './services/get-host.js'
 
 import {
   compose, pluck, reverse, sortBy, groupBy, prop, map, path, head,
-  isEmpty, identity, propEq, assoc, has,
+  isEmpty, identity, propEq, has,
   values, reduce, find, keys, divide, __, nth
 } from 'ramda'
 
@@ -129,7 +129,7 @@ export function profiles({ gql, post, load }) {
   }
 }
 
-export function pages({ register, post, gql, postWebpage, load, loadState, postVanilla }) {
+export function pages({ register, post, gql, postWebpage, load, postVanilla }) {
   const registerPage = register ? Async.fromPromise(register) : () => Async.of(null)
 
 
@@ -165,12 +165,10 @@ export function pages({ register, post, gql, postWebpage, load, loadState, postV
   }
 
   async function get(id) {
+    // page meta is embedded in the page HTML itself (base64 <meta> tags),
+    // so a single gateway GET is all a read needs — no contract evaluation
     return Async.of(id)
       .chain(Async.fromPromise(load))
-      .chain(page => Async.fromPromise(loadState)(page.webpage || id)
-        .map(state => assoc('state', state, page))
-      )
-      // validate page 
       .chain(pageModel.validate)
       .toPromise()
   }

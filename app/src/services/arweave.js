@@ -29,7 +29,6 @@ export const arweave = Arweave.init(_options)
 //const { WarpFactory, LoggerFactory } = window.warp
 LoggerFactory.INST.logLevel("error");
 const warp = WarpFactory.forMainnet().use(new DeployPlugin())
-const options = { allowBigInt: true, internalWrites: true, unsafeClient: 'allow' }
 
 //--- Helper functions
 const createDataEntry = data => Async.fromPromise(arweave.createTransaction.bind(arweave))({ data })
@@ -77,17 +76,6 @@ export const loadPage = async (id) => {
 export const loadProfile = async (id) => {
   const { data } = await arweave.api.get(id)
   return data
-}
-
-export const loadState = async (id) => {
-  try {
-    const contract = warp.contract(id)
-    const state = await contract.setEvaluationOptions(options).readState().then(path(['cachedValue', 'state']))
-    return state
-  } catch (e) {
-    console.log('state error', e)
-    return {}
-  }
 }
 
 export const load = async (id) => {
