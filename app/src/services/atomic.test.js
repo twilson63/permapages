@@ -44,3 +44,19 @@ test('ok', () => {
   expect(result2.content).toEqual(page.content)
   expect(result2.allowStamps).toEqual(page.allowStamps)
 })
+
+test('published page paints without CDNs or runtime compilers', () => {
+  const result = htmlify(page)
+  // no mutable third-party CDNs baked into permanent HTML
+  expect(result).not.toContain('cdn.tailwindcss.com')
+  expect(result).not.toContain('unpkg.com')
+  expect(result).not.toContain('cdn.jsdelivr.net')
+  // styles are inlined so first paint needs zero external CSS/JS
+  expect(result).toContain('<style>')
+  expect(result).toContain('--paper')
+})
+
+test('widget scripts stay deferred module includes', () => {
+  const result = htmlify(page)
+  expect(result).toContain('<script defer type="module" src="https://stamp-widget.arweave.dev">')
+})

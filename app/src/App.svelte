@@ -4,32 +4,31 @@
   import Announcer from "./components/announcer.svelte";
   import Transition from "./components/transition.svelte";
   import Home from "./home.svelte";
-  import Connect from "./connect.svelte";
   import Account from "./account.svelte";
-  import AccountForm from "./accounts/form.svelte";
+  const accountFormP = () => import("./accounts/form.svelte");
   import Notfound from "./404.svelte";
-  import About from "./about.svelte";
+  const aboutP = () => import("./about.svelte");
   import Pages from "./pages/index.svelte";
-  import Posts from "./posts/index.svelte";
-  import ViewPost from "./pages/posts.svelte";
-  import Compose from "./pages/compose.svelte";
-  import PageLink from "./pages/link.svelte";
-  import PageForm from "./pages/form.svelte";
-  import Arns from "./arns/index.svelte";
-  import Ant from "./arns/show.svelte";
-  import Claim from "./arns/claim.svelte";
+  const postsP = () => import("./posts/index.svelte");
+  const viewPostP = () => import("./pages/posts.svelte");
+  // heavy editor screens load on demand, keeping them out of the boot bundle
+  const composeP = () => import("./pages/compose.svelte");
+  const pageFormP = () => import("./pages/form.svelte");
+  const pageLinkP = () => import("./pages/link.svelte");
+  const arnsP = () => import("./arns/index.svelte");
+  const antP = () => import("./arns/show.svelte");
+  const claimP = () => import("./arns/claim.svelte");
   import Preview from "./pages/show.svelte";
-  import Widgets from "./widgets.svelte";
-  import WidgetsSupport from "./widgets/support.svelte";
-  import WidgetsBuild from "./widgets/build.svelte";
-  import WidgetsHome from "./widgets/index.svelte";
+  const widgetsSupportP = () => import("./widgets/support.svelte");
+  const widgetsBuildP = () => import("./widgets/build.svelte");
+  const widgetsHomeP = () => import("./widgets/index.svelte");
   import Dashboard from "./dashboard.svelte";
 
   import not from "ramda/src/not";
   import isEmpty from "ramda/src/isEmpty";
-  import AuthorPreview from "./pages/author-preview.svelte";
-  import ReaderPreview from "./pages/reader-preview.svelte";
-  import PostHistory from "./pages/post-history.svelte";
+  const authorPreviewP = () => import("./pages/author-preview.svelte");
+  const readerPreviewP = () => import("./pages/reader-preview.svelte");
+  const postHistoryP = () => import("./pages/post-history.svelte");
 
   router.mode.hash();
   router.subscribe((_) => window.scrollTo(0, 0));
@@ -50,16 +49,16 @@
   <Route path="/arns/*">
     {#if not(isEmpty($address))}
       <Route path="/claim">
-        <Claim />
+        {#await claimP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route path="/:ant">
-        <Ant />
+        {#await antP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route path="/">
-        <Arns />
+        {#await arnsP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route fallback>
-        <Arns />
+        {#await arnsP() then m}<svelte:component this={m.default} />{/await}
       </Route>
     {:else}
       <Home />
@@ -69,13 +68,13 @@
   <Route path="/pages/*">
     {#if not(isEmpty($address))}
       <Route path="/compose">
-        <Compose />
+        {#await composeP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route path="/link">
-        <PageLink />
+        {#await pageLinkP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route path="/new">
-        <PageForm />
+        {#await pageFormP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route path="/">
         <Pages />
@@ -89,7 +88,7 @@
   </Route>
   <Route path="/account/edit">
     {#if not(isEmpty($address))}
-      <AccountForm />
+      {#await accountFormP() then m}<svelte:component this={m.default} />{/await}
     {:else}
       <Home />
     {/if}
@@ -102,7 +101,7 @@
     {/if}
   </Route>
   <Route path="/about">
-    <About />
+    {#await aboutP() then m}<svelte:component this={m.default} />{/await}
   </Route>
   <Route path="/preview">
     <Preview />
@@ -110,35 +109,35 @@
   <Route path="/posts/*">
     {#if not(isEmpty($address))}
       <Route path="/author-preview">
-        <AuthorPreview />
+        {#await authorPreviewP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route path="/reader-preview">
-        <ReaderPreview />
+        {#await readerPreviewP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route path="/history">
-        <PostHistory />
+        {#await postHistoryP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route path="/new">
-        <Compose />
+        {#await composeP() then m}<svelte:component this={m.default} />{/await}
       </Route>
       <Route path="/:id/edit" let:meta>
-        <Compose id={meta.params.id} />
+        {#await composeP() then m}<svelte:component this={m.default} id={meta.params.id} />{/await}
       </Route>
       <Route fallback>
-        <Posts />
+        {#await postsP() then m}<svelte:component this={m.default} />{/await}
       </Route>
     {:else}
       <Home />
     {/if}
   </Route>
   <Route path="/widgets">
-    <WidgetsHome />
+    {#await widgetsHomeP() then m}<svelte:component this={m.default} />{/await}
   </Route>
   <Route path="/widgets/support">
-    <WidgetsSupport />
+    {#await widgetsSupportP() then m}<svelte:component this={m.default} />{/await}
   </Route>
   <Route path="/widgets/build">
-    <WidgetsBuild />
+    {#await widgetsBuildP() then m}<svelte:component this={m.default} />{/await}
   </Route>
   <Route path="/404">
     <Notfound />

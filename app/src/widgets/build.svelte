@@ -1,13 +1,13 @@
 <script>
-  import hljs from "highlight.js";
   import { onMount } from "svelte";
   import MobileNav from './mobile-nav.svelte';
 
-  let watchVideo = false 
+  let watchVideo = false
 
-  onMount(() => hljs.highlightAll())
-
-
+  onMount(async () => {
+    const { default: hljs } = await import("highlight.js/lib/common");
+    hljs.highlightAll();
+  })
 </script>
 <svelte:head>
   <title>Permapages Widgets - Build</title>
@@ -185,7 +185,7 @@ font-size: inherit;
                 <div class="margin-bottom margin-small">
                   <h2 class="heading-6">Tools for rapid dev</h2>
                 </div>
-                <p class="text-size-medium-2">Every Permapage, by default, loads the following libraries for programmatic access:<br>‍<br>• TailwindCSS (Atomic CSS using classes) - <a href="https://tailwindcss.com/"><strong>https://tailwindcss.com<br>• </strong></a>DaisyUI (CSS Components built on TailwindCSS) - <a href="https://daisyui.com/"><strong>https://daisyui.com <br>• </strong></a>Arweave SDK (Access to the permaweb) <br>• Arweave JS - <a href="https://github.com/arweaveteam/arweave-js"><strong>https://github.com/arweaveteam/arweave-js<br>• </strong></a>Warp SDK (Arweave Smart Contract Access) - <a href="https://warp.cc/"><strong>https://warp.cc<br><br>‍</strong></a>You may use these libraries as you build your widget, or you can import your own libraries using ESM Modules. <strong><em>NOTE: If you import external libraries, it is important to use permanent links to those libraries<br><br>‍</em></strong>TailwindCSS and DaisyUI are available as HTML class names within your markup, for example, if you wanted to create a <strong>badge</strong> component within your Widget, you would use the following HTML <strong>&lt;div class=&quot;badge badge-primary&quot;&gt;My Badge&lt;/div&gt;<br><br>‍</strong>Arweave is available on the <strong>window</strong> object as <strong>arweave</strong> Warp is available on the <strong>window</strong> object as <strong>warp</strong>Using these libraries you have the power to create rich user experiences with minimal code. <br><br>TailwindCSS and DaisyUI give you a clean presentation framework to manage the look and feel of your widget and Arweave and Warp give you powerful interaction libraries with Arweave Data and Smartweave Contracts.</p>
+                <p class="text-size-medium-2">Widgets are self-contained ES modules. A published Permapage ships with zero JavaScript and a small inlined stylesheet, so your widget must bring everything it needs:<br>‍<br>• Import libraries as ESM modules from permanent (transaction-id) links — for example <strong>import Arweave from 'https://arweave.net/&lt;txid-of-arweave-js&gt;'</strong>. For AO process interaction, bundle <strong>@permaweb/aoconnect</strong> into your widget, or read patched process state with a plain <strong>fetch</strong> from a HyperBEAM node.<br>• Ship your own styles: inject a &lt;style&gt; tag or use inline styles inside the element you hydrate. The page's stylesheet covers typography and a few layout primitives (<strong>card</strong>, <strong>btn</strong>, <strong>alert</strong>, <strong>carousel</strong>) that you may reuse, but arbitrary utility classes are not available.<br><br><strong><em>NOTE: pages published before 2026 loaded TailwindCSS, DaisyUI, arweave-js and the Warp SDK from CDNs, and exposed window.arweave / window.warp. New pages do not — widgets relying on those globals will not work on new pages.</em></strong></p>
                 <div class="margin-top margin-medium">
                   <div class="button-row-2">
                     <a target="_blank" href="https://notes.arweave.dev/#/notes/CB9wDNrR7pdCB-BTepoYNWRUOT5RlB7KH2PPeOXow24" class="button-link with-icon-green w-inline-block">
@@ -317,7 +317,7 @@ try {
                       <div id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dc9-c3a095a8" class="w-layout-grid footer4_link-list">
                         <a href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE" target="_blank" class="footer4_link">Learn More</a>
                         <a href="/pages" class="footer4_link">Pages</a>
-                        <a href="https://pilot.ar.io" target="_blank" class="footer4_link">Get ArNS Tokens</a>
+                        <a href="https://arns.arweave.net" target="_blank" class="footer4_link">Get an ArNS Name</a>
                         <a href="https://www.arweave.org/" target="_blank" class="footer4_link">Arweave</a>
                         <a id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dd2-c3a095a8" href="/pages" class="button-small-footer w-button">Create a page</a>
                       </div>

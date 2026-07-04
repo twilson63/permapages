@@ -1,51 +1,19 @@
 import Arweave from 'arweave'
-import Account from 'arweave-account'
 import { parse, htmlify } from './atomic'
+import { buildPageTags } from './tags'
 
-import always from 'ramda/src/always'
-import assoc from 'ramda/src/assoc'
 import path from 'ramda/src/path'
 import pluck from 'ramda/src/pluck'
 import prop from 'ramda/src/prop'
 import map from 'ramda/src/map'
-import mergeAll from 'ramda/src/mergeAll'
-import compose from 'ramda/src/compose'
-import join from 'ramda/src/join'
-import split from 'ramda/src/split'
-import toLower from 'ramda/src/toLower'
 import getHost from './get-host'
 
-import { ArweaveWebWallet } from "arweave-wallet-connector";
-import { readContract, selectWeightedPstHolder } from 'smartweave'
-import { Async } from 'crocks'
-import { DeployPlugin } from 'warp-contracts-plugin-deploy'
-import { WarpFactory, LoggerFactory } from 'warp-contracts'
-
-// PST for permanotes
-//const PERMANOTE_PST = 'cwElAMnBqu2fp-TUsV9lBIZJi-DRZ5tQJgJqxhFjqNY'
-//const CONTRACT_SRC = '0hTokSQ7m3DQujuVisZ-RzcU6hOY3-Uz2ZIh4Aa0nKY'
-//const PAGE_SRC = 'OhGbHpgw-GIXhUaDZIzUjVm5rXWtd_2hrABWlB83rb8'
-const WARP_URL = 'https://d1o5nlqr4okus2.cloudfront.net/gateway/contracts/deploy'
-
-const DATAFI_PAGE_SRC = __ATOMIC_ASSET_SRC__
-
-const [APP_NAME, APP_VERSION, SDK, CONTENT_TYPE, CONTRACT_SRC, INIT_STATE] =
-  ['App-Name', 'App-Version', 'SDK', 'Content-Type', 'Contract-Src', 'Init-State']
-
-const FEE = '.004'
-const arweaveAccount = new Account()
+import Async from 'crocks/Async/index.js'
 
 let _options = {}
 
 _options = { host: getHost(), port: 443, protocol: 'https' }
 export const arweave = Arweave.init(_options)
-
-// global warp
-//const { WarpFactory, LoggerFactory } = window.warp
-LoggerFactory.INST.logLevel("error");
-const warp = WarpFactory.forMainnet().use(new DeployPlugin())
-const options = { allowBigInt: true, internalWrites: true, unsafeClient: 'allow' }
-let wallet = null
 
 //--- Helper functions
 const createDataEntry = data => Async.fromPromise(arweave.createTransaction.bind(arweave))({ data })
@@ -54,32 +22,6 @@ const addTags = tags => tx => {
   return tx
 }
 
-// const sign = tx =>
-//   Async.fromPromise(arweave.transactions.sign.bind(arweave.transactions))(tx).map(always(tx))
-// const post = contractTx => Async.fromPromise(fetch)(WARP_URL, {
-//   method: 'POST',
-//   body: JSON.stringify({ contractTx }),
-//   headers: {
-//     'Accept-Encoding': 'gzip, deflate, br',
-//     'Content-Type': 'application/json',
-//     Accept: 'application/json'
-//   }
-// }).chain(response => response.ok ? Async.fromPromise(response.json.bind(response))() : Async.Rejected(response))
-
-//--- end ---
-
-export const connectApp = () => {
-  wallet = new ArweaveWebWallet({
-    name: 'permapages',
-    logo: `${window.location.origin}/permapages_logo.svg`
-  })
-  console.log('wallet', wallet)
-
-  wallet.setUrl('https://arweave.app')
-  return wallet.connect()
-}
-
-//export const account = async (address) => await arweaveAccount.get(address)
 export const upload = async (file, addr) => {
   // check balance
   if ((file.buffer.byteLength + 10000 > 100000)) {
@@ -107,7 +49,6 @@ export const upload = async (file, addr) => {
   return `https://arweave.net/${tx.id}`
 
 }
-export const handle = async (handle) => await arweaveAccount.get(handle)
 
 export const loadPage = async (id) => {
   const { data } = await arweave.api.get(id)
@@ -122,40 +63,18 @@ export const loadProfile = async (id) => {
   return data
 }
 
-export const loadState = async (id) => {
-  try {
-    const contract = warp.contract(id)
-    const state = await contract.setEvaluationOptions(options).readState().then(path(['cachedValue', 'state']))
-    return state
-  } catch (e) {
-    console.log('state error', e)
-    return {}
-  }
-}
-
 export const load = async (id) => {
   const { data } = await arweave.api.get(id)
   if (!data.public) {
-    if (wallet) {
-      const encryptedData = Object.values(data.content)
-      const symmetricKeyBytes = new Uint8Array(encryptedData.slice(0, 512))
-      const contentBytes = new Uint8Array(encryptedData.slice(512))
-      const symmetricKey = await decryptRSA(symmetricKeyBytes)
-      const decryptString = arweave.utils.bufferToString(
-        await arweave.crypto.decrypt(contentBytes, symmetricKey)
-      )
-      data.content = decryptString
-    } else {
-      // @ts-ignore
-      // eslint-disable-next-line no-undef
-      data.content = await arweaveWallet.decrypt(
-        new Uint8Array(Object.values(data.content)),
-        {
-          algorithm: "RSA-OAEP",
-          hash: "SHA-256",
-        }
-      )
-    }
+    // @ts-ignore
+    // eslint-disable-next-line no-undef
+    data.content = await arweaveWallet.decrypt(
+      new Uint8Array(Object.values(data.content)),
+      {
+        algorithm: "RSA-OAEP",
+        hash: "SHA-256",
+      }
+    )
   }
   return data
 }
@@ -164,65 +83,13 @@ export const postWebpage = async (page) => {
   const html = htmlify(page)
   const dispatch = Async.fromPromise(window.arweaveWallet.dispatch.bind(window.arweaveWallet))
 
-  const slugify = compose(
-    toLower,
-    join('-'),
-    split(' ')
-  )
-
-  const initState = page.state || {
-    ticker: 'PERMAPAGE',
-    name: page.title,
-    title: page.title,
-    description: page.description,
-    creator: page.creator,
-    balances: {
-      [page.creator]: page.units || 100
-    },
-    contentType: 'text/html',
-    createdAt: Date.now(),
-    emergencyHaltWallet: page.owner,
-    halted: false,
-    claimable: [],
-    settings: [["isTradeable", true]]
-  }
-
-  const topics = page.topics.map(t => ({
-    name: `topic:${t}`,
-    value: t
-  }))
-
-  // create data-entry
-  const de = {
-    data: html,
-    tags: [
-      { name: APP_NAME, value: 'SmartWeaveContract' },
-      { name: APP_VERSION, value: '0.3.0' },
-      { name: CONTENT_TYPE, value: 'text/html' },
-      { name: CONTRACT_SRC, value: DATAFI_PAGE_SRC },
-      { name: INIT_STATE, value: JSON.stringify(initState) },
-      { name: 'Title', value: page.title },
-      { name: 'Description', value: page.description },
-      { name: 'Type', value: 'page' },
-      { name: 'Protocol', value: page.protocol },
-      { name: 'Timestamp', value: new Date().toISOString() },
-      { name: 'Indexed-By', value: 'ucm' },
-      { name: APP_NAME, value: 'PermaPages' },
-      { name: "License", value: page.license }
-    ].concat(topics)
-  }
-  de.tags = de.tags.concat(derivation(page))
-  de.tags = de.tags.concat(commercial(page))
-  de.tags = de.tags.concat(dataModelTraining(page))
-
-  // dispatch to bundlr
-  return createDataEntry(de.data).map(addTags(de.tags)).chain(dispatch)
-    // register on warp
-    .chain(result => Async.fromPromise(warp.register.bind(warp))(result.id, 'arweave'))
-    .map(prop('contractTxId'))
+  // pages are plain signed data items — the wallet's dispatch bundles
+  // them via Turbo (free under 100KiB), no contract registration needed
+  return createDataEntry(html)
+    .map(addTags(buildPageTags(page)))
+    .chain(dispatch)
+    .map(prop('id'))
     .toPromise()
-
-
 }
 
 // make generic way to deploy to arweave....
@@ -294,29 +161,13 @@ export const postTx = async (note) => {
 
   // encrypt content if private
   if (!note.public) {
-    if (wallet) {
-      const contentEncoder = new TextEncoder()
-      const contentBuffer = contentEncoder.encode(note.content)
-      const keyBuffer = generateRandomBytes()
-      const encryptedContent = await arweave.crypto.encrypt(contentBuffer, keyBuffer)
-      const publicKey = await wallet.getPublicKey()
-      const jwk = await buildPublicKey(publicKey)
-      const encryptedKey = await window.crypto.subtle.encrypt({ name: 'RSA-OAEP' }, jwk, keyBuffer)
-      note.content = arweave.utils.concatBuffers([encryptedKey, encryptedContent])
-    } else {
-      // @ts-ignore
-      // eslint-disable-next-line no-undef
-      note.content = await arweaveWallet.encrypt(note.content, {
-        algorithm: 'RSA-OAEP',
-        hash: 'SHA-256'
-      })
-    }
-
+    // @ts-ignore
+    // eslint-disable-next-line no-undef
+    note.content = await arweaveWallet.encrypt(note.content, {
+      algorithm: 'RSA-OAEP',
+      hash: 'SHA-256'
+    })
   }
-
-  // get target wallet
-  // const contractState = await readContract(arweave, PERMANOTE_PST)
-  // const holder = selectWeightedPstHolder(contractState.balances)
 
   const tx = await arweave.createTransaction({
     data: JSON.stringify(note),
@@ -350,17 +201,6 @@ export const postTx = async (note) => {
 
   return result
 
-}
-
-export const payment = async () => {
-  const contractState = await readContract(arweave, CONTRACT_ID)
-  const holder = selectWeightedPstHolder(contractState.balances)
-  const fee = await arweave.createTransaction({
-    target: holder,
-    quantity: arweave.ar.arToWinston('.001')
-  })
-  await arweave.transactions.sign(fee)
-  return await arweave.transactions.post(fee)
 }
 
 export const myNotes = async () => {
@@ -422,94 +262,4 @@ query {
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function decryptRSA(data) {
-  if (wallet != null) {
-    console.log(wallet)
-    // arweave.app Case
-    // =========================================================================
-    return await wallet.decrypt(data, { name: 'RSA-OAEP' });
-  } else {
-    // ArConnect Case
-    // =========================================================================
-    throw `Cannot perform RSA decryption with ArConnect`;
-  }
-}
-
-function generateRandomBytes() {
-  const array = new Uint8Array(256)
-  return crypto.getRandomValues(array)
-}
-
-export async function buildPublicKey(pk) {
-  console.log(pk)
-  const keyData = {
-    kty: 'RSA',
-    e: 'AQAB',
-    n: pk,
-    alg: 'RSA-OAEP-256',
-    ext: true,
-  };
-
-  const algo = {
-    name: 'RSA-OAEP',
-    hash: {
-      name: 'SHA-256',
-    },
-  };
-
-  return crypto.subtle.importKey('jwk', keyData, algo, false, ['encrypt']);
-}
-
-
-function derivation(page) {
-  if (page.derivation) {
-    let value = page.derivationValue
-    if (page.derivationValue === "Allowed-With-RevenueShare") {
-      value = `${value}-${page.derivationValuePlus}%`
-    }
-    if (page.derivationValue === "Allowed-With-Fee-One-Time") {
-      value = `${value}-${page.derivationValuePlus}`
-    }
-    if (page.derivationValue === "Allowed-With-Fee-Monthly") {
-      value = `${value}-${page.derivationValuePlus}`
-    }
-    return [{ name: 'Derivation', value }]
-  }
-  return []
-}
-
-function commercial(page) {
-  if (page.commercial) {
-    let value = page.commercialValue
-    if (page.commercialValue === "Allowed-With-RevenueShare") {
-      value = `${value}-${page.commercialValuePlus}%`
-    }
-    if (page.commercialValue === "Allowed-With-Fee-One-Time") {
-      value = `${value}-${page.commercialValuePlus}`
-    }
-    if (page.commercialValue === "Allowed-With-Fee-Monthly") {
-      value = `${value}-${page.commercialValuePlus}`
-    }
-    return [{ name: 'Commercial-Use', value }]
-  }
-  return []
-}
-
-function dataModelTraining(page) {
-  if (page.dataModelTraining) {
-    let value = page.dataModelTrainingValue
-    if (page.dataModelTrainingValue === "Allowed-With-RevenueShare") {
-      value = `${value}-${page.dataModelTrainingValuePlus}%`
-    }
-    if (page.dataModelTrainingValue === "Allowed-With-Fee-One-Time") {
-      value = `${value}-${page.dataModelTrainingValuePlus}`
-    }
-    if (page.dataModelTrainingValue === "Allowed-With-Fee-Monthly") {
-      value = `${value}-${page.dataModelTrainingValuePlus}`
-    }
-    return [{ name: 'Data-Model-Training', value }]
-  }
-  return []
 }

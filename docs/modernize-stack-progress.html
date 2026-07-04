@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress — PermaPages Modernization (modernize-stack)</title>
+<style>
+  :root { --ink:#1a1a1a; --muted:#666; --line:#e2e2e2; --pass:#0a7a33; --fail:#b3261e; --warn:#a15c00; --bg:#fff; --code:#f5f5f5; }
+  @media (prefers-color-scheme: dark) { :root { --ink:#e8e8e8; --muted:#9a9a9a; --line:#333; --pass:#5dd48a; --fail:#ff8a80; --warn:#f0b35c; --bg:#141414; --code:#222; } }
+  body { font: 15px/1.55 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); max-width: 62rem; margin: 2rem auto; padding: 0 1.25rem; }
+  h1 { font-size: 1.5rem; } h2 { font-size: 1.15rem; margin-top: 2rem; border-bottom: 1px solid var(--line); padding-bottom: .3rem; }
+  table { border-collapse: collapse; width: 100%; margin: .8rem 0; font-size: .87rem; }
+  th, td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+  th { background: var(--code); }
+  code, pre { background: var(--code); border-radius: 4px; font-family: ui-monospace, Menlo, monospace; font-size: .85em; }
+  code { padding: .1em .3em; } pre { padding: .7rem; overflow-x: auto; }
+  .chip { display: inline-block; padding: .05em .55em; border-radius: 999px; font-size: .76rem; font-weight: 700; }
+  .pending { background: var(--code); color: var(--muted); } .inprog { background: #e3ecfd; color: #1a47b8; }
+  .pass { background: #e3f0e8; color: var(--pass); } .fail { background: #fbe4e2; color: var(--fail); } .repair { background: #f8edd8; color: var(--warn); }
+  @media (prefers-color-scheme: dark) { .inprog { background:#16233f; } .pass { background:#173322; } .fail { background:#3a1a17; } .repair { background:#36290f; } }
+  .meta { color: var(--muted); font-size: .85rem; }
+</style>
+</head>
+<body>
+<h1>Progress — PermaPages Modernization</h1>
+<p class="meta">Task slug: <code>modernize-stack</code> · PRD: <a href="modernize-stack-prd.html">modernize-stack-prd.html</a> · Started 2026-07-03</p>
+
+<h2>Status: <span class="chip pass">complete</span></h2>
+
+<h2>Step checklist</h2>
+<table id="steps">
+<tr><th>Step</th><th>Title</th><th>Status</th><th>Evidence summary</th></tr>
+<tr><td>1</td><td>Purge dead deps + dead code</td><td><span class="chip pass">done</span></td><td>Commit 1fde5d5. Removed 9 deps (22 packages); deleted orphaned src/show.svelte, src/connect.svelte, src/topic.svelte, stale test/app.test.js+svc-mocks.js; arweave.app wallet path removed, Wander-only connect dialog; frozen encrypt/decrypt branches preserved (else-branch code byte-identical). Grep gate: only atomic.test.js fixture prose remains (permanent exception); demo-post copy updated. Build green 5.9s; vitest 1/1 green (baseline was 5 failing).</td></tr>
+<tr><td>2</td><td>Delete loadState from read path</td><td><span class="chip pass">done</span></td><td>Commit 24b9110. pages().get = single gateway GET (embedded base64 meta); loadState deleted from arweave.js; form.svelte fork flow no longer builds contract state; posts.get dead balances chain removed (no consumer) + sw-cache.js deleted. Grep: readState only in registry.js (Step 4) + atomic.test.js fixture prose. Build 5.95s green; vitest 1/1.</td></tr>
+<tr><td>3</td><td>Publish via plain dispatch, no warp.register</td><td><span class="chip pass">done</span></td><td>Commit 7d034ee. postWebpage/assets.publish/posts.create/vanilla all drop Contract-Src + Init-State + App-Name:SmartWeaveContract; warp.register gone (grep: only registry.js remains, Step 4). New pure tags.js with 2 vitest tests asserting discovery+UDL tags present and contract tags absent. GraphQL query text untouched. Build 5.78s green; vitest 3/3.</td></tr>
+<tr><td>4</td><td>ArNS on @ar.io/sdk (v3, AO era); warp deleted</td><td><span class="chip pass">done (1 item env-blocked)</span></td><td>Commit d714612. <strong>Q2 resolved with a twist</strong>: @ar.io/sdk v4.0.3 turned out to be AR.IO's <em>Solana-era</em> SDK (Solana RPC, SolanaSigner, program ids) — incompatible with this AO/Wander app; pinned ^3 (3.24.0, AO era, includes built-in HyperBEAM read path via ~process@1.0). registry.js rewritten: reads via ARIO.mainnet() + ANT getInfo/getRecords; writes via setBaseNameRecord/setUndernameRecord/removeUndernameRecord/transfer with ArconnectSigner; purchase links out to arns.arweave.net. SDK dynamically imported → 2.9MB chunk is lazy, absent from index.html preloads (verified). warp-contracts + plugin removed from package.json (−474 packages). vite-plugin-node-polyfills added (arbundles needs node crypto/buffer). Grep: zero warp imports (posts.js published-template CDN ref → Step 6). Build 8.1s green; vitest 3/3. <em>Env-blocked</em>: sandbox cannot reach cu.ardrive.io/forward.computer, so live ArNS list render verified only at gateway level (permapages.arweave.net → 200); in-browser check flagged as residual risk.</td></tr>
+<tr><td>5</td><td>Dashboard reads: gateway + HyperBEAM, no DRE</td><td><span class="chip pass">done</span></td><td>Commit 1423b6f. grep "dre-" empty. 3 named parallel GETs in Promise.allSettled: (1) gateway /wallet/balance, (2) $STAMP HyperBEAM patched GET (forward.computer ~process@1.0/now/balances) with stampjs dryrun fallback + 4s timeout, (3) $ARIO via lazy ar.io SDK. $U dropped (Q4). aoconnect ^0.0.98 + stampjs ^1.0.4 added. Dead DRE stamps feature deleted (UI already commented out — flagged as removed feature). Contract-id defines retired. Build green; vitest 3/3.</td></tr>
+<tr><td>6</td><td>Published-page template: zero-JS first paint</td><td><span class="chip pass">done</span></td><td>Commit ca7b9b0. New designed stylesheet (services/template-css.js, ~10KB): serif reading column, CSS-only drawer, 29 legacy theme names → curated palettes, compose-time hljs (editor-only lazy import). Complete sample page = 12.2KB total, ZERO external requests. Evidence: headless-Chrome screenshots with --disable-javascript (dark + cupcake themes) render fully styled; found+fixed footer-button contrast bug via screenshot review. Tests 5/5 incl. new CDN-free + deferred-widget assertions. Widget audit (Q6): opensea = static markup, covered by CSS shims; profile widget = external script, self-hydrating (OK); build.svelte author docs rewritten for the new contract. daisyUI-compiled alternative was measured (54–85KB) and rejected — hand-designed CSS chosen for size + distinctiveness. Dead app.js htmlTemplate deleted.</td></tr>
+<tr><td>7</td><td>App-shell performance budget</td><td><span class="chip pass">done</span></td><td>Commit 3ae46c4. Home-route JS (dist/index.html script graph): <strong>494,625 bytes raw</strong> — meets ≤500KB. Lazy: editors, ArNS screens, widget marketing pages, posts screens, about, EasyMDE (378KB, was a boot-time classic script), markdown-it, hljs (lib/common subset 149KB, was 913KB full). manualChunks per-dep config removed (defeated tree-shaking); crocks path-imported. Only chunk &gt;600KB is the lazy ar.io SDK (2.89MB, ArNS-only — documented deviation). deploy→permaweb-deploy; CI npm/node22; yarn.lock→package-lock. Build+vitest green.</td></tr>
+<tr><td>8</td><td>UX redesign + final validation</td><td><span class="chip pass">done</span></td><td>Commit 3123439. "Permapress" identity (custom daisyUI theme + serif display shared with published pages + ◆ motif). Five screens redesigned and headless-Chrome verified (screenshots in session scratchpad: ux-home, ux-home-mobile, ux-connect, ux-dashboard, ux-pages, ux-editor): home = specimen-card hero + real copy; connect dialog = 3 permissions explained pre-request; dashboard = skeleton balances + action cards; pages = designed empty state + skeleton rows; editor = framed composer with honest publish note. Screenshot review caught+fixed 2 real bugs (NaN $AR balance, invisible footer-button text). pilot.ar.io fully purged (claim flow → arns.arweave.net link-out). Self-scored rubric: home 4.5·5·4.5·4.5·5, connect 4.5, dashboard 4, pages 4.5, editor 4 — all ≥4. AA contrast (green #1F6F50 on paper ≈5.5:1); 375px verified; skeletons not spinner-jumps. Build+vitest 5/5 green.</td></tr>
+</table>
+
+<h2>Bundle-size trend</h2>
+<table id="bundle-trend">
+<tr><th>Checkpoint</th><th>Total dist JS</th><th>Largest chunk</th><th>Notes</th></tr>
+<tr><td>Baseline (pre-work)</td><td>~3.9MB+ JS eager (+378KB easy-mde classic script at boot)</td><td>warp-contracts-plugin-deploy 1,578.71 kB (eager)</td><td>highlight.js 913KB, index 503KB, warp-contracts 325KB; build green 5.8s; tests RED 5/6</td></tr>
+<tr><td>After Step 4 (warp gone)</td><td>entry ~500KB + lazy 2.9MB sdk</td><td>@ar.io/sdk 2,957KB (lazy)</td><td>−474 packages; sdk off boot graph</td></tr>
+<tr><td>Final (Step 8 + repairs)</td><td><strong>482,588 bytes home-route JS</strong> (judge-verified)</td><td>ar.io sdk 2,891KB (lazy, ArNS screens only)</td><td>hljs 149KB lazy common subset; easy-mde on-demand; published page = 12.2KB total, zero JS</td></tr>
+</table>
+
+<h2>Reviewer / judge findings</h2>
+<table id="reviews">
+<tr><th>Gate</th><th>Verdict</th><th>Findings</th></tr>
+<tr><td>Plan review</td><td><span class="chip pass">passed (after repair)</span></td><td>Judge verdict: strong plan, 3 blockers — (1) baseline vitest RED (stale test/app.test.js imports removed <code>notes</code> export; 5 tests failing) contradicting "green after every step" → added to Step 1 + true baseline recorded; (2) Step 2/4 grep gates unsatisfiable as ordered (dre-*.warp.cc URLs land in Step 5, posts.js unpkg-warp template + widgets/build.svelte docs in Step 6, atomic.test.js fixture prose permanent exception) → gates rescoped to imports, full-text grep moved to DoD; (3) Step 6 silently broke documented widget contract (window.arweave/window.warp/Tailwind globals) → new Q6 + widget-audit acceptance item. Non-blocking suggestions also applied: pilot.ar.io in home copy assigned to Step 8, aoconnect dep explicitly in Step 5, ≤500KB measurement method stated, Step 5's 3 GETs named. Area scores: definitions PASS, DoD PASS, coverage PASS, research accuracy PASS (7/7 spot-checks), security PASS, taste rubric PASS.</td></tr>
+<tr><td>Implementation review</td><td><span class="chip pass">approved after repair</span></td><td>Judge independently re-ran build (green), vitest (5/5), and all DoD greps; verified frozen crypto branches byte-identical vs main, all 6 dispatch sites behind user action, scopes unchanged, GraphQL text unchanged, SDK calls match installed 3.24.0 types. <strong>2 blockers found → fixed in commit 878495f</strong>: (1) allowStamps toggle still injected the mutable dead stamp-widget script into permanent pages — injection removed, meta flag kept; (2) stampjs fallback called balance() without the address — fixed. Non-blocking fixes also applied: help-wallet dialog rewritten for Wander/permapress, publish awaits code highlighting, unused direct aoconnect dep removed. Taste/originality scores: published-page stylesheet 5/5, home 4.5/4.5, connect 5/4.5, dashboard 4/4, pages 4.5/4, editor 4/4 — all ≥4. Verdict: approve. Residual: live ArNS browser check env-blocked; window.warp third-party widgets break on new pages by design; profile-widget URL still mutable (pre-existing, follow-up).</td></tr>
+</table>
+
+<h2>Risk flags</h2>
+<ul id="risk-flags">
+<li>None triggered yet. Watch: frozen encrypt/decrypt branches; wallet scope changes; new dispatch call sites.</li>
+</ul>
+
+<h2>Step evidence log</h2>
+<div id="evidence"><p class="meta">Populated as steps complete.</p></div>
+
+<h2>Handoff checkpoints</h2>
+<pre id="handoff">2026-07-03 begin — research complete (codebase map + ecosystem research), PRD written, awaiting plan-review gate.</pre>
+</body>
+</html>

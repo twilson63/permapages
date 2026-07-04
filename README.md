@@ -29,40 +29,35 @@
 
 ## Stack
 
-* Svelte + Vite
-* NodeJS build tool
-* Arweave
+* Svelte 4 + Vite 5 (Node >= 18, npm)
+* Arweave — pages publish as signed data items via the Wander wallet's `dispatch()` (bundled through Turbo, free under 100KB)
+* AO / HyperBEAM — state reads via HyperBEAM patched HTTP paths, AO dryrun as fallback
+* ArNS via `@ar.io/sdk` v3 (AO era — do not bump to v4, which targets Solana)
 
 ## Development
 
+All commands run from the `app/` directory (the repo root has no package.json):
+
 ```
 cd app
-yarn
-yarn dev
+npm ci        # install from the committed package-lock.json
+npm run dev   # vite dev server
+npm run build # production build to dist/
+npx vitest run
 ```
+
+> If you previously installed with yarn or are switching to this branch from an
+> older checkout, delete `app/node_modules` first — the dependency tree changed
+> substantially (warp/smartweave/bundlr removed).
 
 ## Deployment
 
-> create wallet.json
+> create wallet.json in the repo root (never commit it)
 
 ```
-yarn build
-npm i -g arkb
-arkb deploy dist --use-bundler https://node2.bundlr.network --wallet ../mywallet.json --tag-name DEPLOY --tag-value permapages
+cd app
+npm run build
+DEPLOY_KEY=$(base64 -i ../wallet.json) npm run deploy   # permaweb-deploy → updates the ArNS name
 ```
 
-> NOTE: make sure you have a balance in bundler if not.
-
-```
-arkb fund-bundler 0.1 --use-bundler https://node2.bundlr.network --wallet ../mywallet.json
-```
-
-Deploy with bundlr
-
-```
-npm i -g @bundlr-network/client
-bundlr upload-dir ./dist -c arweave -h https://node2.bundlr.network --index-file index.html --no-confirmation -w ../wallet.json 
-```
-
-
-Update ArNS - https://permapages.arweave.dev
+Live at https://permapages.arweave.net

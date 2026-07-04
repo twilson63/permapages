@@ -1,18 +1,46 @@
 @tailwind base;
 @tailwind components;
+
+@layer base {
+  body {
+    @apply font-sans antialiased;
+  }
+  h1, h2, h3 {
+    @apply font-display;
+  }
+}
+
+/* buttons read as set type, not shouted labels */
+.btn {
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+/* the brand wordmark — ink with the archival-green permanence mark */
+.wordmark {
+  @apply font-display font-bold tracking-tight text-base-content;
+}
+.wordmark::after {
+  content: "\25C6";
+  @apply text-primary ml-1.5 text-[0.55em] align-middle inline-block;
+}
+
+/* etched section eyebrow: small caps, letterspaced, ledger green */
+.eyebrow {
+  @apply text-xs font-sans font-semibold uppercase tracking-[0.18em] text-primary;
+}
+
+/* legacy gradient classes kept as quiet ink accents for un-migrated screens */
 .txt-gradient {
-  @apply bg-clip-text bg-gradient-to-r from-[#FF00E5] to-[#7B55EC] text-transparent;
+  @apply text-base-content;
+}
+.gradient-box:hover .nft-svg path {
+  fill: #1f6f50;
 }
 
-.gradient-box:hover svg linearGradient stop:first-child {
-  stop-color: #7b55ec;
+/* skeleton shimmer for data that is still loading */
+.skeleton-line {
+  @apply bg-base-300 rounded animate-pulse;
 }
 
-.gradient-box:hover svg linearGradient stop:last-child {
-  stop-color: #ff00e5;
-}
-
-.gradient-box:hover .nft-svg path{
-  fill: #ff00e5;
-}
 @tailwind utilities;

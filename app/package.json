@@ -8,34 +8,29 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "deploy": "arkb deploy dist --use-bundler https://node2.bundlr.network --wallet ../wallet.json --tag-name DEPLOY --tag-value permapages"
+    "deploy": "npx permaweb-deploy --deploy-folder dist --arns-name permapages"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "@tailwindcss/typography": "^0.5.2",
-    "@verto/flex": "^0.1.7",
     "autoprefixer": "^10.4.4",
     "daisyui": "^2.11.1",
-    "esbuild": "^0.19.10",
     "eslint": "^8.14.0",
     "esm": "^3.2.25",
     "postcss": "^8.4.12",
-    "replace-in-file": "^6.3.5",
     "svelte": "^4.2.8",
     "svelte-loading-spinners": "^0.1.7",
     "tailwindcss": "^3.0.23",
     "tinro": "^0.6.12",
     "uvu": "^0.5.3",
     "vite": "^5.0.10",
+    "vite-plugin-node-polyfills": "^0.28.0",
     "vitest": "^1.1.0"
   },
   "dependencies": {
-    "@permaweb/stampjs": "^0.6.2",
-    "ardb": "^1.1.10",
+    "@ar.io/sdk": "^3.24.0",
+    "@permaweb/stampjs": "^1.0.4",
     "arweave": "^1.13.4",
-    "arweave-account": "^1.2.5",
-    "arweave-bundles": "^1.0.3",
-    "arweave-wallet-connector": "^0.0.26",
     "crocks": "^0.12.4",
     "date-fns": "^2.28.0",
     "dompurify": "^2.3.8",
@@ -48,9 +43,6 @@
     "marked": "^4.0.14",
     "mustache": "^4.2.0",
     "ramda": "^0.29.1",
-    "smartweave": "^0.4.48",
-    "warp-contracts": "1.4.26",
-    "warp-contracts-plugin-deploy": "^1.0.12",
     "zod": "^3.14.2"
   }
 }

@@ -2,23 +2,17 @@ import Arweave from 'arweave'
 import { htmlify } from './atomic'
 import getHost from './get-host'
 
-const DATAFI_PAGE_SRC = __ATOMIC_ASSET_SRC__
-
-const [APP_NAME, APP_VERSION, CONTRACT_SRC, INIT_STATE] =
-  ['App-Name', 'App-Version', 'Contract-Src', 'Init-State']
-
-
 let options = {}
 
 options = { host: getHost(), port: 443, protocol: 'https' }
 const arweave = Arweave.init(options)
-// deploy permapage old school
+// deploy permapage as a directly-signed transaction (no bundler)
 export default async function (page) {
   const topics = page.topics.map(t => ({
     name: `topic:${t}`,
     value: t
   }))
-  let tags = [
+  const tags = [
     { name: 'Content-Type', value: 'text/html' },
     { name: 'Title', value: page.title },
     { name: 'Description', value: page.description },
@@ -26,14 +20,6 @@ export default async function (page) {
     { name: 'Protocol', value: page.protocol },
     { name: 'Timestamp', value: new Date().toISOString() }
   ].concat(topics)
-  if (!page.noContract) {
-    tags = tags.concat([
-      { name: APP_NAME, value: 'SmartWeaveContract' },
-      { name: APP_VERSION, value: '0.3.0' },
-      { name: CONTRACT_SRC, value: DATAFI_PAGE_SRC },
-      { name: INIT_STATE, value: JSON.stringify(page.state) }
-    ])
-  }
   // publish web page
   const webpageTx = await arweave.createTransaction({ data: htmlify(page) })
 

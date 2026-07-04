@@ -8,7 +8,6 @@
     postWebpage,
     loadPage,
     loadProfile,
-    loadState,
   } from "../services/arweave.js";
   import { gql } from "../services/gql.js";
   import { register, listANTs, updateSubDomain } from "../services/registry.js";
@@ -17,13 +16,13 @@
   import markdownIt from "markdown-it";
   import container from "markdown-it-container";
   import attrs from "markdown-it-attrs";
-  import hljs from "highlight.js";
+  import { enableCodeHighlight } from "../services/md.js";
+  import { loadEasyMDE } from "../services/easymde-loader.js";
   import opensea from "../widgets/opensea.js";
   import Mustache from "mustache";
   import { onMount } from "svelte";
   import compose from "ramda/src/compose";
   import append from "ramda/src/append";
-  import mergeAll from "ramda/src/mergeAll";
   import join from "ramda/src/join";
   import split from "ramda/src/split";
   import toLower from "ramda/src/toLower";
@@ -102,12 +101,16 @@
 
   md.use(attrs);
 
+  // code blocks are highlighted at compose time so published pages need no JS
+  enableCodeHighlight(md);
+
   const slugify = compose(toLower, join("-"), split(" "));
 
   onMount(async () => {
     loadWidgets().then((widgets) => {
       allWidgets = widgets;
     });
+    await loadEasyMDE();
     easymde = new window.EasyMDE({
       autosave: {
         enabled: true,
@@ -149,7 +152,7 @@
 
   if (meta().query.fork) {
     // getNote from meta().query.fork
-    pages({ load: loadPage, loadState })
+    pages({ load: loadPage })
       .get(meta().query.fork)
       .then(async (p) => {
         topics = p.topics ? p.topics.join(", ") : "";
@@ -184,24 +187,6 @@
         page.dataModelTraining = p.dataModelTraining || false;
         page.dataModelTrainingValue = p.dataModelTrainingValue;
         page.dataModelTrainingValuePlus = p.dataModelTrainingValuePlus || "1";
-
-        page.state = mergeAll(
-          {
-            ticker: "PAGE",
-            name: p.title,
-            title: p.title,
-            description: p.description,
-            creator: p.owner || p.creator,
-            balances: {
-              [$address]: p.units,
-            },
-            contentType: "text/html",
-            createdAt: Date.now(),
-            claimable: [],
-            settings: [["isTradeable", true]],
-          },
-          p.state
-        );
       });
   } else {
   }
@@ -216,26 +201,17 @@
       confirm = false;
       submitting = true;
 
+      // publishing must ship pre-highlighted code — make sure hljs is ready
+      await enableCodeHighlight(md);
+
       page.content = easymde.value();
       page.creator = $address;
       page.units = Number(page.units);
-      // allowStamps is set
-      if (page.allowStamps) {
-        //if (!find(propEq("elementId", "passport"), page.widgets)) {
-        page.widgets = [
-          ...page.widgets.filter((w) => w.elementId !== "passport"),
-          {
-            source: "https://stamp-widget.arweave.dev",
-            elementId: "passport",
-            name: "passport",
-            description: "Permapage Passport Widget",
-            version: "latest",
-          },
-        ];
-        // }
-      } else {
-        page.widgets = page.widgets.filter((w) => w.elementId !== "passport");
-      }
+      // the legacy stamp widget targeted the retired Warp STAMP contract and
+      // lived at a mutable URL — permanent pages only carry txid-pinned
+      // widgets now. The allowStamps flag stays in the page meta for a
+      // future AO-native stamp widget.
+      page.widgets = page.widgets.filter((w) => w.elementId !== "passport");
 
       // upgrade current page widgets
       // if (allWidgets.length > 0) {
@@ -457,23 +433,26 @@
 </script>
 
 <Navbar />
-<main>
-  <section class="hero bg-base-100 min-h-screen items-start w-full">
-    <div class="hero-content flex-col w-full">
+<main class="min-h-screen bg-base-200">
+  <section class="w-full">
+    <div class="container mx-auto flex flex-col px-4 py-10">
+      <p class="eyebrow mb-2">Compose</p>
+      <h1 class="mb-6 text-3xl font-bold">New page</h1>
       {#if error}
         <div class="alert alert-error">
           {error}
         </div>
       {/if}
       <form class="w-full" on:submit|preventDefault={submit}>
-        <div class="form-control">
-          <label for="content" class="label"
-            >Page Content <span class="text-sm"
-              >(use the markdown language or html to add content your page)</span
+        <div class="form-control rounded-xl border border-base-300 bg-base-100 p-5">
+          <label for="content" class="label font-semibold"
+            >Content
+            <span class="text-sm font-normal text-base-content/60"
+              >markdown or HTML — this becomes the page</span
             ></label
           >
           <textarea
-            class="textarea textarea-bordered textarea-secondary bg-white"
+            class="textarea textarea-bordered bg-base-100"
             id="content"
             name="content"
             bind:value={page.content}
@@ -481,8 +460,10 @@
         </div>
         <button
           type="button"
-          class="btn btn-ghost my-16"
-          on:click={() => (advanced = !advanced)}>Show Advanced Options</button
+          class="btn btn-outline btn-sm my-8 rounded-full"
+          aria-expanded={advanced}
+          on:click={() => (advanced = !advanced)}
+          >{advanced ? "Hide" : "Show"} appearance, license &amp; domain options</button
         >
         {#if advanced}
           <div class="mt-4 form-control">
@@ -839,17 +820,15 @@
           </div>
         {/if}
 
-        <div class="mt-8 flex justify-end space-x-2">
-          <!--
-          <button type="button" class="btn btn-secondary" on:click={preview}
-            >Preview</button
-          >
-          -->
-          <button type="submit" class="btn btn-primary">Publish</button>
-          <a class="btn" href="/pages" on:click={() => easymde.value("")}
+        <div class="mt-8 flex items-center justify-end gap-3">
+          <a class="btn btn-ghost rounded-full" href="/pages" on:click={() => easymde.value("")}
             >Cancel</a
           >
+          <button type="submit" class="btn btn-primary px-8">Publish page</button>
         </div>
+        <p class="mt-2 text-right text-xs text-base-content/50">
+          Publishing signs the page with your wallet and stores it permanently — free under 100KB.
+        </p>
       </form>
     </div>
   </section>

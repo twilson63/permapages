@@ -203,7 +203,7 @@ font-size: inherit;
                         <div id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dc9-c3a095a8" class="w-layout-grid footer4_link-list">
                           <a href="https://permanotes.app/#/notes/WYfC1LPyHJlHrTaN11QS_9-rDMXW0EREqp3FlYKzIWE" target="_blank" class="footer4_link">Learn More</a>
                           <a href="/pages" class="footer4_link">Pages</a>
-                          <a href="https://pilot.ar.io" target="_blank" class="footer4_link">Get ArNS Tokens</a>
+                          <a href="https://arns.arweave.net" target="_blank" class="footer4_link">Get an ArNS Name</a>
                           <a href="https://www.arweave.org/" target="_blank" class="footer4_link">Arweave</a>
                           <a id="w-node-cb5a6e0f-00f4-dcb7-83b5-9905374b7dd2-c3a095a8" href="/pages" class="button-small-footer w-button">Create a page</a>
                         </div>

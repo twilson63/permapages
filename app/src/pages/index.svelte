@@ -41,28 +41,30 @@
 </script>
 
 <NavBar />
-<main>
-  <section class="hero bg-base-200 min-h-screen items-start">
-    <div class="hero-content flex-col lg:flex-row-reverse w-full">
-      <div class="flex flex-col space-y-16 w-full">
-        <div>
-          <div class="flex">
-            <h2 class="text-2xl mb-2 flex-1">Your Pages</h2>
-            <div class="flex-none6">
-              <a href="/pages/new" class="btn btn-primary">New Web Page</a>
-            </div>
-          </div>
-          <div class="overflow-x-auto">
-            {#await pageList}
-              Loading...
-            {:then records}
-              <PageTable {records} />
-            {/await}
-          </div>
-        </div>
-      </div>
+<main class="min-h-screen bg-base-200">
+  <div class="container mx-auto px-4 py-10">
+    <p class="eyebrow mb-2">Library</p>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h1 class="text-3xl font-bold">Your pages</h1>
+      <a href="/pages/new" class="btn btn-primary">New page</a>
     </div>
-  </section>
+
+    <div class="mt-8">
+      {#await pageList}
+        <div class="rounded-xl border border-base-300 bg-base-100 p-4" aria-busy="true" aria-label="Loading pages">
+          {#each [0, 1, 2, 3] as row}
+            <div class="flex items-center justify-between gap-6 border-b border-base-200 py-4 last:border-none">
+              <div class="skeleton-line h-4 w-2/5"></div>
+              <div class="skeleton-line hidden h-3 w-24 md:block"></div>
+              <div class="skeleton-line h-6 w-24 rounded-full"></div>
+            </div>
+          {/each}
+        </div>
+      {:then records}
+        <PageTable {records} />
+      {/await}
+    </div>
+  </div>
 </main>
 
 <Modal open={successDialog}>

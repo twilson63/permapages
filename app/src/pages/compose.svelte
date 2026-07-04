@@ -8,7 +8,11 @@
   import { onMount } from "svelte";
   import Copyright from "../widgets/copyright.svelte";
   import { posts } from "../api.js";
-  import { md } from "../services/md.js";
+  import { md, enableCodeHighlight } from "../services/md.js";
+  import { loadEasyMDE } from "../services/easymde-loader.js";
+
+  // posts are highlighted at compose time; published HTML needs no JS
+  enableCodeHighlight(md);
 
   export let id = "";
 
@@ -25,6 +29,7 @@
   };
 
   onMount(async () => {
+    await loadEasyMDE();
     easymde = new window.EasyMDE({
       autosave: {
         enabled: true,
